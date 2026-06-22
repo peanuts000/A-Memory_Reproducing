@@ -62,8 +62,8 @@ class AgenticMemorySystem:
     def __init__(
         self,
         model_name: str = "all-MiniLM-L6-v2",
-        llm_backend: str = "openai",
-        llm_model: str = "gpt-4o-mini",
+        llm_backend: str = None,
+        llm_model: str = None,
         evo_threshold: int = 100,
         api_key: Optional[str] = None,
         api_base: Optional[str] = None,

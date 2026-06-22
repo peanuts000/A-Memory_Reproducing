@@ -7,10 +7,16 @@ This script demonstrates the core functionality of the A-Mem system:
   3. Inspecting memory structure
 
 Usage:
-    # With OpenAI (requires OPENAI_API_KEY):
+    # Auto-detect from .env (推荐):
     python examples/basic_demo.py
 
-    # With Ollama (requires ollama running):
+    # With Doubao (豆包):
+    python examples/basic_demo.py --backend doubao
+
+    # With OpenAI:
+    python examples/basic_demo.py --backend openai --api-key sk-xxx
+
+    # With Ollama:
     python examples/basic_demo.py --backend ollama --model llama3.2
 """
 
@@ -25,25 +31,35 @@ from amem import AgenticMemorySystem
 
 
 def main():
+    # Auto-detect defaults from .env
+    default_backend = "doubao" if os.getenv("DOUBAO_API_KEY") else "openai"
+    default_model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215") if default_backend == "doubao" else "gpt-4o-mini"
+
     parser = argparse.ArgumentParser(description="A-Mem Basic Demo")
     parser.add_argument(
         "--backend",
         type=str,
-        default="openai",
-        choices=["openai", "ollama", "litellm"],
-        help="LLM backend to use",
+        default=default_backend,
+        choices=["openai", "ollama", "litellm", "doubao"],
+        help="LLM backend to use (auto-detected from .env)",
     )
     parser.add_argument(
         "--model",
         type=str,
-        default="gpt-4o-mini",
-        help="LLM model identifier",
+        default=default_model,
+        help="LLM model identifier (auto-detected from .env)",
     )
     parser.add_argument(
         "--api-key",
         type=str,
         default=None,
-        help="API key (or set OPENAI_API_KEY env var)",
+        help="API key (auto-read from .env if not provided)",
+    )
+    parser.add_argument(
+        "--base-url",
+        type=str,
+        default=None,
+        help="API base URL (auto-read from .env if not provided)",
     )
     args = parser.parse_args()
 
@@ -53,11 +69,12 @@ def main():
     print(f"Backend: {args.backend}, Model: {args.model}")
     print()
 
-    # Initialize the memory system
+    # Initialize the memory system (api_key/api_base will be auto-read from .env if None)
     memory_system = AgenticMemorySystem(
         llm_backend=args.backend,
         llm_model=args.model,
         api_key=args.api_key,
+        api_base=args.base_url,
         top_k=5,
     )
 

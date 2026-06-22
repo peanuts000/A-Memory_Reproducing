@@ -10,6 +10,14 @@ for LLM agents through three core mechanisms:
   3. Memory Evolution - Dynamically update existing memories with new context
 """
 
+# Auto-load .env file on import
+try:
+    from dotenv import load_dotenv
+    import os
+    load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
+except ImportError:
+    pass
+
 from .memory_note import MemoryNote
 from .retriever import SimpleEmbeddingRetriever
 from .llm_controller import LLMController, BaseLLMController

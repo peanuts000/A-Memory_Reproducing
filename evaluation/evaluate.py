@@ -108,6 +108,7 @@ def run_evaluation(
     backend: str = "openai",
     model: str = "gpt-4o-mini",
     api_key: str = None,
+    api_base: str = None,
     top_k: int = 10,
     output_file: str = "results.json",
     max_conversations: int = None,
@@ -153,6 +154,7 @@ def run_evaluation(
             llm_backend=backend,
             llm_model=model,
             api_key=api_key,
+            api_base=api_base,
             top_k=top_k,
         )
 
@@ -210,11 +212,15 @@ def run_evaluation(
 
 
 def main():
+    default_backend = "doubao" if os.getenv("DOUBAO_API_KEY") else "openai"
+    default_model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215") if default_backend == "doubao" else "gpt-4o-mini"
+
     parser = argparse.ArgumentParser(description="Evaluate A-Mem on LoCoMo")
     parser.add_argument("--data_dir", type=str, required=True, help="Path to LoCoMo data")
-    parser.add_argument("--backend", type=str, default="openai", choices=["openai", "ollama", "litellm"])
-    parser.add_argument("--model", type=str, default="gpt-4o-mini")
+    parser.add_argument("--backend", type=str, default=default_backend, choices=["openai", "ollama", "litellm", "doubao"])
+    parser.add_argument("--model", type=str, default=default_model)
     parser.add_argument("--api-key", type=str, default=None)
+    parser.add_argument("--base-url", type=str, default=None, help="API base URL (auto-read from .env)")
     parser.add_argument("--top_k", type=int, default=10, help="Number of memories to retrieve")
     parser.add_argument("--output", type=str, default="results.json")
     parser.add_argument("--max_conversations", type=int, default=None, help="Limit conversations for testing")
@@ -225,6 +231,7 @@ def main():
         backend=args.backend,
         model=args.model,
         api_key=args.api_key,
+        api_base=args.base_url,
         top_k=args.top_k,
         output_file=args.output,
         max_conversations=args.max_conversations,
