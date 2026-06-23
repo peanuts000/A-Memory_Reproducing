@@ -1,8 +1,8 @@
 """
-Response parsers for A-Mem LLM outputs.
+A-Mem LLM 输出的响应解析器。
 
-Handles both JSON structured output and plain-text fallback parsing
-with section-marker extraction.
+处理 JSON 结构化输出和纯文本回退解析，
+支持分段标记提取。
 """
 
 import json
@@ -11,7 +11,7 @@ from typing import Dict, List, Any
 
 
 def strip_markdown_fences(text: str) -> str:
-    """Remove ```json ... ``` or ``` ... ``` fences from LLM output."""
+    """移除 LLM 输出中的 ```json ... ``` 或 ``` ... ``` 围栏。"""
     text = text.strip()
     text = re.sub(r"^```(?:json)?\s*\n?", "", text, flags=re.MULTILINE)
     text = re.sub(r"\n?\s*```$", "", text, flags=re.MULTILINE)
@@ -19,16 +19,16 @@ def strip_markdown_fences(text: str) -> str:
 
 
 def parse_json_response(response: str) -> Dict[str, Any]:
-    """Parse JSON from LLM response, handling markdown fences.
+    """从 LLM 响应中解析 JSON，处理 markdown 围栏。
 
-    Args:
-        response: Raw LLM response string.
+    参数:
+        response: 原始 LLM 响应字符串。
 
-    Returns:
-        Parsed dictionary, or empty dict on failure.
+    返回:
+        解析后的字典，失败时返回空字典。
     """
     cleaned = strip_markdown_fences(response)
-    # Try to find JSON object
+    # 尝试查找 JSON 对象
     start_idx = cleaned.find("{")
     end_idx = cleaned.rfind("}")
     if start_idx != -1 and end_idx != -1:
@@ -40,17 +40,17 @@ def parse_json_response(response: str) -> Dict[str, Any]:
 
 
 def parse_analysis_response(response: str, content: str = "") -> Dict[str, Any]:
-    """Parse the note construction analysis response.
+    """解析笔记构建的分析响应。
 
-    Expected JSON format:
+    期望的 JSON 格式：
         {"keywords": [...], "context": "...", "tags": [...]}
 
-    Args:
-        response: Raw LLM response.
-        content: Original content (used for fallback).
+    参数:
+        response: 原始 LLM 响应。
+        content: 原始内容（用于回退）。
 
-    Returns:
-        Dictionary with keywords, context, and tags.
+    返回:
+        包含 keywords、context 和 tags 的字典。
     """
     result = parse_json_response(response)
 
@@ -58,7 +58,7 @@ def parse_analysis_response(response: str, content: str = "") -> Dict[str, Any]:
     context = result.get("context", "")
     tags = result.get("tags", [])
 
-    # Validate and repair
+    # 验证和修复
     if not isinstance(keywords, list):
         keywords = []
     if not isinstance(context, str):
@@ -66,7 +66,7 @@ def parse_analysis_response(response: str, content: str = "") -> Dict[str, Any]:
     if not isinstance(tags, list):
         tags = []
 
-    # Fallback: extract from content if empty
+    # 回退：如果为空则从内容中提取
     if not keywords and content:
         keywords = _heuristic_keywords(content)
     if not context and content:
@@ -78,16 +78,16 @@ def parse_analysis_response(response: str, content: str = "") -> Dict[str, Any]:
 
 
 def parse_link_response(response: str) -> Dict[str, Any]:
-    """Parse the link generation response.
+    """解析链接生成响应。
 
-    Expected JSON format:
+    期望的 JSON 格式：
         {"should_link": bool, "suggested_connections": [...], "reason": "..."}
 
-    Args:
-        response: Raw LLM response.
+    参数:
+        response: 原始 LLM 响应。
 
-    Returns:
-        Dictionary with should_link, suggested_connections, and reason.
+    返回:
+        包含 should_link、suggested_connections 和 reason 的字典。
     """
     result = parse_json_response(response)
 
@@ -95,7 +95,7 @@ def parse_link_response(response: str) -> Dict[str, Any]:
     suggested_connections = result.get("suggested_connections", [])
     reason = result.get("reason", "")
 
-    # Ensure connections are integers
+    # 确保连接为整数
     connections = []
     for c in suggested_connections:
         try:
@@ -111,9 +111,9 @@ def parse_link_response(response: str) -> Dict[str, Any]:
 
 
 def parse_evolution_response(response: str, num_neighbors: int) -> Dict[str, Any]:
-    """Parse the memory evolution response.
+    """解析记忆演化响应。
 
-    Expected JSON format:
+    期望的 JSON 格式：
         {
             "should_evolve": bool,
             "actions": [...],
@@ -123,12 +123,12 @@ def parse_evolution_response(response: str, num_neighbors: int) -> Dict[str, Any
             "new_tags_neighborhood": [[...], ...]
         }
 
-    Args:
-        response: Raw LLM response.
-        num_neighbors: Expected number of neighbors.
+    参数:
+        response: 原始 LLM 响应。
+        num_neighbors: 期望的邻居数量。
 
-    Returns:
-        Dictionary with evolution decisions and updated values.
+    返回:
+        包含演化决策和更新值的字典。
     """
     result = parse_json_response(response)
 
@@ -139,13 +139,13 @@ def parse_evolution_response(response: str, num_neighbors: int) -> Dict[str, Any
     new_context = result.get("new_context_neighborhood", [])
     new_tags = result.get("new_tags_neighborhood", [])
 
-    # Ensure lengths match num_neighbors
+    # 确保长度匹配 num_neighbors
     if len(new_context) < num_neighbors:
         new_context.extend([""] * (num_neighbors - len(new_context)))
     if len(new_tags) < num_neighbors:
         new_tags.extend([[] for _ in range(num_neighbors - len(new_tags))])
 
-    # Ensure connections are integers
+    # 确保连接为整数
     connections = []
     for c in suggested_connections:
         try:
@@ -164,7 +164,7 @@ def parse_evolution_response(response: str, num_neighbors: int) -> Dict[str, Any
 
 
 def _heuristic_keywords(content: str, max_keywords: int = 5) -> List[str]:
-    """Extract heuristic keywords from content text."""
+    """从内容文本中启发式提取关键词。"""
     stop_words = {
         "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",
         "have", "has", "had", "do", "does", "did", "will", "would", "could",
@@ -195,7 +195,7 @@ def _heuristic_keywords(content: str, max_keywords: int = 5) -> List[str]:
 
 
 def _heuristic_context(content: str) -> str:
-    """Extract a heuristic context sentence from content."""
+    """从内容中启发式提取上下文句子。"""
     match = re.match(r"(.+?[.!?])\s", content)
     if match:
         return match.group(1).strip()

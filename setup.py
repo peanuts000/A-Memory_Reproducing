@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="amem",
     version="1.0.0",
-    description="A-Mem: Agentic Memory for LLM Agents - A faithful reproduction",
+    description="A-Mem: 面向 LLM Agent 的智能记忆系统 - 论文忠实复现",
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="A-Memory Reproducing",

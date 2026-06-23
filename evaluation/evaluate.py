@@ -1,16 +1,16 @@
 """
-A-Mem Evaluation Script on LoCoMo Dataset.
+A-Mem 在 LoCoMo 数据集上的评估脚本。
 
-Reproduces the evaluation from the paper (Section 4):
-  - Dataset: LoCoMo (7,512 QA pairs across 5 categories)
-  - Metrics: F1, BLEU-1, ROUGE-L, ROUGE-2, METEOR, SBERT Similarity
-  - Categories: Single-hop, Multi-hop, Temporal, Open-domain, Adversarial
+复现论文中的评估（第 4 节）：
+  - 数据集：LoCoMo（5 个类别共 7,512 个 QA 对）
+  - 指标：F1, BLEU-1, ROUGE-L, ROUGE-2, METEOR, SBERT 相似度
+  - 类别：单跳、多跳、时间、开放领域、对抗性
 
-Usage:
+使用方法：
     python evaluation/evaluate.py \
         --data_dir ./data/locomo \
-        --backend openai \
-        --model gpt-4o-mini \
+        --backend doubao \
+        --model doubao-seed-2-0-lite-260215 \
         --output results.json
 """
 
@@ -27,13 +27,13 @@ from amem import AgenticMemorySystem
 from evaluation.load_dataset import load_locomo_dataset, Conversation
 from evaluation.metrics import calculate_all_metrics, aggregate_metrics
 
-# Category names for the LoCoMo dataset
+# LoCoMo 数据集的类别名称
 CATEGORY_NAMES = {
-    0: "Single Hop",
-    1: "Multi Hop",
-    2: "Temporal",
-    3: "Open Domain",
-    4: "Adversarial",
+    0: "单跳 (Single Hop)",
+    1: "多跳 (Multi Hop)",
+    2: "时间 (Temporal)",
+    3: "开放领域 (Open Domain)",
+    4: "对抗性 (Adversarial)",
 }
 
 
@@ -42,41 +42,41 @@ def evaluate_conversation(
     memory_system: AgenticMemorySystem,
     top_k: int = 10,
 ) -> List[Dict]:
-    """Evaluate A-Mem on a single conversation.
+    """在单个对话上评估 A-Mem。
 
-    For each turn in the conversation, add it as a memory note.
-    Then for each QA pair, retrieve relevant memories and generate an answer.
+    对于对话中的每一轮，将其添加为记忆笔记。
+    然后对于每个 QA 对，检索相关记忆并生成答案。
 
-    Args:
-        conversation: The conversation to evaluate.
-        memory_system: Initialized A-Mem system.
-        top_k: Number of memories to retrieve for each question.
+    参数:
+        conversation: 要评估的对话。
+        memory_system: 初始化的 A-Mem 系统。
+        top_k: 每个问题检索的记忆数量。
 
-    Returns:
-        List of result dicts with predictions, references, and metrics.
+    返回:
+        包含预测、参考和指标的结果字典列表。
     """
     results = []
 
-    # Phase 1: Ingest all conversation turns as memories
-    print(f"  Ingesting {sum(len(s.turns) for s in conversation.sessions)} turns...")
+    # 阶段 1：将所有对话轮次作为记忆摄入
+    print(f"  正在摄入 {sum(len(s.turns) for s in conversation.sessions)} 轮对话...")
     for session in conversation.sessions:
         for turn in session.turns:
             content = f"Speaker {turn.speaker} says: {turn.content}"
             memory_system.add_note(content, time=turn.timestamp)
 
-    print(f"  Total memories: {memory_system.get_memory_count()}")
+    print(f"  记忆总数: {memory_system.get_memory_count()}")
 
-    # Phase 2: Answer questions using retrieved memories
+    # 阶段 2：使用检索到的记忆回答问题
     for qa in conversation.qa_pairs:
-        # Retrieve relevant memories
+        # 检索相关记忆
         context = memory_system.retrieve_with_context(qa.question, k=top_k)
 
-        # Generate answer using LLM with retrieved context
+        # 使用 LLM 和检索到的上下文生成答案
         prompt = (
-            f"Based on the following conversation memories, answer the question concisely.\n\n"
-            f"Memories:\n{context}\n\n"
-            f"Question: {qa.question}\n\n"
-            f"Answer with a short phrase or sentence:"
+            f"基于以下对话记忆，简洁地回答问题。\n\n"
+            f"记忆:\n{context}\n\n"
+            f"问题: {qa.question}\n\n"
+            f"请用短语或句子回答:"
         )
 
         try:
@@ -85,10 +85,10 @@ def evaluate_conversation(
             )
             prediction = response.strip()
         except Exception as e:
-            print(f"  Error generating answer: {e}")
+            print(f"  生成答案时出错: {e}")
             prediction = ""
 
-        # Calculate metrics
+        # 计算指标
         metrics = calculate_all_metrics(prediction, qa.answer)
 
         results.append({
@@ -96,7 +96,7 @@ def evaluate_conversation(
             "reference": qa.answer,
             "prediction": prediction,
             "category": qa.category,
-            "category_name": qa.category_name or CATEGORY_NAMES.get(qa.category, "unknown"),
+            "category_name": qa.category_name or CATEGORY_NAMES.get(qa.category, "未知"),
             "metrics": metrics,
         })
 
@@ -113,33 +113,33 @@ def run_evaluation(
     output_file: str = "results.json",
     max_conversations: int = None,
 ):
-    """Run full evaluation on the LoCoMo dataset.
+    """在 LoCoMo 数据集上运行完整评估。
 
-    Args:
-        data_dir: Path to LoCoMo data directory.
-        backend: LLM backend.
-        model: LLM model.
-        api_key: Optional API key.
-        top_k: Number of memories to retrieve.
-        output_file: Path to save results.
-        max_conversations: Limit number of conversations (for testing).
+    参数:
+        data_dir: LoCoMo 数据目录路径。
+        backend: LLM 后端。
+        model: LLM 模型。
+        api_key: 可选的 API Key。
+        top_k: 检索的记忆数量。
+        output_file: 保存结果的路径。
+        max_conversations: 限制对话数量（用于测试）。
     """
     print("=" * 60)
-    print("A-Mem Evaluation on LoCoMo Dataset")
+    print("A-Mem 在 LoCoMo 数据集上的评估")
     print("=" * 60)
-    print(f"Backend: {backend}, Model: {model}, Top-k: {top_k}")
+    print(f"后端: {backend}, 模型: {model}, Top-k: {top_k}")
     print()
 
-    # Load dataset
+    # 加载数据集
     conversations = load_locomo_dataset(data_dir)
     if not conversations:
-        print(f"No conversations found in {data_dir}")
+        print(f"在 {data_dir} 中未找到对话数据")
         return
 
     if max_conversations:
         conversations = conversations[:max_conversations]
 
-    print(f"Loaded {len(conversations)} conversations")
+    print(f"已加载 {len(conversations)} 个对话")
 
     all_results = []
     all_metrics = []
@@ -147,9 +147,9 @@ def run_evaluation(
     total_time = 0
 
     for i, conv in enumerate(conversations):
-        print(f"\nEvaluating conversation {i + 1}/{len(conversations)}: {conv.conversation_id}")
+        print(f"\n评估对话 {i + 1}/{len(conversations)}: {conv.conversation_id}")
 
-        # Create a fresh memory system for each conversation
+        # 为每个对话创建新的记忆系统
         memory_system = AgenticMemorySystem(
             llm_backend=backend,
             llm_model=model,
@@ -168,22 +168,22 @@ def run_evaluation(
             all_categories.append(r["category"])
 
         all_results.extend(results)
-        print(f"  Completed in {elapsed:.1f}s, {len(results)} QA pairs")
+        print(f"  完成耗时 {elapsed:.1f}s, {len(results)} 个 QA 对")
 
-    # Aggregate results
+    # 聚合结果
     aggregated = aggregate_metrics(all_metrics, all_categories)
 
-    # Print summary
+    # 打印摘要
     print("\n" + "=" * 60)
-    print("RESULTS SUMMARY")
+    print("结果摘要")
     print("=" * 60)
 
     overall = aggregated.get("overall", {})
-    print("\nOverall:")
+    print("\n总体:")
     for metric_name, stats in overall.items():
         print(f"  {metric_name}: {stats['mean']:.4f} (±{stats['std']:.4f})")
 
-    print("\nPer Category:")
+    print("\n各类别:")
     for cat_id, cat_name in CATEGORY_NAMES.items():
         cat_key = f"category_{cat_id}"
         if cat_key in aggregated:
@@ -191,10 +191,10 @@ def run_evaluation(
             for metric_name, stats in aggregated[cat_key].items():
                 print(f"    {metric_name}: {stats['mean']:.4f}")
 
-    print(f"\nTotal evaluation time: {total_time:.1f}s")
-    print(f"Average time per QA: {total_time / max(len(all_results), 1):.2f}s")
+    print(f"\n总评估时间: {total_time:.1f}s")
+    print(f"平均每 QA 耗时: {total_time / max(len(all_results), 1):.2f}s")
 
-    # Save results
+    # 保存结果
     output = {
         "config": {
             "backend": backend,
@@ -208,22 +208,22 @@ def run_evaluation(
     }
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(output, f, ensure_ascii=False, indent=2)
-    print(f"\nResults saved to: {output_file}")
+    print(f"\n结果已保存到: {output_file}")
 
 
 def main():
     default_backend = "doubao" if os.getenv("DOUBAO_API_KEY") else "openai"
     default_model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215") if default_backend == "doubao" else "gpt-4o-mini"
 
-    parser = argparse.ArgumentParser(description="Evaluate A-Mem on LoCoMo")
-    parser.add_argument("--data_dir", type=str, required=True, help="Path to LoCoMo data")
+    parser = argparse.ArgumentParser(description="在 LoCoMo 上评估 A-Mem")
+    parser.add_argument("--data_dir", type=str, required=True, help="LoCoMo 数据路径")
     parser.add_argument("--backend", type=str, default=default_backend, choices=["openai", "ollama", "litellm", "doubao"])
     parser.add_argument("--model", type=str, default=default_model)
     parser.add_argument("--api-key", type=str, default=None)
-    parser.add_argument("--base-url", type=str, default=None, help="API base URL (auto-read from .env)")
-    parser.add_argument("--top_k", type=int, default=10, help="Number of memories to retrieve")
+    parser.add_argument("--base-url", type=str, default=None, help="API Base URL（从 .env 自动读取）")
+    parser.add_argument("--top_k", type=int, default=10, help="检索的记忆数量")
     parser.add_argument("--output", type=str, default="results.json")
-    parser.add_argument("--max_conversations", type=int, default=None, help="Limit conversations for testing")
+    parser.add_argument("--max_conversations", type=int, default=None, help="限制对话数量用于测试")
     args = parser.parse_args()
 
     run_evaluation(

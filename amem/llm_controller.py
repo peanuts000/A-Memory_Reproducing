@@ -1,14 +1,13 @@
 """
-LLMController: Abstraction layer for LLM backends.
+LLMController: LLM 后端抽象层。
 
-Supports multiple backends:
-  - OpenAI (GPT-4o-mini, GPT-4o, etc.)
-  - Doubao (豆包, via OpenAI-compatible API)
-  - Ollama (local models via LiteLLM)
-  - SGLang (local inference server)
+支持多种后端：
+  - OpenAI (GPT-4o-mini, GPT-4o 等)
+  - 豆包 Doubao (通过 OpenAI 兼容 API)
+  - Ollama (通过 LiteLLM 的本地模型)
+  - LiteLLM (通用适配器)
 
-All backends provide a unified get_completion() interface with
-structured JSON output support.
+所有后端提供统一的 get_completion() 接口，支持结构化 JSON 输出。
 """
 
 import os
@@ -17,7 +16,7 @@ import re
 from abc import ABC, abstractmethod
 from typing import Optional, Any, Literal
 
-# Auto-load .env
+# 自动加载 .env 文件
 try:
     from dotenv import load_dotenv
     load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
@@ -26,7 +25,7 @@ except ImportError:
 
 
 class BaseLLMController(ABC):
-    """Abstract base class for LLM controllers."""
+    """LLM 控制器的抽象基类。"""
 
     @abstractmethod
     def get_completion(
@@ -35,24 +34,24 @@ class BaseLLMController(ABC):
         response_format: Optional[dict] = None,
         temperature: float = 0.7,
     ) -> str:
-        """Get a completion from the LLM.
+        """从 LLM 获取补全结果。
 
-        Args:
-            prompt: The user prompt.
-            response_format: JSON schema for structured output.
-            temperature: Sampling temperature.
+        参数:
+            prompt: 用户提示词。
+            response_format: 结构化输出的 JSON schema。
+            temperature: 采样温度。
 
-        Returns:
-            The LLM response as a string.
+        返回:
+            LLM 响应字符串。
         """
         pass
 
 
 class OpenAIController(BaseLLMController):
-    """OpenAI-compatible API controller with structured output support.
+    """OpenAI 兼容 API 控制器，支持结构化输出。
 
-    Works with any OpenAI-compatible API (OpenAI, Doubao/豆包, DeepSeek, etc.)
-    by specifying a custom base_url.
+    可与任何 OpenAI 兼容 API 配合使用（OpenAI、豆包、DeepSeek 等），
+    通过指定自定义 base_url 实现。
     """
 
     def __init__(
@@ -65,7 +64,7 @@ class OpenAIController(BaseLLMController):
             from openai import OpenAI
         except ImportError:
             raise ImportError(
-                "OpenAI package not found. Install with: pip install openai"
+                "未找到 OpenAI 包。请使用以下命令安装: pip install openai"
             )
 
         self.model = model
@@ -73,7 +72,7 @@ class OpenAIController(BaseLLMController):
             api_key = os.getenv("OPENAI_API_KEY")
         if api_key is None:
             raise ValueError(
-                "API key not found. Set OPENAI_API_KEY environment variable or pass api_key."
+                "未找到 API Key。请设置 OPENAI_API_KEY 环境变量或传入 api_key 参数。"
             )
 
         client_kwargs = {"api_key": api_key}
@@ -91,14 +90,14 @@ class OpenAIController(BaseLLMController):
         kwargs = {
             "model": self.model,
             "messages": [
-                {"role": "system", "content": "You must respond with a JSON object."},
+                {"role": "system", "content": "你必须以 JSON 对象格式回复。"},
                 {"role": "user", "content": prompt},
             ],
             "temperature": temperature,
             "max_tokens": 2000,
         }
 
-        # Try structured output first; fall back to plain prompt if unsupported
+        # 优先尝试结构化输出；如果不支持则回退到普通提示
         use_structured = response_format is not None
         if use_structured:
             kwargs["response_format"] = response_format
@@ -108,9 +107,9 @@ class OpenAIController(BaseLLMController):
             return response.choices[0].message.content
         except Exception as e:
             error_msg = str(e).lower()
-            # If structured output is not supported, retry without it
+            # 如果不支持结构化输出，则不使用它重试
             if use_structured and ("response_format" in error_msg or "json_schema" in error_msg or "unsupported" in error_msg):
-                print(f"[Warning] Structured output not supported, falling back to plain prompt. Error: {e}")
+                print(f"[警告] 不支持结构化输出，回退到普通提示。错误: {e}")
                 kwargs.pop("response_format", None)
                 response = self.client.chat.completions.create(**kwargs)
                 return response.choices[0].message.content
@@ -118,7 +117,7 @@ class OpenAIController(BaseLLMController):
 
 
 class OllamaController(BaseLLMController):
-    """Ollama controller via LiteLLM for local model inference."""
+    """通过 LiteLLM 的 Ollama 控制器，用于本地模型推理。"""
 
     def __init__(self, model: str = "llama3.2"):
         self.model = model
@@ -126,7 +125,7 @@ class OllamaController(BaseLLMController):
             self.model = f"ollama/{model}"
 
     def _generate_empty_response(self, response_format: Optional[dict]) -> dict:
-        """Generate an empty response matching the schema structure."""
+        """生成匹配 schema 结构的空响应。"""
         if not response_format or "json_schema" not in response_format:
             return {}
 
@@ -161,7 +160,7 @@ class OllamaController(BaseLLMController):
                 "messages": [
                     {
                         "role": "system",
-                        "content": "You must respond with a JSON object.",
+                        "content": "你必须以 JSON 对象格式回复。",
                     },
                     {"role": "user", "content": prompt},
                 ],
@@ -173,12 +172,12 @@ class OllamaController(BaseLLMController):
             response = completion(**kwargs)
             return response.choices[0].message.content
         except Exception as e:
-            print(f"Ollama completion error: {e}")
+            print(f"Ollama 补全错误: {e}")
             return json.dumps(self._generate_empty_response(response_format))
 
 
 class LiteLLMController(BaseLLMController):
-    """Universal LiteLLM controller supporting any backend."""
+    """通用 LiteLLM 控制器，支持任意后端。"""
 
     def __init__(
         self,
@@ -222,7 +221,7 @@ class LiteLLMController(BaseLLMController):
                 "messages": [
                     {
                         "role": "system",
-                        "content": "You must respond with a JSON object.",
+                        "content": "你必须以 JSON 对象格式回复。",
                     },
                     {"role": "user", "content": prompt},
                 ],
@@ -238,20 +237,20 @@ class LiteLLMController(BaseLLMController):
             response = completion(**kwargs)
             return response.choices[0].message.content
         except Exception as e:
-            print(f"LiteLLM completion error: {e}")
+            print(f"LiteLLM 补全错误: {e}")
             return json.dumps(self._generate_empty_response(response_format))
 
 
 class LLMController:
-    """Unified LLM controller that dispatches to the appropriate backend.
+    """统一的 LLM 控制器，分发到相应的后端。
 
-    Args:
-        backend: One of 'openai', 'ollama', 'litellm', 'doubao'.
-                 Defaults to 'doubao' if DOUBAO_API_KEY is set in env.
-        model: Model identifier (e.g., 'gpt-4o-mini', 'llama3.2', 'doubao-seed-2-0-lite-260215').
-               For 'doubao' backend, defaults to DOUBAO_MODEL env var.
-        api_key: Optional API key for the backend.
-        api_base: Optional API base URL (required for 'doubao', optional for others).
+    参数:
+        backend: 'openai', 'ollama', 'litellm', 'doubao' 之一。
+                 如果环境变量中设置了 DOUBAO_API_KEY，则默认使用 'doubao'。
+        model: 模型标识符（如 'gpt-4o-mini', 'llama3.2', 'doubao-seed-2-0-lite-260215'）。
+               对于 'doubao' 后端，默认使用 DOUBAO_MODEL 环境变量。
+        api_key: 可选的后端 API Key。
+        api_base: 可选的 API Base URL（'doubao' 必需，其他可选）。
     """
 
     def __init__(
@@ -261,7 +260,7 @@ class LLMController:
         api_key: Optional[str] = None,
         api_base: Optional[str] = None,
     ):
-        # Auto-detect backend: if DOUBAO_API_KEY is set and no backend specified, use doubao
+        # 自动检测后端：如果设置了 DOUBAO_API_KEY 且未指定后端，则使用 doubao
         if backend is None:
             if os.getenv("DOUBAO_API_KEY"):
                 backend = "doubao"
@@ -282,8 +281,8 @@ class LLMController:
                 api_base = os.getenv("DOUBAO_BASE_URL")
             if not api_base:
                 raise ValueError(
-                    "Doubao requires a base_url. Pass api_base or set DOUBAO_BASE_URL env var.\n"
-                    "Example: https://ark.cn-beijing.volces.com/api/v3"
+                    "豆包需要 base_url。请传入 api_base 或设置 DOUBAO_BASE_URL 环境变量。\n"
+                    "示例: https://ark.cn-beijing.volces.com/api/v3"
                 )
             if model is None:
                 model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215")
@@ -298,5 +297,5 @@ class LLMController:
             self.llm = LiteLLMController(model, api_base, api_key)
         else:
             raise ValueError(
-                f"Unknown backend: {backend}. Use 'openai', 'doubao', 'ollama', or 'litellm'."
+                f"未知后端: {backend}。请使用 'openai', 'doubao', 'ollama' 或 'litellm'。"
             )

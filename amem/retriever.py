@@ -1,13 +1,13 @@
 """
-SimpleEmbeddingRetriever: Cosine similarity-based memory retrieval.
+SimpleEmbeddingRetriever: 基于余弦相似度的记忆检索系统。
 
-Uses SentenceTransformer (all-MiniLM-L6-v2) to encode text and compute
-cosine similarity for retrieving relevant memories (Equations 8-10).
+使用 SentenceTransformer (all-MiniLM-L6-v2) 对文本进行编码，并计算
+余弦相似度来检索相关记忆（论文中的公式 8-10）。
 
-Paper reference:
-  e_q = f_enc(q)                          (Equation 8)
-  s_{q,i} = (e_q · e_i) / (|e_q| |e_i|)  (Equation 9)
-  M_retrieved = {m_i | rank(s_{q,i}) <= k} (Equation 10)
+论文参考：
+  e_q = f_enc(q)                          (公式 8)
+  s_{q,i} = (e_q · e_i) / (|e_q| |e_i|)  (公式 9)
+  M_retrieved = {m_i | rank(s_{q,i}) <= k} (公式 10)
 """
 
 import os
@@ -17,21 +17,23 @@ from typing import List, Dict, Optional, Tuple
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# 为中国用户使用 Hugging Face 镜像源
+os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
+
 
 class SimpleEmbeddingRetriever:
-    """Embedding-based retrieval system using cosine similarity.
+    """基于嵌入的检索系统，使用余弦相似度。
 
-    This retriever encodes documents using a SentenceTransformer model
-    and retrieves the top-k most relevant documents based on cosine
-    similarity between query and document embeddings.
+    该检索器使用 SentenceTransformer 模型对文档进行编码，
+    并基于查询与文档嵌入之间的余弦相似度检索 top-k 最相关文档。
     """
 
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
-        """Initialize the retriever with a SentenceTransformer model.
+        """初始化检索器。
 
-        Args:
-            model_name: Name of the SentenceTransformer model to use.
-                        Default is 'all-MiniLM-L6-v2' as specified in the paper.
+        参数:
+            model_name: SentenceTransformer 模型名称。
+                        默认使用论文指定的 'all-MiniLM-L6-v2'。
         """
         self.model = SentenceTransformer(model_name)
         self.model_name = model_name
@@ -40,13 +42,13 @@ class SimpleEmbeddingRetriever:
         self.document_ids: Dict[str, int] = {}
 
     def add_documents(self, documents: List[str]) -> None:
-        """Add documents to the retriever's index.
+        """向检索器索引中添加文档。
 
-        Encodes the documents and appends them to the existing index.
-        If no documents exist yet, initializes the index.
+        对文档进行编码并追加到现有索引。
+        如果尚无文档，则初始化索引。
 
-        Args:
-            documents: List of text strings to add to the index.
+        参数:
+            documents: 要添加到索引的文本字符串列表。
         """
         if not documents:
             return
@@ -65,14 +67,14 @@ class SimpleEmbeddingRetriever:
                 self.document_ids[doc] = start_idx + idx
 
     def search(self, query: str, k: int = 5) -> List[int]:
-        """Search for the top-k most similar documents.
+        """搜索 top-k 最相似文档。
 
-        Args:
-            query: The query text to search for.
-            k: Number of top results to return.
+        参数:
+            query: 查询文本。
+            k: 返回的结果数量。
 
-        Returns:
-            List of indices of the top-k most similar documents.
+        返回:
+            top-k 最相似文档的索引列表。
         """
         if not self.corpus or self.embeddings is None:
             return []
@@ -84,14 +86,14 @@ class SimpleEmbeddingRetriever:
         return top_k_indices.tolist()
 
     def search_with_scores(self, query: str, k: int = 5) -> List[Tuple[int, float]]:
-        """Search with similarity scores.
+        """带相似度分数的搜索。
 
-        Args:
-            query: The query text to search for.
-            k: Number of top results to return.
+        参数:
+            query: 查询文本。
+            k: 返回的结果数量。
 
-        Returns:
-            List of (index, similarity_score) tuples for the top-k results.
+        返回:
+            top-k 结果的 (索引, 相似度分数) 元组列表。
         """
         if not self.corpus or self.embeddings is None:
             return []
@@ -103,11 +105,11 @@ class SimpleEmbeddingRetriever:
         return [(int(idx), float(similarities[idx])) for idx in top_k_indices]
 
     def save(self, cache_file: str, embeddings_file: str) -> None:
-        """Save retriever state to disk.
+        """将检索器状态保存到磁盘。
 
-        Args:
-            cache_file: Path to save the corpus and document_ids pickle.
-            embeddings_file: Path to save the numpy embeddings array.
+        参数:
+            cache_file: 保存语料库和 document_ids 的 pickle 文件路径。
+            embeddings_file: 保存 numpy 嵌入数组的文件路径。
         """
         if self.embeddings is not None:
             np.save(embeddings_file, self.embeddings)
@@ -122,14 +124,14 @@ class SimpleEmbeddingRetriever:
 
     @classmethod
     def load(cls, cache_file: str, embeddings_file: str) -> "SimpleEmbeddingRetriever":
-        """Load retriever state from disk.
+        """从磁盘加载检索器状态。
 
-        Args:
-            cache_file: Path to the corpus pickle file.
-            embeddings_file: Path to the numpy embeddings file.
+        参数:
+            cache_file: 语料库 pickle 文件路径。
+            embeddings_file: numpy 嵌入文件路径。
 
-        Returns:
-            A restored SimpleEmbeddingRetriever instance.
+        返回:
+            恢复的 SimpleEmbeddingRetriever 实例。
         """
         with open(cache_file, "rb") as f:
             state = pickle.load(f)
@@ -147,17 +149,17 @@ class SimpleEmbeddingRetriever:
     def from_memories(
         cls, memories: Dict, model_name: str = "all-MiniLM-L6-v2"
     ) -> "SimpleEmbeddingRetriever":
-        """Build a retriever from existing memory notes.
+        """从现有记忆笔记构建检索器。
 
-        Creates document strings combining content, context, keywords,
-        and tags for each memory, then indexes them.
+        为每个记忆创建包含内容、上下文、关键词和标签的文档字符串，
+        然后对其进行索引。
 
-        Args:
-            memories: Dictionary mapping memory IDs to MemoryNote objects.
-            model_name: SentenceTransformer model name.
+        参数:
+            memories: 记忆 ID 到 MemoryNote 对象的字典映射。
+            model_name: SentenceTransformer 模型名称。
 
-        Returns:
-            A new SimpleEmbeddingRetriever populated with the memories.
+        返回:
+            填充了记忆数据的新 SimpleEmbeddingRetriever 实例。
         """
         retriever = cls(model_name)
         docs = []

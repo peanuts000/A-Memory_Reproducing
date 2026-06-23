@@ -1,12 +1,13 @@
 """
-Conversation Demo: Interactive A-Mem memory system.
+对话演示：交互式 A-Mem 记忆系统。
 
-Demonstrates how A-Mem maintains memory across a multi-turn conversation,
-building an interconnected knowledge network that evolves over time.
+演示 A-Mem 如何在多轮对话中维护记忆，
+构建随时间演化的互连知识网络。
 
-Usage:
+使用方法：
     python examples/conversation_demo.py --backend openai --model gpt-4o-mini
-    python examples/conversation_demo.py --backend ollama --model llama3.2
+    python examples/conversation_demo.py --backend doubao
+    python examples/conversation_demo.py --interactive
 """
 
 import argparse
@@ -19,81 +20,81 @@ from amem import AgenticMemorySystem
 
 
 def run_conversation_demo(memory_system: AgenticMemorySystem):
-    """Run a scripted multi-turn conversation demo."""
+    """运行预设的多轮对话演示。"""
 
     conversations = [
-        # Session 1: Getting to know each other
-        ("2023-07-21", "Calvin", "Hey Dave! I just moved into my new studio space. It's amazing having my own place to work on music."),
-        ("2023-07-21", "Dave", "That's great Calvin! I've been really into hiking lately. Found some amazing trails around here."),
-        ("2023-07-21", "Calvin", "Nice! I've been experimenting with electronic elements in my songs. Adding synths gives them a fresh vibe."),
-        ("2023-07-21", "Dave", "You should check out the mountain trails near the lake. The scenery is perfect for photography too."),
+        # 第一轮对话：互相了解
+        ("2023-07-21", "Calvin", "嘿 Dave！我刚搬进新的工作室。有自己的地方做音乐真是太棒了。"),
+        ("2023-07-21", "Dave", "太好了 Calvin！我最近迷上了徒步。这附近有一些很棒的步道。"),
+        ("2023-07-21", "Calvin", "不错！我一直在尝试在歌曲中加入电子元素。合成器让歌曲有了全新的感觉。"),
+        ("2023-07-21", "Dave", "你应该去看看湖边的山间步道。那里的风景也非常适合摄影。"),
 
-        # Session 2: Catching up
-        ("2023-09-15", "Dave", "I've been working on a photography project. Capturing sunsets at different locations."),
-        ("2023-09-15", "Calvin", "That sounds beautiful! I've been collaborating with a local DJ. We're planning a live show next month."),
-        ("2023-09-15", "Dave", "Speaking of collaborations, have you thought about using AI for your music compositions?"),
-        ("2023-09-15", "Calvin", "Actually yes! I've been reading about AI music generation. It could help with creating backing tracks."),
+        # 第二轮对话：叙旧
+        ("2023-09-15", "Dave", "我一直在做一个摄影项目。在不同地点拍摄日落。"),
+        ("2023-09-15", "Calvin", "听起来很美！我一直在和一个本地 DJ 合作。我们下个月计划一场现场演出。"),
+        ("2023-09-15", "Dave", "说到合作，你有没有想过用 AI 来辅助音乐创作？"),
+        ("2023-09-15", "Calvin", "确实有！我一直在阅读关于 AI 音乐生成的文章。它可以帮助创作伴奏。"),
 
-        # Session 3: Deep dive
-        ("2023-10-22", "Calvin", "The live show went amazing! We had over 200 people. The electronic sets really got the crowd going."),
-        ("2023-10-22", "Dave", "Congrats! I finished my photography series. Going to exhibit at the local gallery next month."),
-        ("2023-10-22", "Calvin", "Let's do a joint exhibition! My music with your photos. It would be an immersive experience."),
-        ("2023-10-22", "Dave", "That's a brilliant idea! We could call it 'Harmony in Motion' - music and visual art combined."),
+        # 第三轮对话：深入交流
+        ("2023-10-22", "Calvin", "现场演出非常成功！有超过 200 人参加。电子音乐让观众非常兴奋。"),
+        ("2023-10-22", "Dave", "恭喜！我完成了我的摄影系列。下个月将在本地画廊展出。"),
+        ("2023-10-22", "Calvin", "我们来办个联合展览吧！我的音乐配上你的照片。会是一种沉浸式体验。"),
+        ("2023-10-22", "Dave", "好主意！我们可以叫它'律动中的和谐'——音乐与视觉艺术的结合。"),
     ]
 
-    print("Adding conversation memories to A-Mem system...\n")
+    print("正在向 A-Mem 系统添加对话记忆...\n")
 
     for timestamp, speaker, content in conversations:
         formatted = f"Speaker {speaker} says: {content}"
         note_id = memory_system.add_note(formatted, time=timestamp)
         print(f"[{timestamp}] {speaker}: {content[:60]}...")
-        print(f"  → Memory ID: {note_id[:8]}...")
+        print(f"  → 记忆 ID: {note_id[:8]}...")
 
-    print(f"\nTotal memories: {memory_system.get_memory_count()}")
+    print(f"\n记忆总数: {memory_system.get_memory_count()}")
 
-    # Test retrieval with various queries
+    # 使用各种查询测试检索
     print("\n" + "=" * 60)
-    print("Testing Memory Retrieval")
+    print("测试记忆检索")
     print("=" * 60)
 
     test_queries = [
-        "What hobby did Calvin start?",
-        "Tell me about Dave's photography project",
-        "What collaboration ideas did they discuss?",
-        "When was the live music show?",
-        "What is the name of their joint exhibition?",
+        "Calvin 开始了什么爱好?",
+        "告诉我 Dave 的摄影项目",
+        "他们讨论了什么合作计划?",
+        "现场音乐演出是什么时候?",
+        "他们联合展览的名字是什么?",
     ]
 
     for query in test_queries:
-        print(f"\nQuery: '{query}'")
+        print(f"\n查询: '{query}'")
         results = memory_system.retrieve(query, k=3)
         for i, mem in enumerate(results):
             print(f"  [{i + 1}] {mem.content[:80]}...")
-            print(f"      Context: {mem.context}")
-            print(f"      Keywords: {mem.keywords}")
+            print(f"      上下文: {mem.context}")
+            print(f"      关键词: {mem.keywords}")
 
-    # Demonstrate memory evolution by inspecting notes
+    # 通过检查笔记展示记忆演化
     print("\n" + "=" * 60)
-    print("Memory Structure After Evolution")
+    print("演化后的记忆结构")
     print("=" * 60)
 
     for mid, note in memory_system.memories.items():
         if note.links:
-            print(f"\nMemory: {note.content[:60]}...")
-            print(f"  Links to: {len(note.links)} other memories")
-            print(f"  Tags: {note.tags}")
+            print(f"\n记忆: {note.content[:60]}...")
+            print(f"  链接到: {len(note.links)} 条其他记忆")
+            print(f"  标签: {note.tags}")
 
 
 def interactive_mode(memory_system: AgenticMemorySystem):
-    """Run in interactive mode for manual testing."""
+    """运行交互模式进行手动测试。"""
     print("\n" + "=" * 60)
-    print("Interactive Mode - A-Mem Memory System")
+    print("交互模式 - A-Mem 记忆系统")
     print("=" * 60)
-    print("Commands:")
-    print("  add <content>  - Add a new memory")
-    print("  ask <question> - Query the memory system")
-    print("  show           - Show all memories")
-    print("  quit           - Exit")
+    print("命令:")
+    print("  add <内容>   - 添加新记忆")
+    print("  ask <问题>   - 查询记忆系统")
+    print("  show         - 显示所有记忆")
+    print("  quit         - 退出")
     print()
 
     while True:
@@ -111,17 +112,17 @@ def interactive_mode(memory_system: AgenticMemorySystem):
         if user_input.lower() == "show":
             for mid, note in memory_system.memories.items():
                 print(f"\n  [{mid[:8]}] {note.content}")
-                print(f"    Keywords: {note.keywords}")
-                print(f"    Tags: {note.tags}")
-                print(f"    Context: {note.context}")
-                print(f"    Links: {note.links}")
+                print(f"    关键词: {note.keywords}")
+                print(f"    标签: {note.tags}")
+                print(f"    上下文: {note.context}")
+                print(f"    链接: {note.links}")
             continue
 
         if user_input.lower().startswith("add "):
             content = user_input[4:].strip()
             if content:
                 note_id = memory_system.add_note(content)
-                print(f"Added memory: {note_id[:8]}...")
+                print(f"已添加记忆: {note_id[:8]}...")
             continue
 
         if user_input.lower().startswith("ask "):
@@ -129,27 +130,27 @@ def interactive_mode(memory_system: AgenticMemorySystem):
             if query:
                 results = memory_system.retrieve(query, k=3)
                 if not results:
-                    print("No relevant memories found.")
+                    print("未找到相关记忆。")
                 else:
                     for i, mem in enumerate(results):
                         print(f"\n  [{i + 1}] {mem.content}")
-                        print(f"      Context: {mem.context}")
-                        print(f"      Keywords: {mem.keywords}")
+                        print(f"      上下文: {mem.context}")
+                        print(f"      关键词: {mem.keywords}")
             continue
 
-        print("Unknown command. Use 'add', 'ask', 'show', or 'quit'.")
+        print("未知命令。请使用 'add', 'ask', 'show' 或 'quit'。")
 
 
 def main():
     default_backend = "doubao" if os.getenv("DOUBAO_API_KEY") else "openai"
     default_model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215") if default_backend == "doubao" else "gpt-4o-mini"
 
-    parser = argparse.ArgumentParser(description="A-Mem Conversation Demo")
+    parser = argparse.ArgumentParser(description="A-Mem 对话演示")
     parser.add_argument("--backend", type=str, default=default_backend, choices=["openai", "ollama", "litellm", "doubao"])
     parser.add_argument("--model", type=str, default=default_model)
     parser.add_argument("--api-key", type=str, default=None)
-    parser.add_argument("--base-url", type=str, default=None, help="API base URL (auto-read from .env)")
-    parser.add_argument("--interactive", action="store_true", help="Run in interactive mode")
+    parser.add_argument("--base-url", type=str, default=None, help="API Base URL（从 .env 自动读取）")
+    parser.add_argument("--interactive", action="store_true", help="运行交互模式")
     args = parser.parse_args()
 
     memory_system = AgenticMemorySystem(

@@ -1,16 +1,15 @@
 """
-A-Mem: Agentic Memory for LLM Agents
-A faithful reproduction of the paper: "A-Mem: Agentic Memory for LLM Agents"
-(arXiv:2502.12110)
+A-Mem: 面向 LLM Agent 的智能记忆系统
 
-Based on the Zettelkasten method, this system enables dynamic memory structuring
-for LLM agents through three core mechanisms:
-  1. Note Construction - Generate structured memory notes with LLM
-  2. Link Generation - Establish connections between related memories
-  3. Memory Evolution - Dynamically update existing memories with new context
+本项目是对论文 "A-Mem: Agentic Memory for LLM Agents" (arXiv:2502.12110) 的忠实复现。
+
+基于 Zettelkasten 方法，本系统通过以下三个核心机制实现 LLM Agent 的动态记忆管理：
+  1. 笔记构建 (Note Construction) - 使用 LLM 生成结构化记忆笔记
+  2. 链接生成 (Link Generation) - 在相关记忆之间建立连接
+  3. 记忆演化 (Memory Evolution) - 根据新信息动态更新已有记忆
 """
 
-# Auto-load .env file on import
+# 导入时自动加载 .env 文件
 try:
     from dotenv import load_dotenv
     import os

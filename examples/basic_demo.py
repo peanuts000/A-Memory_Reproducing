@@ -1,22 +1,22 @@
 """
-Basic Demo: A-Mem Agentic Memory System
+基础演示：A-Mem 智能记忆系统
 
-This script demonstrates the core functionality of the A-Mem system:
-  1. Adding memory notes (triggers Note Construction + Link Generation + Evolution)
-  2. Retrieving relevant memories
-  3. Inspecting memory structure
+本脚本演示 A-Mem 系统的核心功能：
+  1. 添加记忆笔记（触发笔记构建 + 链接生成 + 记忆演化）
+  2. 检索相关记忆
+  3. 检查记忆结构
 
-Usage:
-    # Auto-detect from .env (推荐):
+使用方法：
+    # 自动从 .env 检测配置（推荐）:
     python examples/basic_demo.py
 
-    # With Doubao (豆包):
+    # 使用豆包:
     python examples/basic_demo.py --backend doubao
 
-    # With OpenAI:
+    # 使用 OpenAI:
     python examples/basic_demo.py --backend openai --api-key sk-xxx
 
-    # With Ollama:
+    # 使用 Ollama:
     python examples/basic_demo.py --backend ollama --model llama3.2
 """
 
@@ -24,52 +24,52 @@ import argparse
 import sys
 import os
 
-# Add parent directory to path
+# 添加父目录到路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from amem import AgenticMemorySystem
 
 
 def main():
-    # Auto-detect defaults from .env
+    # 从 .env 自动检测默认配置
     default_backend = "doubao" if os.getenv("DOUBAO_API_KEY") else "openai"
     default_model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215") if default_backend == "doubao" else "gpt-4o-mini"
 
-    parser = argparse.ArgumentParser(description="A-Mem Basic Demo")
+    parser = argparse.ArgumentParser(description="A-Mem 基础演示")
     parser.add_argument(
         "--backend",
         type=str,
         default=default_backend,
         choices=["openai", "ollama", "litellm", "doubao"],
-        help="LLM backend to use (auto-detected from .env)",
+        help="要使用的 LLM 后端（从 .env 自动检测）",
     )
     parser.add_argument(
         "--model",
         type=str,
         default=default_model,
-        help="LLM model identifier (auto-detected from .env)",
+        help="LLM 模型标识符（从 .env 自动检测）",
     )
     parser.add_argument(
         "--api-key",
         type=str,
         default=None,
-        help="API key (auto-read from .env if not provided)",
+        help="API Key（如未提供则从 .env 自动读取）",
     )
     parser.add_argument(
         "--base-url",
         type=str,
         default=None,
-        help="API base URL (auto-read from .env if not provided)",
+        help="API Base URL（如未提供则从 .env 自动读取）",
     )
     args = parser.parse_args()
 
     print("=" * 60)
-    print("A-Mem: Agentic Memory System - Basic Demo")
+    print("A-Mem: 智能记忆系统 - 基础演示")
     print("=" * 60)
-    print(f"Backend: {args.backend}, Model: {args.model}")
+    print(f"后端: {args.backend}, 模型: {args.model}")
     print()
 
-    # Initialize the memory system (api_key/api_base will be auto-read from .env if None)
+    # 初始化记忆系统（api_key/api_base 为 None 时会自动从 .env 读取）
     memory_system = AgenticMemorySystem(
         llm_backend=args.backend,
         llm_model=args.model,
@@ -79,9 +79,9 @@ def main():
     )
 
     # -----------------------------------------------------------------------
-    # Step 1: Add memory notes
+    # 步骤 1：添加记忆笔记
     # -----------------------------------------------------------------------
-    print("Step 1: Adding memory notes...")
+    print("步骤 1: 添加记忆笔记...")
     print("-" * 40)
 
     conversations = [
@@ -94,52 +94,52 @@ def main():
 
     memory_ids = []
     for i, conv in enumerate(conversations):
-        print(f"\nAdding memory {i + 1}/{len(conversations)}...")
+        print(f"\n添加记忆 {i + 1}/{len(conversations)}...")
         note_id = memory_system.add_note(conv)
         memory_ids.append(note_id)
         print(f"  ID: {note_id[:8]}...")
 
-    print(f"\nTotal memories stored: {memory_system.get_memory_count()}")
+    print(f"\n已存储记忆总数: {memory_system.get_memory_count()}")
 
     # -----------------------------------------------------------------------
-    # Step 2: Retrieve memories
+    # 步骤 2：检索记忆
     # -----------------------------------------------------------------------
     print("\n" + "=" * 60)
-    print("Step 2: Retrieving memories...")
+    print("步骤 2: 检索记忆...")
     print("-" * 40)
 
     queries = [
-        "Which hobby did Dave pick up?",
-        "What is Calvin working on?",
-        "Tell me about their collaboration plans",
+        "Dave 有什么爱好?",
+        "Calvin 在做什么?",
+        "告诉我他们的合作计划",
     ]
 
     for query in queries:
-        print(f"\nQuery: '{query}'")
+        print(f"\n查询: '{query}'")
         results = memory_system.retrieve(query, k=3)
         for j, mem in enumerate(results):
-            print(f"  [{j + 1}] Content: {mem.content[:80]}...")
-            print(f"      Context: {mem.context}")
-            print(f"      Keywords: {mem.keywords}")
-            print(f"      Tags: {mem.tags}")
+            print(f"  [{j + 1}] 内容: {mem.content[:80]}...")
+            print(f"      上下文: {mem.context}")
+            print(f"      关键词: {mem.keywords}")
+            print(f"      标签: {mem.tags}")
 
     # -----------------------------------------------------------------------
-    # Step 3: Inspect memory structure
+    # 步骤 3：检查记忆结构
     # -----------------------------------------------------------------------
     print("\n" + "=" * 60)
-    print("Step 3: Memory structure inspection...")
+    print("步骤 3: 检查记忆结构...")
     print("-" * 40)
 
     for mid in memory_ids:
         note = memory_system.memories[mid]
-        print(f"\nMemory: {note.content[:60]}...")
-        print(f"  Keywords: {note.keywords}")
-        print(f"  Tags: {note.tags}")
-        print(f"  Context: {note.context}")
-        print(f"  Links: {note.links}")
+        print(f"\n记忆: {note.content[:60]}...")
+        print(f"  关键词: {note.keywords}")
+        print(f"  标签: {note.tags}")
+        print(f"  上下文: {note.context}")
+        print(f"  链接: {note.links}")
 
     print("\n" + "=" * 60)
-    print("Demo complete!")
+    print("演示完成!")
 
 
 if __name__ == "__main__":

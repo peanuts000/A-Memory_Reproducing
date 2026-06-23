@@ -1,22 +1,22 @@
 """
-AgenticMemorySystem: The core A-Mem memory management system.
+AgenticMemorySystem: A-Mem 的核心记忆管理系统。
 
-Implements the three-phase memory storage pipeline:
-  1. Note Construction (Section 3.1)
-  2. Link Generation (Section 3.2)
-  3. Memory Evolution (Section 3.3)
+实现三阶段记忆存储流水线：
+  1. 笔记构建 (Note Construction)（第 3.1 节）
+  2. 链接生成 (Link Generation)（第 3.2 节）
+  3. 记忆演化 (Memory Evolution)（第 3.3 节）
 
-And the memory retrieval mechanism (Section 3.4).
+以及记忆检索机制（第 3.4 节）。
 
-Usage:
+使用方法：
     from amem import AgenticMemorySystem
 
     memory = AgenticMemorySystem(
-        llm_backend="openai",
-        llm_model="gpt-4o-mini"
+        llm_backend="doubao",
+        llm_model="doubao-seed-2-0-lite-260215"
     )
-    memory.add_note("The cache system works great in production.")
-    results = memory.retrieve("Tell me about the cache system")
+    memory.add_note("缓存系统在生产环境中运行良好。")
+    results = memory.retrieve("告诉我关于缓存系统的信息")
 """
 
 import json
@@ -41,22 +41,22 @@ from .parsers import (
 
 
 class AgenticMemorySystem:
-    """Agentic Memory System for LLM Agents.
+    """面向 LLM Agent 的智能记忆系统。
 
-    Implements the full A-Mem pipeline:
-      - Note Construction: Generate structured notes with LLM (keywords, context, tags)
-      - Link Generation: Establish connections between related memories
-      - Memory Evolution: Update existing memories with new context
-      - Memory Retrieval: Retrieve relevant memories using cosine similarity
+    实现完整的 A-Mem 流水线：
+      - 笔记构建：使用 LLM 生成结构化笔记（关键词、上下文、标签）
+      - 链接生成：找到语义相似的记忆并建立连接
+      - 记忆演化：根据新信息更新已有记忆
+      - 记忆检索：使用余弦相似度检索相关记忆
 
-    Args:
-        model_name: SentenceTransformer model for embeddings.
-        llm_backend: LLM backend ('openai', 'ollama', 'litellm').
-        llm_model: LLM model identifier.
-        evo_threshold: Trigger consolidation every N evolutions.
-        api_key: Optional API key for the LLM backend.
-        api_base: Optional API base URL.
-        top_k: Default number of nearest neighbors for operations.
+    参数:
+        model_name: 用于嵌入的 SentenceTransformer 模型。
+        llm_backend: LLM 后端（'openai', 'ollama', 'litellm', 'doubao'）。
+        llm_model: LLM 模型标识符。
+        evo_threshold: 每 N 次演化触发一次整合。
+        api_key: 可选的 LLM 后端 API Key。
+        api_base: 可选的 API Base URL。
+        top_k: 操作的默认近邻数量。
     """
 
     def __init__(
@@ -77,40 +77,40 @@ class AgenticMemorySystem:
         self.top_k = top_k
 
     # -----------------------------------------------------------------------
-    # Public API
+    # 公共 API
     # -----------------------------------------------------------------------
 
     def add_note(self, content: str, time: str = None, **kwargs) -> str:
-        """Add a new memory note to the system.
+        """向系统添加新的记忆笔记。
 
-        This triggers the full pipeline:
-          1. Note Construction (generate keywords, context, tags via LLM)
-          2. Link Generation (find and establish connections)
-          3. Memory Evolution (update related memories)
+        触发完整流水线：
+          1. 笔记构建（通过 LLM 生成关键词、上下文、标签）
+          2. 链接生成（找到并建立连接）
+          3. 记忆演化（更新相关记忆）
 
-        Args:
-            content: The raw interaction content.
-            time: Optional timestamp string.
-            **kwargs: Additional keyword arguments for MemoryNote.
+        参数:
+            content: 原始交互内容。
+            time: 可选的时间戳字符串。
+            **kwargs: MemoryNote 的其他关键字参数。
 
-        Returns:
-            The ID of the newly created memory note.
+        返回:
+            新创建的记忆笔记 ID。
         """
-        # Step 1: Note Construction
+        # 步骤 1：笔记构建
         note = MemoryNote(content=content, timestamp=time, **kwargs)
         note = self._construct_note(note)
 
-        # Step 2 & 3: Link Generation + Memory Evolution
+        # 步骤 2 & 3：链接生成 + 记忆演化
         evolved = self._process_memory(note)
 
-        # Store the note
+        # 存储笔记
         self.memories[note.id] = note
 
-        # Add to retriever index
+        # 添加到检索器索引
         doc = self._note_to_document(note)
         self.retriever.add_documents([doc])
 
-        # Track evolution count for consolidation
+        # 跟踪演化计数以进行整合
         if evolved:
             self.evo_cnt += 1
             if self.evo_cnt % self.evo_threshold == 0:
@@ -119,19 +119,19 @@ class AgenticMemorySystem:
         return note.id
 
     def retrieve(self, query: str, k: int = None) -> List[MemoryNote]:
-        """Retrieve the top-k most relevant memories for a query.
+        """检索 top-k 最相关记忆。
 
-        Implements the memory retrieval from Section 3.4:
+        实现第 3.4 节的记忆检索：
           e_q = f_enc(q)
           s_{q,i} = (e_q · e_i) / (|e_q| |e_i|)
           M_retrieved = {m_i | rank(s_{q,i}) <= k}
 
-        Args:
-            query: The query text.
-            k: Number of results to return. Defaults to self.top_k.
+        参数:
+            query: 查询文本。
+            k: 返回结果数量。默认使用 self.top_k。
 
-        Returns:
-            List of the most relevant MemoryNote objects.
+        返回:
+            最相关的 MemoryNote 对象列表。
         """
         if not self.memories:
             return []
@@ -147,14 +147,14 @@ class AgenticMemorySystem:
         return results
 
     def retrieve_with_context(self, query: str, k: int = None) -> str:
-        """Retrieve memories and format them as context string.
+        """检索记忆并格式化为上下文字符串。
 
-        Args:
-            query: The query text.
-            k: Number of results.
+        参数:
+            query: 查询文本。
+            k: 结果数量。
 
-        Returns:
-            Formatted string of retrieved memories for prompt injection.
+        返回:
+            用于提示词注入的格式化记忆上下文字符串。
         """
         memories = self.retrieve(query, k)
         if not memories:
@@ -163,25 +163,24 @@ class AgenticMemorySystem:
         context_parts = []
         for m in memories:
             part = (
-                f"talk start time: {m.timestamp}\n"
-                f"memory content: {m.content}\n"
-                f"memory context: {m.context}\n"
-                f"memory keywords: {m.keywords}\n"
-                f"memory tags: {m.tags}\n"
+                f"对话开始时间: {m.timestamp}\n"
+                f"记忆内容: {m.content}\n"
+                f"记忆上下文: {m.context}\n"
+                f"记忆关键词: {m.keywords}\n"
+                f"记忆标签: {m.tags}\n"
             )
             context_parts.append(part)
         return "\n---\n".join(context_parts)
 
     def get_memory_count(self) -> int:
-        """Return the number of stored memories."""
+        """返回已存储的记忆数量。"""
         return len(self.memories)
 
     def consolidate_memories(self) -> None:
-        """Rebuild the retriever index from all current memories.
+        """从所有当前记忆重建检索器索引。
 
-        This is called periodically (every evo_threshold evolutions)
-        to ensure the retriever's embeddings are up to date after
-        memory evolution has changed contexts and tags.
+        每隔 evo_threshold 次演化调用一次，
+        以确保检索器的嵌入在记忆演化改变上下文和标签后保持最新。
         """
         try:
             model_name = self.retriever.model.get_config_dict()["model_name"]
@@ -194,14 +193,14 @@ class AgenticMemorySystem:
             self.retriever.add_documents(docs)
 
     # -----------------------------------------------------------------------
-    # Internal Pipeline
+    # 内部流水线
     # -----------------------------------------------------------------------
 
     def _construct_note(self, note: MemoryNote) -> MemoryNote:
-        """Note Construction (Section 3.1).
+        """笔记构建（第 3.1 节）。
 
-        Uses LLM to generate keywords (K_i), context (X_i), and tags (G_i).
-        Then computes the embedding vector (e_i).
+        使用 LLM 生成关键词 (K_i)、上下文 (X_i) 和标签 (G_i)。
+        然后计算嵌入向量 (e_i)。
 
         K_i, G_i, X_i ← LLM(c_i ∥ t_i ∥ Ps1)
         e_i = f_enc[ concat(c_i, K_i, G_i, X_i) ]
@@ -214,7 +213,7 @@ class AgenticMemorySystem:
             )
             analysis = parse_analysis_response(response, note.content)
         except Exception as e:
-            print(f"Error in note construction: {e}")
+            print(f"笔记构建错误: {e}")
             analysis = {"keywords": [], "context": "", "tags": []}
 
         note.keywords = analysis["keywords"]
@@ -224,36 +223,64 @@ class AgenticMemorySystem:
         return note
 
     def _process_memory(self, note: MemoryNote) -> bool:
-        """Process a memory note through Link Generation and Memory Evolution.
+        """处理记忆笔记，执行链接生成和记忆演化。
 
-        Args:
-            note: The newly constructed memory note.
+        参数:
+            note: 新构建的记忆笔记。
 
-        Returns:
-            True if evolution occurred, False otherwise.
+        返回:
+            如果发生了演化则返回 True，否则返回 False。
         """
-        # Find nearest neighbors
-        neighbor_str, indices = self._find_related_memories(note.content, self.top_k)
+        # 找到带相似度分数的最近邻
+        neighbor_str, indices, scores = self._find_related_memories_with_scores(
+            note.content, self.top_k
+        )
 
         if not indices:
             return False
 
-        # Combined Link Generation + Evolution prompt
+        # 过滤：只考虑相似度 > 阈值的邻居
+        SIMILARITY_THRESHOLD = 0.3
+        filtered = [(idx, score) for idx, score in zip(indices, scores) if score > SIMILARITY_THRESHOLD]
+        if not filtered:
+            return False
+
+        filtered_indices = [idx for idx, _ in filtered]
+        filtered_scores = [score for _, score in filtered]
+
+        # 仅使用过滤后的邻居重建邻居字符串
+        all_memories = list(self.memories.values())
+        filtered_neighbor_str = ""
+        for i, (idx, score) in enumerate(zip(filtered_indices, filtered_scores)):
+            if idx >= len(all_memories):
+                continue
+            m = all_memories[idx]
+            filtered_neighbor_str += (
+                f"邻居索引: {i}\t"
+                f"相似度: {score:.3f}\t"
+                f"对话开始时间: {m.timestamp}\t"
+                f"记忆内容: {m.content}\t"
+                f"记忆上下文: {m.context}\t"
+                f"记忆关键词: {m.keywords}\t"
+                f"记忆标签: {m.tags}\n"
+            )
+
+        # 组合链接生成 + 演化提示词
         prompt = EVOLUTION_PROMPT.format(
             context=note.context,
             content=note.content,
             keywords=note.keywords,
-            nearest_neighbors_memories=neighbor_str,
-            neighbor_number=len(indices),
+            nearest_neighbors_memories=filtered_neighbor_str,
+            neighbor_number=len(filtered_indices),
         )
 
         try:
             response = self.llm_controller.llm.get_completion(
                 prompt, response_format=EVOLUTION_SCHEMA, temperature=0.3
             )
-            evolution_result = parse_evolution_response(response, len(indices))
+            evolution_result = parse_evolution_response(response, len(filtered_indices))
         except Exception as e:
-            print(f"Error in memory evolution: {e}")
+            print(f"记忆演化错误: {e}")
             return False
 
         should_evolve = evolution_result["should_evolve"]
@@ -262,23 +289,37 @@ class AgenticMemorySystem:
 
         actions = evolution_result["actions"]
 
-        # Strengthen: add links and update tags for the new memory
+        # 强化：为新记忆添加链接和更新标签
         if "strengthen" in actions:
             connections = evolution_result["suggested_connections"]
             new_tags = evolution_result["tags_to_update"]
-            note.links.extend(connections)
+            # 将连接索引映射回 filtered_indices（真实记忆索引）
+            notes_list = list(self.memories.values())
+            notes_ids = list(self.memories.keys())
+            new_note_idx = len(notes_list)  # 新笔记将被插入的索引位置
+            for conn in connections:
+                if 0 <= conn < len(filtered_indices):
+                    real_idx = filtered_indices[conn]
+                    if real_idx not in note.links:
+                        note.links.append(real_idx)
+                        # 添加反向链接：更新被连接记忆的 links
+                        if real_idx < len(notes_list):
+                            target_note = notes_list[real_idx]
+                            if new_note_idx not in target_note.links:
+                                target_note.links.append(new_note_idx)
+                                self.memories[notes_ids[real_idx]] = target_note
             if new_tags:
                 note.tags = new_tags
 
-        # Update Neighbor: update context and tags of existing memories
+        # 更新邻居：更新现有记忆的上下文和标签
         if "update_neighbor" in actions:
             new_contexts = evolution_result["new_context_neighborhood"]
             new_tags_list = evolution_result["new_tags_neighborhood"]
             notes_list = list(self.memories.values())
             notes_ids = list(self.memories.keys())
 
-            for i in range(min(len(indices), len(new_tags_list))):
-                memory_idx = indices[i]
+            for i in range(min(len(filtered_indices), len(new_tags_list))):
+                memory_idx = filtered_indices[i]
                 if memory_idx >= len(notes_list):
                     continue
 
@@ -297,14 +338,14 @@ class AgenticMemorySystem:
     def _find_related_memories(
         self, query: str, k: int = 5
     ) -> Tuple[str, List[int]]:
-        """Find related memories using the retriever.
+        """使用检索器找到相关记忆。
 
-        Args:
-            query: The query text.
-            k: Number of neighbors.
+        参数:
+            query: 查询文本。
+            k: 邻居数量。
 
-        Returns:
-            Tuple of (formatted memory string, list of indices).
+        返回:
+            (格式化的记忆字符串, 索引列表) 元组。
         """
         if not self.memories:
             return "", []
@@ -318,26 +359,64 @@ class AgenticMemorySystem:
                 continue
             m = all_memories[i]
             memory_str += (
-                f"memory index: {i}\t"
-                f"talk start time: {m.timestamp}\t"
-                f"memory content: {m.content}\t"
-                f"memory context: {m.context}\t"
-                f"memory keywords: {m.keywords}\t"
-                f"memory tags: {m.tags}\n"
+                f"记忆索引: {i}\t"
+                f"对话开始时间: {m.timestamp}\t"
+                f"记忆内容: {m.content}\t"
+                f"记忆上下文: {m.context}\t"
+                f"记忆关键词: {m.keywords}\t"
+                f"记忆标签: {m.tags}\n"
             )
         return memory_str, indices
 
+    def _find_related_memories_with_scores(
+        self, query: str, k: int = 5
+    ) -> Tuple[str, List[int], List[float]]:
+        """带相似度分数的相关记忆查找。
+
+        参数:
+            query: 查询文本。
+            k: 邻居数量。
+
+        返回:
+            (格式化的记忆字符串, 索引列表, 分数列表) 元组。
+        """
+        if not self.memories:
+            return "", [], []
+
+        results = self.retriever.search_with_scores(query, k)
+        all_memories = list(self.memories.values())
+
+        memory_str = ""
+        indices = []
+        scores = []
+        for idx, score in results:
+            if idx >= len(all_memories):
+                continue
+            m = all_memories[idx]
+            memory_str += (
+                f"记忆索引: {idx}\t"
+                f"相似度: {score:.3f}\t"
+                f"对话开始时间: {m.timestamp}\t"
+                f"记忆内容: {m.content}\t"
+                f"记忆上下文: {m.context}\t"
+                f"记忆关键词: {m.keywords}\t"
+                f"记忆标签: {m.tags}\n"
+            )
+            indices.append(idx)
+            scores.append(score)
+        return memory_str, indices, scores
+
     def _find_related_memories_raw(self, query: str, k: int = 5) -> str:
-        """Find related memories including linked neighbors.
+        """查找包含链接邻居的相关记忆。
 
-        When a memory is retrieved, its linked neighbors are also accessed.
+        当检索到一个记忆时，其链接的邻居也会被访问。
 
-        Args:
-            query: The query text.
-            k: Number of top results.
+        参数:
+            query: 查询文本。
+            k: top-k 结果数量。
 
-        Returns:
-            Formatted string of all related memories including links.
+        返回:
+            包含链接的格式化相关记忆字符串。
         """
         if not self.memories:
             return ""
@@ -351,30 +430,30 @@ class AgenticMemorySystem:
                 continue
             m = all_memories[i]
             memory_str += (
-                f"talk start time: {m.timestamp}\t"
-                f"memory content: {m.content}\t"
-                f"memory context: {m.context}\t"
-                f"memory keywords: {m.keywords}\t"
-                f"memory tags: {m.tags}\n"
+                f"对话开始时间: {m.timestamp}\t"
+                f"记忆内容: {m.content}\t"
+                f"记忆上下文: {m.context}\t"
+                f"记忆关键词: {m.keywords}\t"
+                f"记忆标签: {m.tags}\n"
             )
-            # Include linked neighbors
+            # 包含链接的邻居
             for neighbor_id in m.links:
                 if neighbor_id in self.memories:
                     nm = self.memories[neighbor_id]
                     memory_str += (
-                        f"  [linked] talk start time: {nm.timestamp}\t"
-                        f"memory content: {nm.content}\t"
-                        f"memory context: {nm.context}\t"
-                        f"memory keywords: {nm.keywords}\t"
-                        f"memory tags: {nm.tags}\n"
+                        f"  [链接] 对话开始时间: {nm.timestamp}\t"
+                        f"记忆内容: {nm.content}\t"
+                        f"记忆上下文: {nm.context}\t"
+                        f"记忆关键词: {nm.keywords}\t"
+                        f"记忆标签: {nm.tags}\n"
                     )
         return memory_str
 
     @staticmethod
     def _note_to_document(note: MemoryNote) -> str:
-        """Convert a memory note to a document string for the retriever.
+        """将记忆笔记转换为检索器的文档字符串。
 
-        Combines content, context, keywords, and tags as specified in the paper.
+        按论文要求组合内容、上下文、关键词和标签。
         """
         return (
             f"content: {note.content} "
@@ -384,33 +463,33 @@ class AgenticMemorySystem:
         )
 
     # -----------------------------------------------------------------------
-    # Serialization
+    # 序列化
     # -----------------------------------------------------------------------
 
     def save(self, path: str) -> None:
-        """Save the memory system state to disk.
+        """将记忆系统状态保存到磁盘。
 
-        Args:
-            path: Directory path to save the state.
+        参数:
+            path: 保存状态的目录路径。
         """
         import os
 
         os.makedirs(path, exist_ok=True)
 
-        # Save memories
+        # 保存记忆
         memories_data = {
             mid: note.to_dict() for mid, note in self.memories.items()
         }
         with open(os.path.join(path, "memories.json"), "w", encoding="utf-8") as f:
             json.dump(memories_data, f, ensure_ascii=False, indent=2)
 
-        # Save retriever
+        # 保存检索器
         self.retriever.save(
             os.path.join(path, "retriever_cache.pkl"),
             os.path.join(path, "retriever_embeddings.npy"),
         )
 
-        # Save metadata
+        # 保存元数据
         meta = {
             "evo_cnt": self.evo_cnt,
             "evo_threshold": self.evo_threshold,
@@ -428,20 +507,20 @@ class AgenticMemorySystem:
         llm_model: str = "gpt-4o-mini",
         api_key: Optional[str] = None,
     ) -> "AgenticMemorySystem":
-        """Load a saved memory system from disk.
+        """从磁盘加载保存的记忆系统。
 
-        Args:
-            path: Directory path where state was saved.
-            llm_backend: LLM backend for the restored system.
-            llm_model: LLM model for the restored system.
-            api_key: Optional API key.
+        参数:
+            path: 保存状态的目录路径。
+            llm_backend: 恢复系统的 LLM 后端。
+            llm_model: 恢复系统的 LLM 模型。
+            api_key: 可选的 API Key。
 
-        Returns:
-            Restored AgenticMemorySystem instance.
+        返回:
+            恢复的 AgenticMemorySystem 实例。
         """
         import os
 
-        # Load metadata
+        # 加载元数据
         with open(os.path.join(path, "meta.json"), "r") as f:
             meta = json.load(f)
 
@@ -454,14 +533,14 @@ class AgenticMemorySystem:
         )
         system.evo_cnt = meta.get("evo_cnt", 0)
 
-        # Load memories
+        # 加载记忆
         with open(os.path.join(path, "memories.json"), "r", encoding="utf-8") as f:
             memories_data = json.load(f)
         system.memories = {
             mid: MemoryNote.from_dict(data) for mid, data in memories_data.items()
         }
 
-        # Load retriever
+        # 加载检索器
         system.retriever = SimpleEmbeddingRetriever.load(
             os.path.join(path, "retriever_cache.pkl"),
             os.path.join(path, "retriever_embeddings.npy"),
