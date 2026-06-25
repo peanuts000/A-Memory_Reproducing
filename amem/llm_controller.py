@@ -6,6 +6,8 @@ LLMController: LLM 后端抽象层。
   - 豆包 Doubao (通过 OpenAI 兼容 API)
   - Ollama (通过 LiteLLM 的本地模型)
   - LiteLLM (通用适配器)
+  - SGLang (本地高性能推理服务器)
+  - vLLM (本地高性能推理服务器)
 
 所有后端提供统一的 get_completion() 接口，支持结构化 JSON 输出。
 """
@@ -13,8 +15,13 @@ LLMController: LLM 后端抽象层。
 import os
 import json
 import re
+import time
+import functools
+import logging
 from abc import ABC, abstractmethod
 from typing import Optional, Any, Literal
+
+logger = logging.getLogger("amem")
 
 # 自动加载 .env 文件
 try:
@@ -22,6 +29,36 @@ try:
     load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".env"))
 except ImportError:
     pass
+
+
+def retry_llm_call(max_retries: int = 2, base_delay: float = 1.0):
+    """LLM 调用重试装饰器，支持指数退避。
+
+    参数:
+        max_retries: 最大重试次数（默认 2，即共 3 次尝试）。
+        base_delay: 基础延迟秒数（每次重试翻倍）。
+    """
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            last_exc = None
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    last_exc = e
+                    if attempt < max_retries:
+                        delay = base_delay * (2 ** attempt)
+                        logger.warning(
+                            "LLM 调用 %s 失败 (第 %d/%d 次): %s — %.1f 秒后重试",
+                            func.__name__, attempt + 1, max_retries + 1, e, delay,
+                        )
+                        time.sleep(delay)
+            logger.error("LLM 调用 %s 在 %d 次尝试后仍然失败: %s",
+                         func.__name__, max_retries + 1, last_exc)
+            raise last_exc
+        return wrapper
+    return decorator
 
 
 class BaseLLMController(ABC):
@@ -45,6 +82,30 @@ class BaseLLMController(ABC):
             LLM 响应字符串。
         """
         pass
+
+    def check_connectivity(self) -> bool:
+        """检查 LLM 后端是否可达。
+
+        发送一个简单的测试请求来验证连接。
+
+        返回:
+            True 如果连接成功。
+
+        异常:
+            ConnectionError: 如果后端不可达。
+        """
+        try:
+            response = self.get_completion(
+                "Reply with exactly one word: READY", temperature=0.0
+            )
+            if not response or not response.strip():
+                raise ConnectionError("LLM 后端返回空响应")
+            logger.info("LLM 连通性检查通过 (响应: %s)", response.strip()[:50])
+            return True
+        except Exception as e:
+            raise ConnectionError(
+                f"无法连接到 LLM 后端: {e}。请检查服务器是否正在运行。"
+            ) from e
 
 
 class OpenAIController(BaseLLMController):
@@ -81,6 +142,7 @@ class OpenAIController(BaseLLMController):
         self.client = OpenAI(**client_kwargs)
         self.base_url = base_url
 
+    @retry_llm_call(max_retries=2, base_delay=1.0)
     def get_completion(
         self,
         prompt: str,
@@ -109,7 +171,7 @@ class OpenAIController(BaseLLMController):
             error_msg = str(e).lower()
             # 如果不支持结构化输出，则不使用它重试
             if use_structured and ("response_format" in error_msg or "json_schema" in error_msg or "unsupported" in error_msg):
-                print(f"[警告] 不支持结构化输出，回退到普通提示。错误: {e}")
+                logger.warning("不支持结构化输出，回退到普通提示。错误: %s", e)
                 kwargs.pop("response_format", None)
                 response = self.client.chat.completions.create(**kwargs)
                 return response.choices[0].message.content
@@ -146,34 +208,31 @@ class OllamaController(BaseLLMController):
                     result[prop_name] = {}
         return result
 
+    @retry_llm_call(max_retries=2, base_delay=1.0)
     def get_completion(
         self,
         prompt: str,
         response_format: Optional[dict] = None,
         temperature: float = 0.7,
     ) -> str:
-        try:
-            from litellm import completion
+        from litellm import completion
 
-            kwargs = {
-                "model": self.model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "你必须以 JSON 对象格式回复。",
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                "temperature": temperature,
-            }
-            if response_format:
-                kwargs["response_format"] = response_format
+        kwargs = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "你必须以 JSON 对象格式回复。",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": temperature,
+        }
+        if response_format:
+            kwargs["response_format"] = response_format
 
-            response = completion(**kwargs)
-            return response.choices[0].message.content
-        except Exception as e:
-            print(f"Ollama 补全错误: {e}")
-            return json.dumps(self._generate_empty_response(response_format))
+        response = completion(**kwargs)
+        return response.choices[0].message.content
 
 
 class LiteLLMController(BaseLLMController):
@@ -207,58 +266,181 @@ class LiteLLMController(BaseLLMController):
                     result[prop_name] = 0
         return result
 
+    @retry_llm_call(max_retries=2, base_delay=1.0)
     def get_completion(
         self,
         prompt: str,
         response_format: Optional[dict] = None,
         temperature: float = 0.7,
     ) -> str:
-        try:
-            from litellm import completion
+        from litellm import completion
 
-            kwargs = {
-                "model": self.model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "你必须以 JSON 对象格式回复。",
-                    },
-                    {"role": "user", "content": prompt},
-                ],
+        kwargs = {
+            "model": self.model,
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "你必须以 JSON 对象格式回复。",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": temperature,
+        }
+        if self.api_base:
+            kwargs["api_base"] = self.api_base
+        if self.api_key:
+            kwargs["api_key"] = self.api_key
+        if response_format:
+            kwargs["response_format"] = response_format
+
+        response = completion(**kwargs)
+        return response.choices[0].message.content
+
+
+class SGLangController(BaseLLMController):
+    """SGLang 推理服务器控制器。
+
+    SGLang 是一个高性能的本地推理引擎，支持结构化 JSON 输出。
+    适用于本地部署的大模型推理。
+
+    参数:
+        model: 模型名称。
+        host: SGLang 服务器地址（默认 http://localhost）。
+        port: SGLang 服务器端口（默认 30000）。
+    """
+
+    def __init__(
+        self,
+        model: str = "llama2",
+        host: str = "http://localhost",
+        port: int = 30000,
+    ):
+        self.model = model
+        self.base_url = f"{host}:{port}"
+
+    @retry_llm_call(max_retries=2, base_delay=1.0)
+    def get_completion(
+        self,
+        prompt: str,
+        response_format: Optional[dict] = None,
+        temperature: float = 0.7,
+    ) -> str:
+        import requests
+
+        # 提取 JSON schema（SGLang 接受字符串格式的 schema）
+        json_schema_str = None
+        if response_format and "json_schema" in response_format:
+            json_schema = response_format["json_schema"].get("schema", {})
+            json_schema_str = json.dumps(json_schema)
+
+        payload = {
+            "text": prompt,
+            "sampling_params": {
                 "temperature": temperature,
-            }
-            if self.api_base:
-                kwargs["api_base"] = self.api_base
-            if self.api_key:
-                kwargs["api_key"] = self.api_key
-            if response_format:
-                kwargs["response_format"] = response_format
+                "max_new_tokens": 2000,
+            },
+        }
+        if json_schema_str:
+            payload["sampling_params"]["json_schema"] = json_schema_str
 
-            response = completion(**kwargs)
-            return response.choices[0].message.content
-        except Exception as e:
-            print(f"LiteLLM 补全错误: {e}")
-            return json.dumps(self._generate_empty_response(response_format))
+        response = requests.post(
+            f"{self.base_url}/generate",
+            headers={"Content-Type": "application/json"},
+            json=payload,
+            timeout=120,
+        )
+        if response.status_code == 200:
+            return response.json().get("text", "")
+        raise RuntimeError(
+            f"SGLang 服务器返回状态码 {response.status_code}: {response.text}"
+        )
+
+
+class VLLMController(BaseLLMController):
+    """vLLM 推理服务器控制器。
+
+    vLLM 是一个高性能的本地推理引擎，提供 OpenAI 兼容的 API。
+    适用于本地部署的大模型推理。
+
+    参数:
+        model: 模型名称。
+        host: vLLM 服务器地址（默认 http://localhost）。
+        port: vLLM 服务器端口（默认 8000）。
+    """
+
+    def __init__(
+        self,
+        model: str = "llama2",
+        host: str = "http://localhost",
+        port: int = 8000,
+    ):
+        self.model = model
+        self.base_url = f"{host}:{port}"
+
+    @retry_llm_call(max_retries=2, base_delay=1.0)
+    def get_completion(
+        self,
+        prompt: str,
+        response_format: Optional[dict] = None,
+        temperature: float = 0.7,
+    ) -> str:
+        import requests
+
+        payload = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": "你必须以 JSON 对象格式回复。"},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": temperature,
+            "max_tokens": 2000,
+        }
+
+        # vLLM 支持 guided_json 进行结构化输出
+        if response_format and "json_schema" in response_format:
+            json_schema = response_format["json_schema"].get("schema", {})
+            payload["guided_json"] = json_schema
+
+        response = requests.post(
+            f"{self.base_url}/v1/chat/completions",
+            headers={"Content-Type": "application/json"},
+            json=payload,
+            timeout=120,
+        )
+        if response.status_code == 200:
+            return response.json()["choices"][0]["message"]["content"]
+        raise RuntimeError(
+            f"vLLM 服务器返回状态码 {response.status_code}: {response.text}"
+        )
 
 
 class LLMController:
     """统一的 LLM 控制器，分发到相应的后端。
 
     参数:
-        backend: 'openai', 'ollama', 'litellm', 'doubao' 之一。
+        backend: 'openai', 'ollama', 'litellm', 'doubao', 'sglang', 'vllm' 之一。
                  如果环境变量中设置了 DOUBAO_API_KEY，则默认使用 'doubao'。
         model: 模型标识符（如 'gpt-4o-mini', 'llama3.2', 'doubao-seed-2-0-lite-260215'）。
                对于 'doubao' 后端，默认使用 DOUBAO_MODEL 环境变量。
         api_key: 可选的后端 API Key。
         api_base: 可选的 API Base URL（'doubao' 必需，其他可选）。
+        sglang_host: SGLang 服务器地址（默认 http://localhost）。
+        sglang_port: SGLang 服务器端口（默认 30000）。
+        vllm_host: vLLM 服务器地址（默认 http://localhost）。
+        vllm_port: vLLM 服务器端口（默认 8000）。
     """
 
     def __init__(
         self,
-        backend: Literal["openai", "ollama", "litellm", "doubao"] = None,
+        backend: Literal["openai", "ollama", "litellm", "doubao", "sglang", "vllm"] = None,
         model: str = None,
         api_key: Optional[str] = None,
         api_base: Optional[str] = None,
+        sglang_host: str = "http://localhost",
+        sglang_port: int = 30000,
+        vllm_host: str = "http://localhost",
+        vllm_port: int = 8000,
+        check_connection: bool = False,
     ):
         # 自动检测后端：如果设置了 DOUBAO_API_KEY 且未指定后端，则使用 doubao
         if backend is None:
@@ -295,7 +477,19 @@ class LLMController:
             if model is None:
                 model = "gpt-4o-mini"
             self.llm = LiteLLMController(model, api_base, api_key)
+        elif backend == "sglang":
+            if model is None:
+                model = "llama2"
+            self.llm = SGLangController(model, sglang_host, sglang_port)
+        elif backend == "vllm":
+            if model is None:
+                model = "llama2"
+            self.llm = VLLMController(model, vllm_host, vllm_port)
         else:
             raise ValueError(
-                f"未知后端: {backend}。请使用 'openai', 'doubao', 'ollama' 或 'litellm'。"
+                f"未知后端: {backend}。请使用 'openai', 'doubao', 'ollama', 'litellm', 'sglang' 或 'vllm'。"
             )
+
+        # 可选的连通性检查
+        if check_connection:
+            self.llm.check_connectivity()

@@ -16,6 +16,7 @@ import numpy as np
 from typing import List, Dict, Optional, Tuple
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+from rank_bm25 import BM25Okapi
 
 # 为中国用户使用 Hugging Face 镜像源
 os.environ.setdefault("HF_ENDPOINT", "https://hf-mirror.com")
@@ -162,6 +163,187 @@ class SimpleEmbeddingRetriever:
             填充了记忆数据的新 SimpleEmbeddingRetriever 实例。
         """
         retriever = cls(model_name)
+        docs = []
+        for m in memories.values():
+            metadata = f"{m.context} {' '.join(m.keywords)} {' '.join(m.tags)}"
+            doc = f"{m.content} , {metadata}"
+            docs.append(doc)
+        if docs:
+            retriever.add_documents(docs)
+        return retriever
+
+    def __len__(self) -> int:
+        return len(self.corpus)
+
+
+def simple_tokenize(text: str) -> List[str]:
+    """简单的分词函数，用于 BM25。"""
+    return text.lower().split()
+
+
+class HybridRetriever:
+    """混合检索系统，结合 BM25 关键词匹配和语义嵌入检索。
+
+    通过 alpha 参数平衡两种检索方式：
+      - alpha=0: 纯 BM25
+      - alpha=1: 纯语义嵌入
+      - alpha=0.5: 两者各占一半（默认）
+
+    参数:
+        model_name: SentenceTransformer 模型名称。
+        alpha: 语义检索权重（0-1）。
+    """
+
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2", alpha: float = 0.5):
+        self.model = SentenceTransformer(model_name)
+        self.model_name = model_name
+        self.alpha = alpha
+        self.bm25: Optional[BM25Okapi] = None
+        self.corpus: List[str] = []
+        self.embeddings: Optional[np.ndarray] = None
+        self.document_ids: Dict[str, int] = {}
+
+    def add_documents(self, documents: List[str]) -> None:
+        """添加文档到 BM25 和语义索引。
+
+        参数:
+            documents: 要添加的文本字符串列表。
+        """
+        if not documents:
+            return
+
+        if not self.corpus:
+            self.corpus = list(documents)
+            self.document_ids = {doc: idx for idx, doc in enumerate(documents)}
+        else:
+            start_idx = len(self.corpus)
+            self.corpus.extend(documents)
+            for idx, doc in enumerate(documents):
+                self.document_ids[doc] = start_idx + idx
+
+        # 更新 BM25 索引
+        tokenized_corpus = [simple_tokenize(doc) for doc in self.corpus]
+        self.bm25 = BM25Okapi(tokenized_corpus)
+
+        # 更新语义嵌入
+        new_embeddings = self.model.encode(documents, show_progress_bar=False)
+        if self.embeddings is None:
+            self.embeddings = new_embeddings
+        else:
+            self.embeddings = np.vstack([self.embeddings, new_embeddings])
+
+    def search(self, query: str, k: int = 5) -> List[int]:
+        """混合检索：BM25 + 语义嵌入。
+
+        参数:
+            query: 查询文本。
+            k: 返回的结果数量。
+
+        返回:
+            top-k 最相似文档的索引列表。
+        """
+        if not self.corpus or self.embeddings is None:
+            return []
+
+        k = min(k, len(self.corpus))
+
+        # BM25 分数
+        tokenized_query = simple_tokenize(query)
+        bm25_scores = np.array(self.bm25.get_scores(tokenized_query))
+        # 归一化 BM25 分数到 [0, 1]
+        bm25_min, bm25_max = bm25_scores.min(), bm25_scores.max()
+        if bm25_max - bm25_min > 1e-6:
+            bm25_scores = (bm25_scores - bm25_min) / (bm25_max - bm25_min)
+        else:
+            bm25_scores = np.zeros_like(bm25_scores)
+
+        # 语义相似度分数
+        query_embedding = self.model.encode([query], show_progress_bar=False)[0]
+        semantic_scores = cosine_similarity([query_embedding], self.embeddings)[0]
+
+        # 混合分数
+        hybrid_scores = self.alpha * semantic_scores + (1 - self.alpha) * bm25_scores
+
+        top_k_indices = np.argsort(hybrid_scores)[-k:][::-1]
+        return top_k_indices.tolist()
+
+    def search_with_scores(self, query: str, k: int = 5) -> List[Tuple[int, float]]:
+        """带混合分数的检索。
+
+        参数:
+            query: 查询文本。
+            k: 返回的结果数量。
+
+        返回:
+            top-k 结果的 (索引, 混合分数) 元组列表。
+        """
+        if not self.corpus or self.embeddings is None:
+            return []
+
+        k = min(k, len(self.corpus))
+
+        # BM25 分数
+        tokenized_query = simple_tokenize(query)
+        bm25_scores = np.array(self.bm25.get_scores(tokenized_query))
+        bm25_min, bm25_max = bm25_scores.min(), bm25_scores.max()
+        if bm25_max - bm25_min > 1e-6:
+            bm25_scores = (bm25_scores - bm25_min) / (bm25_max - bm25_min)
+        else:
+            bm25_scores = np.zeros_like(bm25_scores)
+
+        # 语义相似度分数
+        query_embedding = self.model.encode([query], show_progress_bar=False)[0]
+        semantic_scores = cosine_similarity([query_embedding], self.embeddings)[0]
+
+        # 混合分数
+        hybrid_scores = self.alpha * semantic_scores + (1 - self.alpha) * bm25_scores
+
+        top_k_indices = np.argsort(hybrid_scores)[-k:][::-1]
+        return [(int(idx), float(hybrid_scores[idx])) for idx in top_k_indices]
+
+    def save(self, cache_file: str, embeddings_file: str) -> None:
+        """将检索器状态保存到磁盘。"""
+        if self.embeddings is not None:
+            np.save(embeddings_file, self.embeddings)
+
+        state = {
+            "corpus": self.corpus,
+            "document_ids": self.document_ids,
+            "model_name": self.model_name,
+            "alpha": self.alpha,
+        }
+        with open(cache_file, "wb") as f:
+            pickle.dump(state, f)
+
+    @classmethod
+    def load(cls, cache_file: str, embeddings_file: str) -> "HybridRetriever":
+        """从磁盘加载检索器状态。"""
+        with open(cache_file, "rb") as f:
+            state = pickle.load(f)
+
+        retriever = cls(
+            model_name=state.get("model_name", "all-MiniLM-L6-v2"),
+            alpha=state.get("alpha", 0.5),
+        )
+        retriever.corpus = state["corpus"]
+        retriever.document_ids = state["document_ids"]
+
+        if os.path.exists(embeddings_file):
+            retriever.embeddings = np.load(embeddings_file)
+
+        # 重建 BM25 索引
+        if retriever.corpus:
+            tokenized_corpus = [simple_tokenize(doc) for doc in retriever.corpus]
+            retriever.bm25 = BM25Okapi(tokenized_corpus)
+
+        return retriever
+
+    @classmethod
+    def from_memories(
+        cls, memories: Dict, model_name: str = "all-MiniLM-L6-v2", alpha: float = 0.5
+    ) -> "HybridRetriever":
+        """从现有记忆笔记构建混合检索器。"""
+        retriever = cls(model_name, alpha)
         docs = []
         for m in memories.values():
             metadata = f"{m.context} {' '.join(m.keywords)} {' '.join(m.tags)}"

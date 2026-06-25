@@ -23,7 +23,7 @@ import json
 from typing import List, Dict, Optional, Tuple
 
 from .memory_note import MemoryNote
-from .retriever import SimpleEmbeddingRetriever
+from .retriever import SimpleEmbeddingRetriever, HybridRetriever
 from .llm_controller import LLMController
 from .prompt_templates import (
     ANALYZE_CONTENT_PROMPT,
@@ -32,11 +32,20 @@ from .prompt_templates import (
     ANALYSIS_SCHEMA,
     LINK_SCHEMA,
     EVOLUTION_SCHEMA,
+    EVOLUTION_DECISION_PROMPT,
+    STRENGTHEN_DETAILS_PROMPT,
+    UPDATE_NEIGHBORS_PROMPT,
+    EVOLUTION_DECISION_SCHEMA,
+    STRENGTHEN_DETAILS_SCHEMA,
+    UPDATE_NEIGHBORS_SCHEMA,
 )
 from .parsers import (
     parse_analysis_response,
     parse_link_response,
     parse_evolution_response,
+    parse_evolution_decision,
+    parse_strengthen_details,
+    parse_update_neighbors,
 )
 
 
@@ -57,6 +66,8 @@ class AgenticMemorySystem:
         api_key: 可选的 LLM 后端 API Key。
         api_base: 可选的 API Base URL。
         top_k: 操作的默认近邻数量。
+        use_hybrid: 是否使用 BM25+语义的混合检索（默认 True）。
+        hybrid_alpha: 混合检索中语义检索的权重（0-1，默认 0.5）。
     """
 
     def __init__(
@@ -68,9 +79,16 @@ class AgenticMemorySystem:
         api_key: Optional[str] = None,
         api_base: Optional[str] = None,
         top_k: int = 5,
+        use_hybrid: bool = True,
+        hybrid_alpha: float = 0.5,
     ):
         self.memories: Dict[str, MemoryNote] = {}
-        self.retriever = SimpleEmbeddingRetriever(model_name)
+        self.use_hybrid = use_hybrid
+        self.hybrid_alpha = hybrid_alpha
+        if use_hybrid:
+            self.retriever = HybridRetriever(model_name, alpha=hybrid_alpha)
+        else:
+            self.retriever = SimpleEmbeddingRetriever(model_name)
         self.llm_controller = LLMController(llm_backend, llm_model, api_key, api_base)
         self.evo_cnt = 0
         self.evo_threshold = evo_threshold
@@ -126,6 +144,8 @@ class AgenticMemorySystem:
           s_{q,i} = (e_q · e_i) / (|e_q| |e_i|)
           M_retrieved = {m_i | rank(s_{q,i}) <= k}
 
+        检索时会记录每个返回记忆的访问次数和时间。
+
         参数:
             query: 查询文本。
             k: 返回结果数量。默认使用 self.top_k。
@@ -143,7 +163,9 @@ class AgenticMemorySystem:
         results = []
         for idx in indices:
             if idx < len(all_memories):
-                results.append(all_memories[idx])
+                m = all_memories[idx]
+                m.record_access()  # 记录访问
+                results.append(m)
         return results
 
     def retrieve_with_context(self, query: str, k: int = None) -> str:
@@ -187,7 +209,10 @@ class AgenticMemorySystem:
         except (AttributeError, KeyError):
             model_name = "all-MiniLM-L6-v2"
 
-        self.retriever = SimpleEmbeddingRetriever(model_name)
+        if self.use_hybrid:
+            self.retriever = HybridRetriever(model_name, alpha=self.hybrid_alpha)
+        else:
+            self.retriever = SimpleEmbeddingRetriever(model_name)
         docs = [self._note_to_document(m) for m in self.memories.values()]
         if docs:
             self.retriever.add_documents(docs)
@@ -224,6 +249,13 @@ class AgenticMemorySystem:
 
     def _process_memory(self, note: MemoryNote) -> bool:
         """处理记忆笔记，执行链接生成和记忆演化。
+
+        采用分步演化策略，每步可独立失败：
+          1. 演化决策：判断是否需要演化及操作类型
+          2. 强化详情：获取连接和标签更新（可选）
+          3. 更新邻居：获取邻居上下文/标签更新（可选）
+
+        任何步骤失败时，记忆仍会被存储（不含该步的演化效果）。
 
         参数:
             note: 新构建的记忆笔记。
@@ -265,75 +297,100 @@ class AgenticMemorySystem:
                 f"记忆标签: {m.tags}\n"
             )
 
-        # 组合链接生成 + 演化提示词
-        prompt = EVOLUTION_PROMPT.format(
-            context=note.context,
-            content=note.content,
-            keywords=note.keywords,
-            nearest_neighbors_memories=filtered_neighbor_str,
-            neighbor_number=len(filtered_indices),
-        )
-
+        # ---- 步骤 1：演化决策 ----
         try:
-            response = self.llm_controller.llm.get_completion(
-                prompt, response_format=EVOLUTION_SCHEMA, temperature=0.3
+            decision_prompt = EVOLUTION_DECISION_PROMPT.format(
+                context=note.context,
+                content=note.content,
+                keywords=note.keywords,
+                nearest_neighbors_memories=filtered_neighbor_str,
             )
-            evolution_result = parse_evolution_response(response, len(filtered_indices))
+            decision_response = self.llm_controller.llm.get_completion(
+                decision_prompt, response_format=EVOLUTION_DECISION_SCHEMA, temperature=0.3
+            )
+            decision = parse_evolution_decision(decision_response)
         except Exception as e:
-            print(f"记忆演化错误: {e}")
+            print(f"演化决策错误: {e} — 存储记忆但不演化")
             return False
 
-        should_evolve = evolution_result["should_evolve"]
-        if not should_evolve:
+        if decision["decision"] == "NO_EVOLUTION":
             return False
 
-        actions = evolution_result["actions"]
+        should_strengthen = decision["decision"] in ("STRENGTHEN", "STRENGTHEN_AND_UPDATE")
+        should_update = decision["decision"] in ("UPDATE_NEIGHBOR", "STRENGTHEN_AND_UPDATE")
+        evolved = False
 
-        # 强化：为新记忆添加链接和更新标签
-        if "strengthen" in actions:
-            connections = evolution_result["suggested_connections"]
-            new_tags = evolution_result["tags_to_update"]
-            # 将连接索引映射回 filtered_indices（真实记忆索引）
-            notes_list = list(self.memories.values())
-            notes_ids = list(self.memories.keys())
-            new_note_idx = len(notes_list)  # 新笔记将被插入的索引位置
-            for conn in connections:
-                if 0 <= conn < len(filtered_indices):
-                    real_idx = filtered_indices[conn]
-                    if real_idx not in note.links:
-                        note.links.append(real_idx)
-                        # 添加反向链接：更新被连接记忆的 links
-                        if real_idx < len(notes_list):
-                            target_note = notes_list[real_idx]
-                            if new_note_idx not in target_note.links:
-                                target_note.links.append(new_note_idx)
-                                self.memories[notes_ids[real_idx]] = target_note
-            if new_tags:
-                note.tags = new_tags
+        # ---- 步骤 2：强化详情（条件执行）----
+        if should_strengthen:
+            try:
+                strengthen_prompt = STRENGTHEN_DETAILS_PROMPT.format(
+                    content=note.content,
+                    keywords=note.keywords,
+                    nearest_neighbors_memories=filtered_neighbor_str,
+                )
+                strengthen_response = self.llm_controller.llm.get_completion(
+                    strengthen_prompt, response_format=STRENGTHEN_DETAILS_SCHEMA, temperature=0.3
+                )
+                strengthen = parse_strengthen_details(strengthen_response)
 
-        # 更新邻居：更新现有记忆的上下文和标签
-        if "update_neighbor" in actions:
-            new_contexts = evolution_result["new_context_neighborhood"]
-            new_tags_list = evolution_result["new_tags_neighborhood"]
-            notes_list = list(self.memories.values())
-            notes_ids = list(self.memories.keys())
+                # 将连接索引映射回真实记忆索引
+                notes_list = list(self.memories.values())
+                notes_ids = list(self.memories.keys())
+                new_note_idx = len(notes_list)
+                for conn in strengthen["connections"]:
+                    if 0 <= conn < len(filtered_indices):
+                        real_idx = filtered_indices[conn]
+                        if real_idx not in note.links:
+                            note.links.append(real_idx)
+                            # 添加反向链接
+                            if real_idx < len(notes_list):
+                                target_note = notes_list[real_idx]
+                                if new_note_idx not in target_note.links:
+                                    target_note.links.append(new_note_idx)
+                                    self.memories[notes_ids[real_idx]] = target_note
+                if strengthen["tags"]:
+                    note.tags = strengthen["tags"]
+                note.record_evolution("strengthen", f"连接数: {len(strengthen['connections'])}")
+                evolved = True
+            except Exception as e:
+                print(f"强化详情错误: {e} — 跳过强化步骤")
 
-            for i in range(min(len(filtered_indices), len(new_tags_list))):
-                memory_idx = filtered_indices[i]
-                if memory_idx >= len(notes_list):
-                    continue
+        # ---- 步骤 3：更新邻居（条件执行）----
+        if should_update:
+            try:
+                update_prompt = UPDATE_NEIGHBORS_PROMPT.format(
+                    content=note.content,
+                    context=note.context,
+                    nearest_neighbors_memories=filtered_neighbor_str,
+                    max_neighbor_idx=len(filtered_indices) - 1,
+                    neighbor_count=len(filtered_indices),
+                )
+                update_response = self.llm_controller.llm.get_completion(
+                    update_prompt, response_format=UPDATE_NEIGHBORS_SCHEMA, temperature=0.3
+                )
+                neighbor_updates = parse_update_neighbors(update_response, len(filtered_indices))
 
-                tag = new_tags_list[i]
-                context = new_contexts[i] if i < len(new_contexts) else ""
+                notes_list = list(self.memories.values())
+                notes_ids = list(self.memories.keys())
+                updated_count = 0
+                for i in range(min(len(filtered_indices), len(neighbor_updates))):
+                    upd = neighbor_updates[i]
+                    memory_idx = filtered_indices[i]
+                    if memory_idx >= len(notes_list):
+                        continue
+                    notetmp = notes_list[memory_idx]
+                    if upd["tags"]:
+                        notetmp.tags = upd["tags"]
+                    if upd["context"]:
+                        notetmp.context = upd["context"]
+                    self.memories[notes_ids[memory_idx]] = notetmp
+                    updated_count += 1
+                note.record_evolution("update_neighbor", f"更新了 {updated_count} 个邻居")
+                evolved = True
+            except Exception as e:
+                print(f"更新邻居错误: {e} — 跳过邻居更新步骤")
 
-                notetmp = notes_list[memory_idx]
-                if tag:
-                    notetmp.tags = tag
-                if context:
-                    notetmp.context = context
-                self.memories[notes_ids[memory_idx]] = notetmp
-
-        return True
+        return evolved
 
     def _find_related_memories(
         self, query: str, k: int = 5
@@ -495,6 +552,8 @@ class AgenticMemorySystem:
             "evo_threshold": self.evo_threshold,
             "top_k": self.top_k,
             "memory_count": len(self.memories),
+            "use_hybrid": self.use_hybrid,
+            "hybrid_alpha": self.hybrid_alpha,
         }
         with open(os.path.join(path, "meta.json"), "w") as f:
             json.dump(meta, f, indent=2)
@@ -524,12 +583,17 @@ class AgenticMemorySystem:
         with open(os.path.join(path, "meta.json"), "r") as f:
             meta = json.load(f)
 
+        use_hybrid = meta.get("use_hybrid", True)
+        hybrid_alpha = meta.get("hybrid_alpha", 0.5)
+
         system = cls(
             llm_backend=llm_backend,
             llm_model=llm_model,
             api_key=api_key,
             evo_threshold=meta.get("evo_threshold", 100),
             top_k=meta.get("top_k", 5),
+            use_hybrid=use_hybrid,
+            hybrid_alpha=hybrid_alpha,
         )
         system.evo_cnt = meta.get("evo_cnt", 0)
 
@@ -541,9 +605,15 @@ class AgenticMemorySystem:
         }
 
         # 加载检索器
-        system.retriever = SimpleEmbeddingRetriever.load(
-            os.path.join(path, "retriever_cache.pkl"),
-            os.path.join(path, "retriever_embeddings.npy"),
-        )
+        if use_hybrid:
+            system.retriever = HybridRetriever.load(
+                os.path.join(path, "retriever_cache.pkl"),
+                os.path.join(path, "retriever_embeddings.npy"),
+            )
+        else:
+            system.retriever = SimpleEmbeddingRetriever.load(
+                os.path.join(path, "retriever_cache.pkl"),
+                os.path.join(path, "retriever_embeddings.npy"),
+            )
 
         return system

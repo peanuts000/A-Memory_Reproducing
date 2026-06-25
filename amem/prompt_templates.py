@@ -114,6 +114,137 @@ EVOLUTION_PROMPT = """你是一个负责管理和演化知识库的 AI 记忆演
 
 
 # ---------------------------------------------------------------------------
+# 分步演化提示词（用于优雅降级）
+# ---------------------------------------------------------------------------
+
+# 步骤 1：演化决策（仅判断是否需要演化及操作类型）
+EVOLUTION_DECISION_PROMPT = """你是一个 AI 记忆演化代理。分析新的记忆笔记及其最近邻记忆，决定是否需要演化。
+
+新记忆:
+- 上下文: {context}
+- 内容: {content}
+- 关键词: {keywords}
+
+最近邻记忆:
+{nearest_neighbors_memories}
+
+基于以上信息，请决定:
+- NO_EVOLUTION: 记忆独立存在，无需变化。
+- STRENGTHEN: 新记忆应与某些邻居建立链接，并更新其标签。
+- UPDATE_NEIGHBOR: 邻居的上下文/标签应基于新理解进行更新。
+- STRENGTHEN_AND_UPDATE: 同时进行强化和更新。
+
+请以 JSON 格式响应:
+{{
+    "decision": "NO_EVOLUTION 或 STRENGTHEN 或 UPDATE_NEIGHBOR 或 STRENGTHEN_AND_UPDATE",
+    "reason": "简要说明原因"
+}}"""
+
+# 步骤 2：强化详情（仅在需要强化时调用）
+STRENGTHEN_DETAILS_PROMPT = """给定新记忆及其邻居，提供更新的连接和标签。
+
+新记忆:
+- 内容: {content}
+- 关键词: {keywords}
+
+邻居记忆:
+{nearest_neighbors_memories}
+
+新记忆应该与哪些邻居索引连接？什么标签最能描述这个记忆？
+
+请以 JSON 格式响应:
+{{
+    "suggested_connections": [0, 2, 3],
+    "tags_to_update": ["tag1", "tag2", "tag3"]
+}}"""
+
+# 步骤 3：更新邻居（仅在需要更新时调用）
+UPDATE_NEIGHBORS_PROMPT = """给定新记忆及其邻居记忆，基于对所有记忆的整体理解更新每个邻居的上下文和标签。
+
+新记忆:
+- 内容: {content}
+- 上下文: {context}
+
+邻居记忆:
+{nearest_neighbors_memories}
+
+对每个邻居（索引 0 到 {max_neighbor_idx}），提供更新的上下文和标签。如果不需要更改，请重复原始值。
+邻居数量为 {neighbor_count}。
+
+请以 JSON 格式响应:
+{{
+    "new_context_neighborhood": ["更新的上下文", ...],
+    "new_tags_neighborhood": [["tag1", "tag2"], ...]
+}}"""
+
+EVOLUTION_DECISION_SCHEMA = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "evolution_decision",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "decision": {"type": "string"},
+                "reason": {"type": "string"},
+            },
+            "required": ["decision", "reason"],
+            "additionalProperties": False,
+        },
+        "strict": True,
+    },
+}
+
+STRENGTHEN_DETAILS_SCHEMA = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "strengthen_details",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "suggested_connections": {
+                    "type": "array",
+                    "items": {"type": "integer"},
+                },
+                "tags_to_update": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+            },
+            "required": ["suggested_connections", "tags_to_update"],
+            "additionalProperties": False,
+        },
+        "strict": True,
+    },
+}
+
+UPDATE_NEIGHBORS_SCHEMA = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "update_neighbors",
+        "schema": {
+            "type": "object",
+            "properties": {
+                "new_context_neighborhood": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "new_tags_neighborhood": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
+                },
+            },
+            "required": ["new_context_neighborhood", "new_tags_neighborhood"],
+            "additionalProperties": False,
+        },
+        "strict": True,
+    },
+}
+
+
+# ---------------------------------------------------------------------------
 # 问答提示词：基于检索到的记忆回答问题
 # ---------------------------------------------------------------------------
 

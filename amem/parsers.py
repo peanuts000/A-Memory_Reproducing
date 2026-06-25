@@ -200,3 +200,115 @@ def _heuristic_context(content: str) -> str:
     if match:
         return match.group(1).strip()
     return content[:200].strip()
+
+
+def parse_evolution_decision(response: str) -> Dict[str, str]:
+    """解析演化决策响应。
+
+    期望的 JSON 格式：
+        {"decision": "NO_EVOLUTION|STRENGTHEN|UPDATE_NEIGHBOR|STRENGTHEN_AND_UPDATE", "reason": "..."}
+
+    参数:
+        response: 原始 LLM 响应。
+
+    返回:
+        包含 decision 和 reason 的字典。
+    """
+    result = parse_json_response(response)
+
+    decision = result.get("decision", "NO_EVOLUTION")
+    reason = result.get("reason", "")
+
+    # 标准化决策值
+    decision = decision.strip().upper().replace(" ", "_")
+    valid_decisions = {
+        "NO_EVOLUTION", "STRENGTHEN", "UPDATE_NEIGHBOR", "STRENGTHEN_AND_UPDATE"
+    }
+    if decision not in valid_decisions:
+        # 尝试从关键词推断
+        resp_upper = response.upper()
+        if "STRENGTHEN" in resp_upper and "UPDATE" in resp_upper:
+            decision = "STRENGTHEN_AND_UPDATE"
+        elif "STRENGTHEN" in resp_upper:
+            decision = "STRENGTHEN"
+        elif "UPDATE" in resp_upper:
+            decision = "UPDATE_NEIGHBOR"
+        else:
+            decision = "NO_EVOLUTION"
+
+    # 兼容旧格式
+    if "should_evolve" in result:
+        should_evolve = result.get("should_evolve", False)
+        actions = result.get("actions", [])
+        if not should_evolve:
+            decision = "NO_EVOLUTION"
+        elif "strengthen" in actions and "update_neighbor" in actions:
+            decision = "STRENGTHEN_AND_UPDATE"
+        elif "strengthen" in actions:
+            decision = "STRENGTHEN"
+        elif "update_neighbor" in actions:
+            decision = "UPDATE_NEIGHBOR"
+        else:
+            decision = "NO_EVOLUTION"
+
+    return {"decision": decision, "reason": reason}
+
+
+def parse_strengthen_details(response: str) -> Dict[str, Any]:
+    """解析强化详情响应。
+
+    期望的 JSON 格式：
+        {"suggested_connections": [...], "tags_to_update": [...]}
+
+    参数:
+        response: 原始 LLM 响应。
+
+    返回:
+        包含 connections 和 tags 的字典。
+    """
+    result = parse_json_response(response)
+
+    suggested_connections = result.get("suggested_connections", result.get("connections", []))
+    tags_to_update = result.get("tags_to_update", result.get("tags", []))
+
+    # 确保连接为整数
+    connections = []
+    for c in suggested_connections:
+        try:
+            connections.append(int(c))
+        except (ValueError, TypeError):
+            pass
+
+    return {
+        "connections": connections,
+        "tags": tags_to_update if isinstance(tags_to_update, list) else [],
+    }
+
+
+def parse_update_neighbors(response: str, num_neighbors: int) -> List[Dict[str, Any]]:
+    """解析更新邻居响应。
+
+    期望的 JSON 格式：
+        {"new_context_neighborhood": [...], "new_tags_neighborhood": [[...], ...]}
+
+    参数:
+        response: 原始 LLM 响应。
+        num_neighbors: 期望的邻居数量。
+
+    返回:
+        包含每个邻居更新信息的字典列表。
+    """
+    result = parse_json_response(response)
+
+    new_contexts = result.get("new_context_neighborhood", [])
+    new_tags_list = result.get("new_tags_neighborhood", [])
+
+    neighbors = []
+    for i in range(num_neighbors):
+        context = new_contexts[i] if i < len(new_contexts) else ""
+        tags = new_tags_list[i] if i < len(new_tags_list) else []
+        if not isinstance(tags, list):
+            tags = []
+        neighbors.append({"context": context, "tags": tags})
+
+    return neighbors

@@ -18,14 +18,15 @@ except ImportError:
     pass
 
 from .memory_note import MemoryNote
-from .retriever import SimpleEmbeddingRetriever
+from .retriever import SimpleEmbeddingRetriever, HybridRetriever
 from .llm_controller import LLMController, BaseLLMController
 from .agentic_memory import AgenticMemorySystem
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __all__ = [
     "MemoryNote",
     "SimpleEmbeddingRetriever",
+    "HybridRetriever",
     "LLMController",
     "BaseLLMController",
     "AgenticMemorySystem",
