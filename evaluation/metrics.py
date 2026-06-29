@@ -1,12 +1,12 @@
 """
-A-Mem 系统的评估指标。
+Evaluation metrics for the A-Mem system.
 
-实现论文中使用的指标（第 4.1 节，附录 A.2）：
-  - F1 分数（词元级别）
+Implements the metrics used in the paper (Section 4.1, Appendix A.2):
+  - F1 score (token-level)
   - BLEU-1
   - ROUGE-L / ROUGE-2
   - METEOR
-  - SBERT 相似度
+  - SBERT similarity
 """
 
 import re
@@ -17,7 +17,7 @@ import statistics
 
 
 def simple_tokenize(text: str) -> List[str]:
-    """简单分词：小写化，按空格分割。"""
+    """Simple tokenization: lowercase, split on whitespace."""
     text = str(text).lower()
     for ch in [".", ",", "!", "?", ";", ":", "(", ")"]:
         text = text.replace(ch, " ")
@@ -25,7 +25,7 @@ def simple_tokenize(text: str) -> List[str]:
 
 
 def calculate_f1(prediction: str, reference: str) -> float:
-    """计算词元级别的 F1 分数（公式 11-13）。
+    """Calculate token-level F1 score (Equations 11-13).
 
     F1 = 2 * precision * recall / (precision + recall)
     """
@@ -48,7 +48,7 @@ def calculate_f1(prediction: str, reference: str) -> float:
 
 
 def calculate_bleu1(prediction: str, reference: str) -> float:
-    """计算 BLEU-1 分数（公式 14-16）。
+    """Calculate BLEU-1 score (Equations 14-16).
 
     BLEU-1 = BP * exp(w_1 * log(p_1))
     """
@@ -62,7 +62,7 @@ def calculate_bleu1(prediction: str, reference: str) -> float:
             ref_tokens, pred_tokens, weights=(1, 0, 0, 0), smoothing_function=smooth
         )
     except ImportError:
-        # 回退：一元组精度
+        # Fallback: unigram precision
         pred_tokens = simple_tokenize(prediction)
         ref_tokens = simple_tokenize(reference)
         if not pred_tokens:
@@ -80,7 +80,7 @@ def calculate_bleu1(prediction: str, reference: str) -> float:
 
 
 def calculate_rouge_l(prediction: str, reference: str) -> float:
-    """计算 ROUGE-L 分数（公式 17-19）。
+    """Calculate ROUGE-L score (Equations 17-19).
 
     ROUGE-L = (1 + beta^2) * R_l * P_l / (R_l + beta^2 * P_l)
     """
@@ -91,7 +91,7 @@ def calculate_rouge_l(prediction: str, reference: str) -> float:
         scores = scorer.score(reference, prediction)
         return scores["rougeL"].fmeasure
     except ImportError:
-        # 回退：基于 LCS 的计算
+        # Fallback: LCS-based calculation
         pred_tokens = simple_tokenize(prediction)
         ref_tokens = simple_tokenize(reference)
         lcs_len = _lcs_length(pred_tokens, ref_tokens)
@@ -106,7 +106,7 @@ def calculate_rouge_l(prediction: str, reference: str) -> float:
 
 
 def calculate_rouge2(prediction: str, reference: str) -> float:
-    """计算 ROUGE-2 分数（公式 20）。"""
+    """Calculate ROUGE-2 score (Equation 20)."""
     try:
         from rouge_score import rouge_scorer
 
@@ -114,7 +114,7 @@ def calculate_rouge2(prediction: str, reference: str) -> float:
         scores = scorer.score(reference, prediction)
         return scores["rouge2"].fmeasure
     except ImportError:
-        # 回退：二元组重叠
+        # Fallback: bigram overlap
         pred_tokens = simple_tokenize(prediction)
         ref_tokens = simple_tokenize(reference)
         pred_bigrams = _get_bigrams(pred_tokens)
@@ -133,18 +133,18 @@ def calculate_rouge2(prediction: str, reference: str) -> float:
 
 
 def calculate_meteor(prediction: str, reference: str) -> float:
-    """计算 METEOR 分数（公式 21-23）。"""
+    """Calculate METEOR score (Equations 21-23)."""
     try:
         from nltk.translate.meteor_score import meteor_score
 
         return meteor_score([reference.split()], prediction.split())
     except ImportError:
-        # 回退：简单一元组重叠
+        # Fallback: simple unigram overlap
         return calculate_f1(prediction, reference)
 
 
 def calculate_sbert_similarity(prediction: str, reference: str) -> float:
-    """计算 SBERT 余弦相似度（公式 24-25）。
+    """Calculate SBERT cosine similarity (Equations 24-25).
 
     SBERT_Similarity = cos(SBERT(x), SBERT(y))
     """
@@ -161,14 +161,14 @@ def calculate_sbert_similarity(prediction: str, reference: str) -> float:
 
 
 def calculate_all_metrics(prediction: str, reference: str) -> Dict[str, float]:
-    """计算所有评估指标。
+    """Calculate all evaluation metrics.
 
-    参数:
-        prediction: 模型预测的答案。
-        reference: 真实参考答案。
+    Args:
+        prediction: Model's predicted answer.
+        reference: Ground truth reference answer.
 
-    返回:
-        指标名称到分数的字典。
+    Returns:
+        Dictionary mapping metric names to scores.
     """
     if not prediction or not reference:
         return {
@@ -197,14 +197,14 @@ def aggregate_metrics(
     all_metrics: List[Dict[str, float]],
     all_categories: List[int],
 ) -> Dict[str, Dict[str, float]]:
-    """按类别聚合指标。
+    """Aggregate metrics by category.
 
-    参数:
-        all_metrics: 指标字典列表。
-        all_categories: 每个指标对应的类别 ID 列表。
+    Args:
+        all_metrics: List of metric dictionaries.
+        all_categories: List of category IDs corresponding to each metric.
 
-    返回:
-        包含 'overall' 和各类别统计信息的字典。
+    Returns:
+        Dictionary with 'overall' and per-category statistics.
     """
     if not all_metrics:
         return {}
@@ -240,7 +240,7 @@ def aggregate_metrics(
 
 
 def _lcs_length(a: List[str], b: List[str]) -> int:
-    """计算最长公共子序列的长度。"""
+    """Calculate the length of the longest common subsequence."""
     m, n = len(a), len(b)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
     for i in range(1, m + 1):
@@ -253,5 +253,5 @@ def _lcs_length(a: List[str], b: List[str]) -> int:
 
 
 def _get_bigrams(tokens: List[str]) -> List[tuple]:
-    """从词元列表中获取二元组。"""
+    """Get bigrams from a list of tokens."""
     return [(tokens[i], tokens[i + 1]) for i in range(len(tokens) - 1)]

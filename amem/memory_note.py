@@ -1,17 +1,18 @@
 """
-MemoryNote: A-Mem 系统中的原子记忆单元。
+MemoryNote: The atomic memory unit in the A-Mem system.
 
-每个记忆笔记遵循 Zettelkasten 的原子笔记原则，
-包含结构化属性：内容、时间戳、关键词、标签、上下文、链接和嵌入向量（论文中的公式 1）。
+Each memory note follows the Zettelkasten atomic note principle,
+containing structured attributes: content, timestamp, keywords, tags,
+context, links, and embedding (Equation 1 in the paper).
 
 m_i = {c_i, t_i, K_i, G_i, X_i, e_i, L_i}
 
-扩展属性（非论文定义，用于增强记忆管理）：
-  - importance_score: 记忆重要性评分
-  - retrieval_count: 被检索次数
-  - last_accessed: 最后访问时间
-  - evolution_history: 演化历史记录
-  - category: 分类标签
+Extended attributes (not from the paper, for enhanced memory management):
+  - importance_score: Memory importance score
+  - retrieval_count: Number of times retrieved
+  - last_accessed: Last access timestamp
+  - evolution_history: Evolution history log
+  - category: Category label
 """
 
 import uuid
@@ -20,22 +21,22 @@ from typing import List, Dict, Optional, Any
 
 
 class MemoryNote:
-    """基础记忆单元，包含结构化元数据。
+    """Basic memory unit with structured metadata.
 
-    属性:
-        id: 记忆笔记的唯一标识符。
-        content: 原始交互内容 (c_i)。
-        timestamp: 交互时间 (t_i)。
-        keywords: LLM 生成的关键词，捕获关键概念 (K_i)。
-        tags: LLM 生成的分类标签 (G_i)。
-        context: LLM 生成的上下文描述 (X_i)。
-        links: 共享语义关系的链接记忆 ID 集合 (L_i)。
-        embedding: 用于相似度匹配的稠密向量表示 (e_i)。
-        importance_score: 记忆重要性评分（1.0 为默认值）。
-        retrieval_count: 被检索次数。
-        last_accessed: 最后访问时间。
-        evolution_history: 演化历史记录。
-        category: 分类标签。
+    Attributes:
+        id: Unique identifier for the memory note.
+        content: Raw interaction content (c_i).
+        timestamp: Interaction time (t_i).
+        keywords: LLM-generated keywords capturing key concepts (K_i).
+        tags: LLM-generated classification tags (G_i).
+        context: LLM-generated context description (X_i).
+        links: Set of linked memory IDs sharing semantic relationships (L_i).
+        embedding: Dense vector representation for similarity matching (e_i).
+        importance_score: Memory importance score (default 1.0).
+        retrieval_count: Number of times retrieved.
+        last_accessed: Last access timestamp.
+        evolution_history: Evolution history log.
+        category: Category label.
     """
 
     def __init__(
@@ -45,7 +46,7 @@ class MemoryNote:
         keywords: Optional[List[str]] = None,
         tags: Optional[List[str]] = None,
         context: Optional[str] = None,
-        links: Optional[List[str]] = None,
+        links: Optional[List[int]] = None,
         embedding: Optional[List[float]] = None,
         timestamp: Optional[str] = None,
         importance_score: Optional[float] = None,
@@ -59,11 +60,11 @@ class MemoryNote:
         self.timestamp = timestamp or datetime.now().strftime("%Y%m%d%H%M")
         self.keywords = keywords or []
         self.tags = tags or []
-        self.context = context or ""
+        self.context = context or "General"
         self.links = links or []
         self.embedding = embedding
 
-        # 扩展字段
+        # Extended fields
         self.importance_score = importance_score or 1.0
         self.retrieval_count = retrieval_count or 0
         self.last_accessed = last_accessed or datetime.now().strftime("%Y%m%d%H%M")
@@ -71,16 +72,16 @@ class MemoryNote:
         self.category = category or "Uncategorized"
 
     def record_access(self) -> None:
-        """记录一次访问，更新访问计数和时间。"""
+        """Record an access event, updating count and timestamp."""
         self.retrieval_count += 1
         self.last_accessed = datetime.now().strftime("%Y%m%d%H%M")
 
     def record_evolution(self, action: str, details: str = "") -> None:
-        """记录一次演化事件。
+        """Record an evolution event.
 
-        参数:
-            action: 演化类型（如 'strengthen', 'update_neighbor'）。
-            details: 演化详情。
+        Args:
+            action: Evolution type (e.g. 'strengthen', 'update_neighbor').
+            details: Evolution details.
         """
         self.evolution_history.append({
             "timestamp": datetime.now().strftime("%Y%m%d%H%M"),
@@ -89,7 +90,7 @@ class MemoryNote:
         })
 
     def to_dict(self) -> Dict[str, Any]:
-        """将记忆笔记序列化为字典。"""
+        """Serialize the memory note to a dictionary."""
         return {
             "id": self.id,
             "content": self.content,
@@ -108,7 +109,7 @@ class MemoryNote:
 
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "MemoryNote":
-        """从字典反序列化记忆笔记。"""
+        """Deserialize a memory note from a dictionary."""
         return cls(
             id=data.get("id"),
             content=data["content"],
@@ -126,7 +127,7 @@ class MemoryNote:
         )
 
     def get_embedding_text(self) -> str:
-        """获取用于嵌入计算的组合文本（公式 3）。
+        """Get the combined text for embedding computation (Equation 3).
 
         e_i = f_enc[ concat(c_i, K_i, G_i, X_i) ]
         """

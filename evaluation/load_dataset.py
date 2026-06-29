@@ -1,13 +1,13 @@
 """
-LoCoMo 数据集加载器，用于 A-Mem 评估。
+LoCoMo dataset loader for A-Mem evaluation.
 
-LoCoMo（长对话记忆）数据集包含长对话，
-配有五个类别的 QA 对：
-  1. 单跳 (Single-hop)：可从单个会话回答
-  2. 多跳 (Multi-hop)：需要跨会话综合信息
-  3. 时间 (Temporal)：测试对时间相关信息的理解
-  4. 开放领域 (Open-domain)：需要与外部知识整合
-  5. 对抗性 (Adversarial)：评估识别无法回答查询的能力
+LoCoMo (Long Conversation Memory) dataset contains long conversations
+with QA pairs across five categories:
+  1. Single-hop: Answerable from a single session
+  2. Multi-hop: Requires synthesizing information across sessions
+  3. Temporal: Tests understanding of time-related information
+  4. Open-domain: Requires integration with external knowledge
+  5. Adversarial: Evaluates ability to recognize unanswerable queries
 """
 
 import json
@@ -18,16 +18,16 @@ from dataclasses import dataclass, field
 
 @dataclass
 class QAPair:
-    """数据集中的问答对。"""
+    """Question-answer pair from the dataset."""
     question: str
     answer: str
-    category: int  # 1=单跳, 2=多跳, 3=时间, 4=开放领域, 5=对抗性
+    category: int  # 0=single-hop, 1=multi-hop, 2=temporal, 3=open-domain, 4=adversarial
     category_name: str = ""
 
 
 @dataclass
 class Turn:
-    """对话中的一轮。"""
+    """A single turn in a conversation."""
     speaker: str
     content: str
     timestamp: str = ""
@@ -35,39 +35,39 @@ class Turn:
 
 @dataclass
 class Session:
-    """包含多轮对话的会话。"""
+    """A session containing multiple conversation turns."""
     session_id: int
     turns: List[Turn] = field(default_factory=list)
 
 
 @dataclass
 class Conversation:
-    """包含多个会话和 QA 对的完整对话。"""
+    """A complete conversation with multiple sessions and QA pairs."""
     conversation_id: str
     sessions: List[Session] = field(default_factory=list)
     qa_pairs: List[QAPair] = field(default_factory=list)
 
 
-# 类别名称映射
+# Category name mapping
 CATEGORY_NAMES = {
-    0: "单跳",
-    1: "多跳",
-    2: "时间",
-    3: "开放领域",
-    4: "对抗性",
+    0: "Single Hop",
+    1: "Multi Hop",
+    2: "Temporal",
+    3: "Open Domain",
+    4: "Adversarial",
 }
 
 
 def load_locomo_dataset(data_dir: str) -> List[Conversation]:
-    """从目录加载 LoCoMo 数据集。
+    """Load LoCoMo dataset from a directory.
 
-    期望的目录结构：
+    Expected directory structure:
         data_dir/
             conversation_0.json
             conversation_1.json
             ...
 
-    每个 JSON 文件应包含：
+    Each JSON file should contain:
         {
             "conversation_id": "...",
             "sessions": [
@@ -90,16 +90,16 @@ def load_locomo_dataset(data_dir: str) -> List[Conversation]:
             ]
         }
 
-    参数:
-        data_dir: 包含对话 JSON 文件的目录路径。
+    Args:
+        data_dir: Path to directory containing conversation JSON files.
 
-    返回:
-        Conversation 对象列表。
+    Returns:
+        List of Conversation objects.
     """
     conversations = []
 
     if not os.path.exists(data_dir):
-        print(f"警告: 未找到数据目录: {data_dir}")
+        print(f"Warning: Data directory not found: {data_dir}")
         return conversations
 
     for filename in sorted(os.listdir(data_dir)):
@@ -117,13 +117,13 @@ def load_locomo_dataset(data_dir: str) -> List[Conversation]:
 
 
 def load_locomo_from_single_file(filepath: str) -> List[Conversation]:
-    """从单个 JSON 文件加载 LoCoMo，文件包含所有对话。
+    """Load LoCoMo from a single JSON file containing all conversations.
 
-    参数:
-        filepath: JSON 文件路径。
+    Args:
+        filepath: Path to the JSON file.
 
-    返回:
-        Conversation 对象列表。
+    Returns:
+        List of Conversation objects.
     """
     with open(filepath, "r", encoding="utf-8") as f:
         data = json.load(f)
@@ -138,10 +138,10 @@ def load_locomo_from_single_file(filepath: str) -> List[Conversation]:
 
 
 def _parse_conversation(data: dict) -> Conversation:
-    """从字典解析对话。"""
+    """Parse a conversation from a dictionary."""
     conv = Conversation(conversation_id=data.get("conversation_id", "unknown"))
 
-    # 解析会话
+    # Parse sessions
     for session_data in data.get("sessions", []):
         session = Session(session_id=session_data.get("session_id", 0))
         for turn_data in session_data.get("turns", []):
@@ -153,13 +153,13 @@ def _parse_conversation(data: dict) -> Conversation:
             session.turns.append(turn)
         conv.sessions.append(session)
 
-    # 解析 QA 对
+    # Parse QA pairs
     for qa_data in data.get("qa_pairs", data.get("questions", [])):
         qa = QAPair(
             question=qa_data.get("question", ""),
             answer=qa_data.get("answer", qa_data.get("reference", "")),
             category=qa_data.get("category", 0),
-            category_name=CATEGORY_NAMES.get(qa_data.get("category", 0), "未知"),
+            category_name=CATEGORY_NAMES.get(qa_data.get("category", 0), "Unknown"),
         )
         conv.qa_pairs.append(qa)
 
@@ -167,16 +167,16 @@ def _parse_conversation(data: dict) -> Conversation:
 
 
 def conversations_to_memory_texts(conversations: List[Conversation]) -> List[List[Dict]]:
-    """将对话转换为记忆就绪的文本格式。
+    """Convert conversations to memory-ready text format.
 
-    每一轮成为一条带有内容和时间戳的记忆笔记。
+    Each turn becomes a memory note with content and timestamp.
 
-    参数:
-        conversations: Conversation 对象列表。
+    Args:
+        conversations: List of Conversation objects.
 
-    返回:
-        嵌套字典列表，每个对话一个列表，每个字典包含
-        'content' 和 'timestamp' 键。
+    Returns:
+        Nested list of dicts, one list per conversation, each dict containing
+        'content' and 'timestamp' keys.
     """
     all_texts = []
     for conv in conversations:
