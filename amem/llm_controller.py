@@ -178,6 +178,97 @@ class OpenAIController(BaseLLMController):
             raise
 
 
+class DeepSeekController(BaseLLMController):
+    """DeepSeek API 控制器，支持 JSON Mode。
+
+    DeepSeek 使用 response_format={"type": "json_object"} 来启用 JSON Mode，
+    并在系统提示中描述期望的 JSON schema。
+
+    参考文档: https://api-docs.deepseek.com/zh-cn/guides/json_mode
+    """
+
+    def __init__(
+        self,
+        model: str = "deepseek-chat",
+        api_key: Optional[str] = None,
+        base_url: Optional[str] = None,
+    ):
+        try:
+            from openai import OpenAI
+        except ImportError:
+            raise ImportError(
+                "未找到 OpenAI 包。请使用以下命令安装: pip install openai"
+            )
+
+        self.model = model
+        if api_key is None:
+            api_key = os.getenv("DEEPSEEK_API_KEY")
+        if api_key is None:
+            raise ValueError(
+                "未找到 DeepSeek API Key。请设置 DEEPSEEK_API_KEY 环境变量或传入 api_key 参数。\n"
+                "获取地址: https://platform.deepseek.com/api_keys"
+            )
+
+        if base_url is None:
+            base_url = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
+        self.base_url = base_url
+
+    def _build_system_prompt(self, response_format: Optional[dict] = None) -> str:
+        """构建系统提示，包含 JSON schema 描述（如果有）。"""
+        base_prompt = "你必须以 JSON 对象格式回复。"
+
+        if response_format and "json_schema" in response_format:
+            schema = response_format["json_schema"].get("schema", {})
+            if schema:
+                # 将 schema 描述添加到系统提示中
+                schema_desc = json.dumps(schema, ensure_ascii=False, indent=2)
+                base_prompt += f"\n\n请严格按照以下 JSON schema 格式回复:\n{schema_desc}"
+                # 如果有 description，也添加进去
+                if "description" in schema:
+                    base_prompt += f"\n\n描述: {schema['description']}"
+
+        return base_prompt
+
+    @retry_llm_call(max_retries=2, base_delay=1.0)
+    def get_completion(
+        self,
+        prompt: str,
+        response_format: Optional[dict] = None,
+        temperature: float = 0.7,
+    ) -> str:
+        # 构建包含 schema 的系统提示
+        system_prompt = self._build_system_prompt(response_format)
+
+        kwargs = {
+            "model": self.model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt},
+            ],
+            "temperature": temperature,
+            "max_tokens": 4096,
+        }
+
+        # DeepSeek 使用 {"type": "json_object"} 启用 JSON Mode
+        if response_format:
+            kwargs["response_format"] = {"type": "json_object"}
+
+        try:
+            response = self.client.chat.completions.create(**kwargs)
+            return response.choices[0].message.content
+        except Exception as e:
+            error_msg = str(e).lower()
+            # 如果 JSON Mode 失败，回退到普通模式
+            if "response_format" in error_msg or "json" in error_msg:
+                logger.warning("DeepSeek JSON Mode 失败，回退到普通模式。错误: %s", e)
+                kwargs.pop("response_format", None)
+                response = self.client.chat.completions.create(**kwargs)
+                return response.choices[0].message.content
+            raise
+
+
 class OllamaController(BaseLLMController):
     """通过 LiteLLM 的 Ollama 控制器，用于本地模型推理。"""
 
@@ -418,7 +509,7 @@ class LLMController:
     """统一的 LLM 控制器，分发到相应的后端。
 
     参数:
-        backend: 'openai', 'ollama', 'litellm', 'doubao', 'sglang', 'vllm' 之一。
+        backend: 'openai', 'ollama', 'litellm', 'doubao', 'deepseek', 'sglang', 'vllm' 之一。
                  如果环境变量中设置了 DOUBAO_API_KEY，则默认使用 'doubao'。
         model: 模型标识符（如 'gpt-4o-mini', 'llama3.2', 'doubao-seed-2-0-lite-260215'）。
                对于 'doubao' 后端，默认使用 DOUBAO_MODEL 环境变量。
@@ -432,7 +523,7 @@ class LLMController:
 
     def __init__(
         self,
-        backend: Literal["openai", "ollama", "litellm", "doubao", "sglang", "vllm"] = None,
+        backend: Literal["openai", "ollama", "litellm", "doubao", "deepseek", "sglang", "vllm"] = None,
         model: str = None,
         api_key: Optional[str] = None,
         api_base: Optional[str] = None,
@@ -469,6 +560,20 @@ class LLMController:
             if model is None:
                 model = os.getenv("DOUBAO_MODEL", "doubao-seed-2-0-lite-260215")
             self.llm = OpenAIController(model, api_key, base_url=api_base)
+        elif backend == "deepseek":
+            # DeepSeek 使用专用控制器，支持 JSON Mode
+            if not api_key:
+                api_key = os.getenv("DEEPSEEK_API_KEY")
+            if not api_key:
+                raise ValueError(
+                    "DeepSeek 需要 API Key。请传入 api_key 或设置 DEEPSEEK_API_KEY 环境变量。\n"
+                    "获取地址: https://platform.deepseek.com/api_keys"
+                )
+            if not api_base:
+                api_base = os.getenv("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+            if model is None:
+                model = os.getenv("DEEPSEEK_MODEL", "deepseek-chat")
+            self.llm = DeepSeekController(model, api_key, base_url=api_base)
         elif backend == "ollama":
             if model is None:
                 model = "llama3.2"
@@ -487,7 +592,7 @@ class LLMController:
             self.llm = VLLMController(model, vllm_host, vllm_port)
         else:
             raise ValueError(
-                f"未知后端: {backend}。请使用 'openai', 'doubao', 'ollama', 'litellm', 'sglang' 或 'vllm'。"
+                f"未知后端: {backend}。请使用 'openai', 'doubao', 'deepseek', 'ollama', 'litellm', 'sglang' 或 'vllm'。"
             )
 
         # 可选的连通性检查

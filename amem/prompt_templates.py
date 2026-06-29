@@ -12,34 +12,35 @@ A-Mem 记忆操作的提示词模板。
 # K_i, G_i, X_i ← LLM(c_i ∥ t_i ∥ Ps1)
 # ---------------------------------------------------------------------------
 
-ANALYZE_CONTENT_PROMPT = """通过对以下内容进行结构化分析：
-1. 识别最显著的关键词（聚焦名词、动词和关键概念）
-2. 提取核心主题和上下文元素
-3. 创建相关的分类标签
+ANALYZE_CONTENT_PROMPT = """Analyze the following conversation turn and extract structured metadata.
 
-请以 JSON 对象格式返回响应：
+IMPORTANT RULES:
+1. Keywords MUST include: named entities (people, places, organizations, dates), key actions, and important concepts
+2. Context MUST be a complete sentence describing "Who did/said what, and when" using the timestamp
+3. Tags MUST include: topic domain, action type, and temporal category if applicable
+
+Timestamp: {timestamp}
+
+Conversation content:
+{content}
+
+Respond with a JSON object:
 {{
     "keywords": [
-        // 若干个具体、独特的关键词，捕获关键概念和术语
-        // 从最重要到最不重要排序
-        // 不要包含说话者名称或时间相关的关键词
-        // 至少三个关键词，但不要过于冗余
+        // Named entities first (people, places, organizations)
+        // Then key actions/verbs
+        // Then important concepts/objects
+        // At least 3 keywords, ordered by importance
+        // Include specific names, dates, locations mentioned
     ],
-    "context":
-        // 一句话总结：
-        // - 主要主题/领域
-        // - 关键论点/要点
-        // - 目标受众/目的
-    ,
+    "context": "One sentence summarizing WHO did/said WHAT and WHEN (use the timestamp to make it specific)",
     "tags": [
-        // 若干个用于分类的广泛类别/主题
-        // 包含领域、格式和类型标签
-        // 至少三个标签，但不要过于冗余
+        // Topic domain tag (e.g., "health", "family", "career", "hobbies")
+        // Action type tag (e.g., "planning", "sharing", "asking", "celebrating")
+        // Temporal tag if applicable (e.g., "summer_2023", "july", "weekend")
+        // At least 3 tags
     ]
-}}
-
-待分析内容：
-{content}"""
+}}"""
 
 
 # ---------------------------------------------------------------------------
@@ -248,16 +249,21 @@ UPDATE_NEIGHBORS_SCHEMA = {
 # 问答提示词：基于检索到的记忆回答问题
 # ---------------------------------------------------------------------------
 
-QA_PROMPT = """你是一个有用的助手。请根据提供的记忆上下文回答以下问题。
+QA_PROMPT = """You are a precise assistant. Answer the following question based ONLY on the provided conversation memories.
 
-问题: {question}
+Question: {question}
 
-相关记忆:
+Relevant memories:
 {memories}
 
-请基于上述记忆中的信息提供简洁准确的回答。如果记忆中没有足够的信息来回答问题，请说"我没有足够的信息来回答这个问题"。
+RULES:
+1. Answer with a SHORT PHRASE only (not a full sentence)
+2. Use EXACT words from the memories when possible
+3. If the information is NOT in the memories, answer "Not mentioned"
+4. Do NOT output JSON format
+5. Do NOT add explanations or reasoning
 
-回答:"""
+Answer:"""
 
 
 # ---------------------------------------------------------------------------

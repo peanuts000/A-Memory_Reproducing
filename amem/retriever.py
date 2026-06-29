@@ -177,8 +177,13 @@ class SimpleEmbeddingRetriever:
 
 
 def simple_tokenize(text: str) -> List[str]:
-    """简单的分词函数，用于 BM25。"""
-    return text.lower().split()
+    """分词函数，用于 BM25。支持 unigram + bigram 以提高关键词匹配精度。"""
+    tokens = text.lower().split()
+    # 添加 bigram 以提高短语匹配能力
+    bigrams = []
+    for i in range(len(tokens) - 1):
+        bigrams.append(f"{tokens[i]}_{tokens[i+1]}")
+    return tokens + bigrams
 
 
 class HybridRetriever:
@@ -187,14 +192,14 @@ class HybridRetriever:
     通过 alpha 参数平衡两种检索方式：
       - alpha=0: 纯 BM25
       - alpha=1: 纯语义嵌入
-      - alpha=0.5: 两者各占一半（默认）
+      - alpha=0.6: 语义检索为主（默认）
 
     参数:
         model_name: SentenceTransformer 模型名称。
         alpha: 语义检索权重（0-1）。
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2", alpha: float = 0.5):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2", alpha: float = 0.6):
         self.model = SentenceTransformer(model_name)
         self.model_name = model_name
         self.alpha = alpha

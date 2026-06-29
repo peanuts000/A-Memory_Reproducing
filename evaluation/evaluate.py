@@ -49,8 +49,8 @@ class MemoryAgent:
     """增强的记忆代理，封装 AgenticMemorySystem 并提供高级检索功能。
 
     增强功能：
-      - 查询关键词生成：使用 LLM 从问题中提取检索关键词
-      - LLM 记忆筛选：使用 LLM 从检索结果中筛选最相关部分
+      - 多查询检索：生成多个查询变体以提高召回率
+      - LLM 重排序：对检索结果进行相关性评分和筛选
       - 分类别 prompt：不同问题类型使用不同的回答提示词
     """
 
@@ -64,7 +64,7 @@ class MemoryAgent:
         retrieve_k: int = 10,
         temperature_c5: float = 0.5,
         use_hybrid: bool = True,
-        hybrid_alpha: float = 0.5,
+        hybrid_alpha: float = 0.6,
     ):
         self.memory_system = AgenticMemorySystem(
             model_name=model_name,
@@ -83,66 +83,167 @@ class MemoryAgent:
         """添加记忆。"""
         self.memory_system.add_note(content, time=time)
 
-    def generate_query_keywords(self, question: str) -> str:
-        """使用 LLM 从问题中生成检索关键词。
+    def generate_query_variants(self, question: str) -> List[str]:
+        """使用 LLM 生成多个查询变体以提高检索召回率。
 
         参数:
             question: 用户问题。
 
         返回:
-            逗号分隔的关键词字符串。
+            查询变体列表（包含原始问题）。
         """
-        prompt = f"""Given the following question, generate several keywords for memory retrieval.
+        prompt = f"""Given the following question, generate 3 different search queries to find relevant conversation memories.
 
 Question: {question}
 
-Please respond with a JSON object containing a "keywords" field with comma-separated keywords.
-Example: {{"keywords": "keyword1, keyword2, keyword3"}}"""
+Each query should approach the question from a different angle:
+1. Query 1: Focus on the main entity/concept (use exact names)
+2. Query 2: Focus on the action/event being asked about
+3. Query 3: Focus on the context/situation described
 
-        try:
-            response = self.llm_controller.llm.get_completion(
-                prompt, temperature=0.3
-            )
-            # 尝试解析 JSON
-            result = json.loads(response.strip().strip("`").replace("json\n", "").replace("```", ""))
-            keywords = result.get("keywords", question)
-            if isinstance(keywords, list):
-                keywords = ", ".join(keywords)
-            return keywords
-        except Exception:
-            # 回退：直接使用问题作为查询
-            return question
-
-    def retrieve_memory_llm(self, memories_text: str, query: str) -> str:
-        """使用 LLM 从检索到的记忆中筛选最相关的部分。
-
-        参数:
-            memories_text: 检索到的记忆文本。
-            query: 用户问题。
-
-        返回:
-            筛选后的相关记忆文本。
-        """
-        prompt = f"""Given the following conversation memories and a question, select the most relevant parts that would help answer the question. Include the date/time if available.
-
-Conversation memories:
-{memories_text}
-
-Question: {query}
-
-Return only the relevant parts. If no parts are relevant, return the original text unchanged.
-Please respond with a JSON object containing a "relevant_parts" field.
-Example: {{"relevant_parts": "2024-01-01: Speaker A said something relevant..."}}"""
+Respond with a JSON object:
+{{"queries": ["query1", "query2", "query3"]}}"""
 
         try:
             response = self.llm_controller.llm.get_completion(prompt, temperature=0.3)
             result = json.loads(response.strip().strip("`").replace("json\n", "").replace("```", ""))
-            return result.get("relevant_parts", memories_text)
+            queries = result.get("queries", [question])
+            if isinstance(queries, list) and queries:
+                # 确保原始问题也在列表中
+                if question not in queries:
+                    queries.insert(0, question)
+                return queries[:5]  # 最多5个查询
         except Exception:
+            pass
+        return [question]
+
+    def retrieve_memory_multi_query(self, question: str, k: int = None) -> str:
+        """使用多查询策略检索记忆，合并去重后返回。
+
+        参数:
+            question: 用户问题。
+            k: 每个查询的检索数量。
+
+        返回:
+            合并去重后的格式化记忆文本。
+        """
+        k = k or self.retrieve_k
+        queries = self.generate_query_variants(question)
+
+        # 收集所有检索结果（使用更大的候选池）
+        candidate_k = min(k * 2, 20)  # 每个查询检索更多结果
+        all_memories = list(self.memory_system.memories.values())
+        seen_indices = set()
+        memory_entries = []
+
+        for query in queries:
+            results = self.memory_system.retriever.search_with_scores(query, candidate_k)
+            for idx, score in results:
+                if idx < len(all_memories) and idx not in seen_indices:
+                    seen_indices.add(idx)
+                    m = all_memories[idx]
+                    memory_entries.append((idx, score, m))
+
+        # 按分数排序，取 top-k
+        memory_entries.sort(key=lambda x: x[1], reverse=True)
+        top_entries = memory_entries[:k]
+
+        # 格式化输出
+        memory_str = ""
+        for idx, score, m in top_entries:
+            memory_str += (
+                f"对话开始时间: {m.timestamp}\t"
+                f"记忆内容: {m.content}\t"
+                f"记忆上下文: {m.context}\t"
+                f"记忆关键词: {m.keywords}\t"
+                f"记忆标签: {m.tags}\n"
+            )
+            # 包含链接的邻居
+            for neighbor_id in m.links:
+                if neighbor_id in self.memory_system.memories:
+                    nm = self.memory_system.memories[neighbor_id]
+                    memory_str += (
+                        f"  [链接] 对话开始时间: {nm.timestamp}\t"
+                        f"记忆内容: {nm.content}\t"
+                        f"记忆上下文: {nm.context}\n"
+                    )
+
+        return memory_str
+
+    def rerank_memories(self, memories_text: str, question: str, top_n: int = 10) -> str:
+        """使用 LLM 对检索到的记忆进行重排序，筛选最相关的部分。
+
+        参数:
+            memories_text: 检索到的记忆文本。
+            question: 用户问题。
+            top_n: 保留的记忆条数。
+
+        返回:
+            筛选后的相关记忆文本。
+        """
+        if not memories_text.strip():
+            return memories_text
+
+        # 将记忆文本分割为单独的条目
+        lines = memories_text.strip().split("\n")
+        memory_entries = []
+        current_entry = ""
+
+        for line in lines:
+            if line.startswith("对话开始时间:"):
+                if current_entry:
+                    memory_entries.append(current_entry)
+                current_entry = line
+            elif line.strip():
+                current_entry += "\n" + line
+        if current_entry:
+            memory_entries.append(current_entry)
+
+        if len(memory_entries) <= top_n:
+            return memories_text
+
+        # 使用 LLM 进行重排序
+        entries_text = ""
+        for i, entry in enumerate(memory_entries):
+            entries_text += f"[{i}] {entry}\n\n"
+
+        prompt = f"""Given the following conversation memories and a question, rank each memory by relevance (0-10 score).
+
+Question: {question}
+
+Memories:
+{entries_text}
+
+For each memory, assign a relevance score from 0 (irrelevant) to 10 (directly answers the question).
+Respond with a JSON object mapping memory index to score:
+{{"scores": {{"0": 8, "1": 3, "2": 9, ...}}}}"""
+
+        try:
+            response = self.llm_controller.llm.get_completion(prompt, temperature=0.1)
+            result = json.loads(response.strip().strip("`").replace("json\n", "").replace("```", ""))
+            scores = result.get("scores", {})
+
+            # 按分数排序
+            scored_entries = []
+            for i, entry in enumerate(memory_entries):
+                score = scores.get(str(i), scores.get(i, 0))
+                try:
+                    score = float(score)
+                except (ValueError, TypeError):
+                    score = 0
+                scored_entries.append((score, entry))
+
+            scored_entries.sort(key=lambda x: x[0], reverse=True)
+
+            # 返回 top_n
+            selected = [entry for _, entry in scored_entries[:top_n]]
+            return "\n".join(selected)
+        except Exception:
+            # 回退：返回原始文本
             return memories_text
 
     def retrieve_memory(self, query: str, k: int = None) -> str:
-        """检索相关记忆并返回格式化字符串。
+        """检索相关记忆并返回格式化字符串（兼容旧接口）。
 
         参数:
             query: 查询文本。
@@ -167,50 +268,94 @@ Example: {{"relevant_parts": "2024-01-01: Speaker A said something relevant..."}
         返回:
             (回答, prompt, 原始上下文) 元组。
         """
-        # 生成检索关键词
-        keywords = self.generate_query_keywords(question)
+        # 使用多查询策略检索相关记忆
+        raw_context = self.retrieve_memory_multi_query(question, k=self.retrieve_k)
 
-        # 检索相关记忆
-        raw_context = self.retrieve_memory(keywords, k=self.retrieve_k)
-
-        # 可选：使用 LLM 筛选记忆
+        # 使用 LLM 重排序筛选最相关的记忆
         context = raw_context
-        if use_llm_filter and raw_context:
-            context = self.retrieve_memory_llm(raw_context, question)
+        if raw_context:
+            context = self.rerank_memories(raw_context, question, top_n=self.retrieve_k)
 
         # 根据类别选择不同的 prompt
         temperature = 0.1
         if category == 4:  # 对抗性问题
             temperature = self.temperature_c5
-            user_prompt = f"""Based on the context: {context}, answer the following question. {question}
+            user_prompt = f"""Based ONLY on the following conversation memories, answer the question.
 
-Select the correct answer or indicate if it's not mentioned in the conversation.
+Conversation memories:
+{context}
+
+Question: {question}
+
+RULES:
+- If the answer IS in the memories, provide a short answer using exact words from the memories.
+- If the answer is NOT in the memories, respond with exactly: "Not mentioned"
+- Do NOT guess or infer information not explicitly stated.
+- Do NOT output JSON format.
+
 Short answer:"""
         elif category == 2:  # 时间问题
-            user_prompt = f"""Based on the context: {context}, answer the following question. Use DATE of CONVERSATION to answer with an approximate date.
-Please generate the shortest possible answer, using words from the conversation where possible.
+            user_prompt = f"""Based ONLY on the following conversation memories, answer the question about WHEN something happened.
 
-Question: {question} Short answer:"""
+Conversation memories:
+{context}
+
+Question: {question}
+
+RULES:
+- Use the CONVERSATION DATE (对话开始时间) in the memories to calculate the absolute date.
+- Answer with a specific date format: "DD Month YYYY" or "Month YYYY" or "YYYY"
+- Do NOT use relative terms like "yesterday", "last week", "next month"
+- If the date cannot be determined, respond with: "Not mentioned"
+- Use exact words from the memories when possible.
+
+Short answer:"""
         elif category == 1:  # 多跳问题
-            user_prompt = f"""Based on the context: {context}, write an answer in the form of a short phrase for the following question. Answer with exact words from the context whenever possible. This question may require information from multiple conversations.
+            user_prompt = f"""Based ONLY on the following conversation memories, answer the question.
 
-Question: {question} Short answer:"""
+Conversation memories:
+{context}
+
+Question: {question}
+
+RULES:
+- This question may require combining information from MULTIPLE conversation sessions.
+- Look through ALL the memories carefully for relevant information.
+- Answer with a short phrase using exact words from the memories.
+- If the information is not in the memories, respond with: "Not mentioned"
+- Do NOT output JSON format.
+
+Short answer:"""
         else:  # 单跳 (0) 和开放领域 (3)
-            user_prompt = f"""Based on the context: {context}, write an answer in the form of a short phrase for the following question. Answer with exact words from the context whenever possible.
+            user_prompt = f"""Based ONLY on the following conversation memories, answer the question.
 
-Question: {question} Short answer:"""
+Conversation memories:
+{context}
+
+Question: {question}
+
+RULES:
+- Find the EXACT answer from the memories.
+- Answer with a short phrase using exact words from the memories.
+- If the information is not in the memories, respond with: "Not mentioned"
+- Do NOT output JSON format.
+- Do NOT add explanations.
+
+Short answer:"""
 
         try:
             response = self.llm_controller.llm.get_completion(
                 user_prompt, temperature=temperature
             )
             prediction = response.strip()
-            # 尝试解析 JSON 格式的回答
+            # 尝试解析 JSON 格式的回答（有些 LLM 会返回 JSON）
             try:
                 result = json.loads(prediction.strip().strip("`").replace("json\n", "").replace("```", ""))
-                prediction = result.get("answer", prediction)
+                prediction = result.get("answer", result.get("response", prediction))
             except (json.JSONDecodeError, ValueError):
                 pass
+            # 清理回答：去除多余的引号和空白
+            prediction = prediction.strip().strip('"').strip("'")
         except Exception as e:
             print(f"  生成答案时出错: {e}")
             prediction = ""
@@ -308,7 +453,7 @@ def run_evaluation(
     output_file: str = "results.json",
     max_conversations: int = None,
     use_hybrid: bool = True,
-    hybrid_alpha: float = 0.5,
+    hybrid_alpha: float = 0.6,
     use_llm_filter: bool = False,
     use_memory_cache: bool = True,
     temperature_c5: float = 0.5,
@@ -460,7 +605,7 @@ def main():
     parser.add_argument("--output", type=str, default="results.json")
     parser.add_argument("--max_conversations", type=int, default=None, help="限制对话数量用于测试")
     parser.add_argument("--no_hybrid", action="store_true", help="禁用混合检索，使用纯语义检索")
-    parser.add_argument("--hybrid_alpha", type=float, default=0.5, help="混合检索语义权重 (0-1)")
+    parser.add_argument("--hybrid_alpha", type=float, default=0.6, help="混合检索语义权重 (0-1)")
     parser.add_argument("--use_llm_filter", action="store_true", help="使用 LLM 筛选记忆")
     parser.add_argument("--no_cache", action="store_true", help="禁用记忆缓存")
     parser.add_argument("--temperature_c5", type=float, default=0.5, help="对抗性问题温度")

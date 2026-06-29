@@ -80,7 +80,7 @@ class AgenticMemorySystem:
         api_base: Optional[str] = None,
         top_k: int = 5,
         use_hybrid: bool = True,
-        hybrid_alpha: float = 0.5,
+        hybrid_alpha: float = 0.6,
     ):
         self.memories: Dict[str, MemoryNote] = {}
         self.use_hybrid = use_hybrid
@@ -230,7 +230,7 @@ class AgenticMemorySystem:
         K_i, G_i, X_i ← LLM(c_i ∥ t_i ∥ Ps1)
         e_i = f_enc[ concat(c_i, K_i, G_i, X_i) ]
         """
-        prompt = ANALYZE_CONTENT_PROMPT.format(content=note.content)
+        prompt = ANALYZE_CONTENT_PROMPT.format(content=note.content, timestamp=note.timestamp)
 
         try:
             response = self.llm_controller.llm.get_completion(
@@ -511,9 +511,11 @@ class AgenticMemorySystem:
         """将记忆笔记转换为检索器的文档字符串。
 
         按论文要求组合内容、上下文、关键词和标签。
+        加入时间戳以提高时间相关查询的 BM25 匹配。
         """
         return (
             f"content: {note.content} "
+            f"timestamp: {note.timestamp} "
             f"context: {note.context} "
             f"keywords: {', '.join(note.keywords)} "
             f"tags: {', '.join(note.tags)}"
