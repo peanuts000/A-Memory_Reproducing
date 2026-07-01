@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-MEM: Agentic Memory 可视化</title>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #0f172a;
+            --bg-card: #1e293b;
+            --bg-hover: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--primary-dark), #7c3aed);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text);
+        }
+
+        .nav-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card h2 .icon {
+            font-size: 1.8rem;
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--accent);
+        }
+
+        .card p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Memory Note Visualization */
+        .memory-note {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .memory-note::before {
+            content: 'MEMORY NOTE';
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--primary);
+            padding: 2px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .note-field {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .note-field .label {
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .note-field .value {
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .tag.keyword {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .tag.link {
+            background: var(--success);
+        }
+
+        /* Flow Diagram */
+        .flow-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            min-width: 140px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .flow-step:hover {
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.2);
+        }
+
+        .flow-step.active {
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(124, 58, 237, 0.2));
+        }
+
+        .flow-step .step-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .flow-step .step-title {
+            font-weight: 600;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .flow-step .step-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Network Graph */
+        #network-graph {
+            width: 100%;
+            height: 500px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: #0f172a;
+        }
+
+        /* Evolution Decision Tree */
+        .decision-tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .decision-node {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .decision-node.question {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+        }
+
+        .decision-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .decision-option {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .decision-option:hover {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        .decision-option.selected {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .decision-option h4 {
+            color: var(--primary-light);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .decision-option p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Retrieval Visualization */
+        .retrieval-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .retrieval-demo {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .query-box {
+            background: linear-gradient(135deg, var(--primary-dark), #7c3aed);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .query-box h3 {
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .query-input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .query-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        .results-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+        }
+
+        .result-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .similarity-bar {
+            width: 100px;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .similarity-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--success));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Animation Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+            border: 1px solid #30363d;
+        }
+
+        .code-block .comment {
+            color: #8b949e;
+        }
+
+        .code-block .keyword {
+            color: #ff7b72;
+        }
+
+        .code-block .string {
+            color: #a5d6ff;
+        }
+
+        .code-block .function {
+            color: #d2a8ff;
+        }
+
+        /* Embedding Visualization */
+        .embedding-vis {
+            display: flex;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .vector-display {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .vector-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .vector-bar .dim {
+            width: 40px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .vector-bar .bar {
+            flex: 1;
+            height: 20px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .vector-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .vector-bar .val {
+            width: 50px;
+            font-size: 0.8rem;
+            text-align: right;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+            margin: 2rem 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--primary);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding: 1rem 0 1rem 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translateX(-5px);
+        }
+
+        .timeline-item .time {
+            font-size: 0.85rem;
+            color: var(--primary-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-item .content {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Highlight animation */
+        .highlight-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #1e293b;
+            color: var(--text);
+            text-align: center;
+            border-radius: 8px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .flow-container {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+
+            .decision-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <h1>🧠 A-MEM: Agentic Memory</h1>
+        <p>基于 Zettelkasten 方法的智能记忆系统可视化</p>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-btn active" onclick="showSection('overview')">📋 概览</button>
+        <button class="nav-btn" onclick="showSection('structure')">📦 记忆结构</button>
+        <button class="nav-btn" onclick="showSection('flow')">🔄 添加流程</button>
+        <button class="nav-btn" onclick="showSection('evolution')">🧬 记忆进化</button>
+        <button class="nav-btn" onclick="showSection('retrieval')">🔍 检索系统</button>
+        <button class="nav-btn" onclick="showSection('network')">🕸️ 记忆网络</button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Overview Section -->
+        <section id="overview" class="section active">
+            <div class="card">
+                <h2><span class="icon">🎯</span> 什么是 A-MEM？</h2>
+                <p>A-MEM (Agentic Memory) 是一种为 LLM 代理设计的智能记忆系统。它借鉴了 Zettelkasten 笔记方法，让 AI 能够动态组织、链接和进化其记忆。</p>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">4</div>
+                        <div class="stat-label">进化决策类型</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">LLM 调用阶段</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">检索方式融合</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">∞</div>
+                        <div class="stat-label">记忆网络链接</div>
+                    </div>
+                </div>
+
+                <h3>核心特性</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                    <div style="background: rgba(99,102,241,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--primary);">
+                        <h4 style="color: var(--primary-light); margin-bottom: 0.5rem;">📝 自动分析</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">自动提取关键词、上下文和标签，无需人工标注</p>
+                    </div>
+                    <div style="background: rgba(245,158,11,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--accent);">
+                        <h4 style="color: var(--accent); margin-bottom: 0.5rem;">🔗 动态链接</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">记忆之间自动建立语义关联，形成知识网络</p>
+                    </div>
+                    <div style="background: rgba(16,185,129,0.1); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--success);">
+                        <h4 style="color: var(--success); margin-bottom: 0.5rem;">🧬 自主进化</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">记忆会根据新信息不断更新和优化</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">🏗️</span> 系统架构</h2>
+                <div class="flow-container">
+                    <div class="flow-step">
+                        <div class="step-icon">📥</div>
+                        <div class="step-title">输入</div>
+                        <div class="step-desc">原始内容</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-icon">🔍</div>
+                        <div class="step-title">分析</div>
+                        <div class="step-desc">LLM 提取</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-icon">🔎</div>
+                        <div class="step-title">检索</div>
+                        <div class="step-desc">查找相关</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-icon">🧬</div>
+                        <div class="step-title">进化</div>
+                        <div class="step-desc">决策更新</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="step-icon">💾</div>
+                        <div class="step-title">存储</div>
+                        <div class="step-desc">持久化</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Memory Structure Section -->
+        <section id="structure" class="section">
+            <div class="card">
+                <h2><span class="icon">📦</span> MemoryNote 结构</h2>
+                <p>每个记忆单元 (MemoryNote) 包含以下字段：</p>
+
+                <div class="memory-note">
+                    <div class="note-field">
+                        <div class="label">ID</div>
+                        <div class="value" style="font-family: monospace; color: var(--primary-light);">550e8400-e29b-41d4-a716-446655440000</div>
+                    </div>
+                    <div class="note-field">
+                        <div class="label">Content (内容)</div>
+                        <div class="value">Caroline 参加了 LGBTQ 支持小组，分享了她的跨性别经历</div>
+                    </div>
+                    <div class="note-field">
+                        <div class="label">Keywords (关键词)</div>
+                        <div class="tag-container">
+                            <span class="tag keyword">Caroline</span>
+                            <span class="tag keyword">LGBTQ</span>
+                            <span class="tag keyword">支持小组</span>
+                            <span class="tag keyword">跨性别</span>
+                        </div>
+                    </div>
+                    <div class="note-field">
+                        <div class="label">Context (上下文)</div>
+                        <div class="value">关于 Caroline 的 LGBTQ 社区参与和身份认同经历</div>
+                    </div>
+                    <div class="note-field">
+                        <div class="label">Tags (标签)</div>
+                        <div class="tag-container">
+                            <span class="tag">身份认同</span>
+                            <span class="tag">社区活动</span>
+                            <span class="tag">个人经历</span>
+                        </div>
+                    </div>
+                    <div class="note-field">
+                        <div class="label">Links (链接)</div>
+                        <div class="tag-container">
+                            <span class="tag link">记忆 #3</span>
+                            <span class="tag link">记忆 #7</span>
+                            <span class="tag link">记忆 #12</span>
+                        </div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                        <div class="note-field">
+                            <div class="label">Timestamp</div>
+                            <div class="value">202305071430</div>
+                        </div>
+                        <div class="note-field">
+                            <div class="label">Importance Score</div>
+                            <div class="value">1.0</div>
+                        </div>
+                        <div class="note-field">
+                            <div class="label">Retrieval Count</div>
+                            <div class="value">5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>字段说明</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                        <thead>
+                            <tr style="background: rgba(99,102,241,0.2);">
+                                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">字段</th>
+                                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">类型</th>
+                                <th style="padding: 1rem; text-align: left; border-bottom: 2px solid var(--primary);">说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 0.75rem; color: var(--primary-light);">content</td>
+                                <td style="padding: 0.75rem; color: var(--text-muted);">str</td>
+                                <td style="padding: 0.75rem;">记忆的原始内容</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 0.75rem; color: var(--primary-light);">keywords</td>
+                                <td style="padding: 0.75rem; color: var(--text-muted);">List[str]</td>
+                                <td style="padding: 0.75rem;">由 LLM 提取的关键词，按重要性排序</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 0.75rem; color: var(--primary-light);">context</td>
+                                <td style="padding: 0.75rem; color: var(--text-muted);">str</td>
+                                <td style="padding: 0.75rem;">内容的上下文摘要</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 0.75rem; color: var(--primary-light);">tags</td>
+                                <td style="padding: 0.75rem; color: var(--text-muted);">List[str]</td>
+                                <td style="padding: 0.75rem;">分类标签，用于主题归类</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid var(--border);">
+                                <td style="padding: 0.75rem; color: var(--primary-light);">links</td>
+                                <td style="padding: 0.75rem; color: var(--text-muted);">List[int]</td>
+                                <td style="padding: 0.75rem;">与其他记忆的关联索引</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Flow Section -->
+        <section id="flow" class="section">
+            <div class="card">
+                <h2><span class="icon">🔄</span> 添加记忆流程</h2>
+                <p>当新内容进入系统时，会经历以下处理流程：</p>
+
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="startFlowAnimation()">▶️ 开始演示</button>
+                    <button class="btn btn-secondary" onclick="resetFlowAnimation()">🔄 重置</button>
+                </div>
+
+                <div id="flow-demo">
+                    <div class="flow-container" id="flow-steps">
+                        <div class="flow-step" id="step-1">
+                            <div class="step-icon">📝</div>
+                            <div class="step-title">输入内容</div>
+                            <div class="step-desc">用户/对话产生新记忆</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" id="step-2">
+                            <div class="step-icon">🤖</div>
+                            <div class="step-title">LLM 分析</div>
+                            <div class="step-desc">提取关键词、上下文、标签</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" id="step-3">
+                            <div class="step-icon">🔎</div>
+                            <div class="step-title">语义检索</div>
+                            <div class="step-desc">查找相似记忆</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" id="step-4">
+                            <div class="step-icon">🧬</div>
+                            <div class="step-title">进化决策</div>
+                            <div class="step-desc">LLM 判断是否进化</div>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step" id="step-5">
+                            <div class="step-icon">💾</div>
+                            <div class="step-title">存储记忆</div>
+                            <div class="step-desc">保存并建立索引</div>
+                        </div>
+                    </div>
+
+                    <div id="flow-detail" style="margin-top: 2rem; min-height: 200px;">
+                        <div class="card" style="background: rgba(99,102,241,0.1); border-color: var(--primary);">
+                            <p style="color: var(--text-muted); text-align: center;">点击"开始演示"查看详细流程</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">💻</span> 代码示例</h2>
+                <div class="code-block">
+<span class="comment"># 添加新记忆的代码流程</span>
+<span class="keyword">def</span> <span class="function">add_note</span>(content: str) -> str:
+    <span class="comment"># 1. 创建记忆笔记，触发 LLM 分析</span>
+    note = MemoryNote(
+        content=content,
+        llm_controller=self.llm_controller  <span class="comment"># 自动分析</span>
+    )
+
+    <span class="comment"># 2. 处理记忆进化</span>
+    evo_label, note = self.process_memory(note)
+
+    <span class="comment"># 3. 存储记忆</span>
+    self.memories[note.id] = note
+
+    <span class="comment"># 4. 添加到检索索引</span>
+    self.retriever.add_documents([
+        <span class="string">"content:"</span> + note.content +
+        <span class="string">" context:"</span> + note.context +
+        <span class="string">" keywords: "</span> + <span class="string">", "</span>.join(note.keywords)
+    ])
+
+    <span class="keyword">return</span> note.id
+                </div>
+            </div>
+        </section>
+
+        <!-- Evolution Section -->
+        <section id="evolution" class="section">
+            <div class="card">
+                <h2><span class="icon">🧬</span> 记忆进化机制</h2>
+                <p>A-MEM 的核心创新在于记忆的自主进化。系统会分析新记忆与现有记忆的关系，决定如何更新记忆网络。</p>
+
+                <div class="decision-tree">
+                    <div class="decision-node question">
+                        <h3 style="color: var(--accent); margin-bottom: 1rem;">🤔 进化决策</h3>
+                        <p>分析新记忆与最近邻记忆的关系</p>
+                    </div>
+
+                    <div class="decision-options">
+                        <div class="decision-option" onclick="selectDecision(this, 'no_evolution')">
+                            <h4>🚫 NO_EVOLUTION</h4>
+                            <p>记忆独立存在，无需建立关联</p>
+                        </div>
+                        <div class="decision-option" onclick="selectDecision(this, 'strengthen')">
+                            <h4>🔗 STRENGTHEN</h4>
+                            <p>加强新记忆与邻居的链接</p>
+                        </div>
+                        <div class="decision-option" onclick="selectDecision(this, 'update')">
+                            <h4>📝 UPDATE_NEIGHBOR</h4>
+                            <p>更新邻居记忆的上下文</p>
+                        </div>
+                        <div class="decision-option" onclick="selectDecision(this, 'both')">
+                            <h4>🔄 STRENGTHEN_AND_UPDATE</h4>
+                            <p>同时加强链接和更新邻居</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="decision-detail" style="margin-top: 2rem;">
+                    <div class="card" style="background: rgba(245,158,11,0.1); border-color: var(--accent);">
+                        <h3 style="color: var(--accent);">👆 点击上方选项查看详细说明</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">📊</span> 进化流程</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="time">Step 1: 检索邻居</div>
+                        <div class="content">
+                            <p>使用语义检索找到与新记忆最相似的 K 个邻居记忆</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">Step 2: 进化决策 (LLM Call #1)</div>
+                        <div class="content">
+                            <p>将新记忆和邻居信息发送给 LLM，判断需要哪种进化操作</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">Step 3: 获取详细信息 (LLM Call #2)</div>
+                        <div class="content">
+                            <p>如果需要 STRENGTHEN，获取具体要建立哪些链接</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">Step 4: 更新邻居 (LLM Call #3)</div>
+                        <div class="content">
+                            <p>如果需要 UPDATE_NEIGHBOR，获取邻居记忆的更新内容</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time">Step 5: 应用更新</div>
+                        <div class="content">
+                            <p>将决策结果应用到记忆网络中</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Retrieval Section -->
+        <section id="retrieval" class="section">
+            <div class="card">
+                <h2><span class="icon">🔍</span> 语义检索系统</h2>
+                <p>A-MEM 使用 SentenceTransformer 将文本转换为向量，通过余弦相似度进行检索。</p>
+
+                <div class="retrieval-demo">
+                    <div class="query-box">
+                        <h3>查询输入</h3>
+                        <input type="text" class="query-input" id="query-input" placeholder="输入查询内容..." value="Caroline 的 LGBTQ 活动">
+                        <button class="btn" style="background: white; color: var(--primary-dark); margin-top: 1rem; width: 100%;" onclick="simulateRetrieval()">
+                            🔍 检索
+                        </button>
+                    </div>
+                    <div class="results-box">
+                        <h3 style="margin-bottom: 1rem;">检索结果</h3>
+                        <div id="retrieval-results">
+                            <div class="result-item">
+                                <div>
+                                    <div style="font-weight: 600;">Caroline 参加骄傲游行</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">2023年7月</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 0.9rem; color: var(--success);">92%</div>
+                                    <div class="similarity-bar">
+                                        <div class="similarity-fill" style="width: 92%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <div>
+                                    <div style="font-weight: 600;">LGBTQ 支持小组会议</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">2023年5月</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 0.9rem; color: var(--success);">88%</div>
+                                    <div class="similarity-bar">
+                                        <div class="similarity-fill" style="width: 88%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="result-item">
+                                <div>
+                                    <div style="font-weight: 600;">跨性别会议发言</div>
+                                    <div style="font-size: 0.85rem; color: var(--text-muted);">2023年7月</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-size: 0.9rem; color: var(--accent);">75%</div>
+                                    <div class="similarity-bar">
+                                        <div class="similarity-fill" style="width: 75%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">📐</span> 向量嵌入可视化</h2>
+                <p>文本通过 SentenceTransformer 转换为高维向量：</p>
+
+                <div class="embedding-vis">
+                    <div class="vector-display">
+                        <h4 style="color: var(--primary-light); margin-bottom: 1rem;">查询向量</h4>
+                        <div id="query-vector"></div>
+                    </div>
+                    <div class="vector-display">
+                        <h4 style="color: var(--success); margin-bottom: 1rem;">记忆向量</h4>
+                        <div id="memory-vector"></div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 1rem;">
+                    <p style="color: var(--text-muted);">余弦相似度: <span style="color: var(--success); font-size: 1.5rem; font-weight: 700;">0.92</span></p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">💻</span> 检索代码</h2>
+                <div class="code-block">
+<span class="keyword">class</span> <span class="function">SimpleEmbeddingRetriever</span>:
+    <span class="keyword">def</span> <span class="function">search</span>(self, query: str, k: int = 5) -> List[int]:
+        <span class="comment"># 1. 将查询转换为向量</span>
+        query_embedding = self.model.encode([query])[0]
+
+        <span class="comment"># 2. 计算与所有记忆的余弦相似度</span>
+        similarities = cosine_similarity(
+            [query_embedding], self.embeddings
+        )[0]
+
+        <span class="comment"># 3. 返回最相似的 k 个索引</span>
+        top_k_indices = np.argsort(similarities)[-k:][::-1]
+        <span class="keyword">return</span> top_k_indices.tolist()
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Section -->
+        <section id="network" class="section">
+            <div class="card">
+                <h2><span class="icon">🕸️</span> 记忆网络可视化</h2>
+                <p>记忆之间通过 links 形成一个动态的网络结构。节点代表记忆，边代表它们之间的关联。</p>
+
+                <div class="controls">
+                    <button class="btn btn-primary" onclick="addRandomMemory()">➕ 添加记忆</button>
+                    <button class="btn btn-secondary" onclick="resetNetwork()">🔄 重置网络</button>
+                </div>
+
+                <div id="network-graph"></div>
+
+                <div style="margin-top: 1rem; display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div>
+                        <span style="display: inline-block; width: 12px; height: 12px; background: var(--primary); border-radius: 50%; margin-right: 8px;"></span>
+                        <span style="color: var(--text-muted);">普通记忆</span>
+                    </div>
+                    <div>
+                        <span style="display: inline-block; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; margin-right: 8px;"></span>
+                        <span style="color: var(--text-muted);">新添加记忆</span>
+                    </div>
+                    <div>
+                        <span style="display: inline-block; width: 12px; height: 12px; background: var(--success); border-radius: 50%; margin-right: 8px;"></span>
+                        <span style="color: var(--text-muted);">高重要性记忆</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2><span class="icon">📈</span> 网络统计</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="node-count">6</div>
+                        <div class="stat-label">记忆节点</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="edge-count">7</div>
+                        <div class="stat-label">关联边</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avg-links">2.3</div>
+                        <div class="stat-label">平均链接数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="evolution-count">3</div>
+                        <div class="stat-label">进化次数</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+
+            if (sectionId === 'network') {
+                initNetwork();
+            }
+            if (sectionId === 'retrieval') {
+                initVectors();
+            }
+        }
+
+        // Flow Animation
+        let flowInterval;
+        let currentStep = 0;
+
+        const flowDetails = [
+            {
+                title: '📝 输入内容',
+                content: '<p>用户对话或系统事件产生新的记忆内容：</p><div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; margin-top: 1rem; font-family: monospace;">"Caroline 在 2023 年 5 月参加了 LGBTQ 支持小组"</div>'
+            },
+            {
+                title: '🤖 LLM 内容分析',
+                content: '<p>调用 LLM 分析内容，提取结构化信息：</p><div style="margin-top: 1rem;"><strong>Keywords:</strong> <span class="tag keyword" style="display: inline;">Caroline</span> <span class="tag keyword" style="display: inline;">LGBTQ</span> <span class="tag keyword" style="display: inline;">支持小组</span></div><div style="margin-top: 0.5rem;"><strong>Context:</strong> 关于 Caroline 参与 LGBTQ 社区活动的记录</div><div style="margin-top: 0.5rem;"><strong>Tags:</strong> <span class="tag" style="display: inline;">社区活动</span> <span class="tag" style="display: inline;">身份认同</span></div>'
+            },
+            {
+                title: '🔎 语义检索',
+                content: '<p>使用 SentenceTransformer 将内容编码为向量，在记忆库中查找最相似的 K 个邻居：</p><div style="margin-top: 1rem;"><div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--border);"><span>记忆 #3: Caroline 的跨性别经历</span><span style="color: var(--success);">相似度: 0.89</span></div><div style="display: flex; justify-content: space-between; padding: 0.5rem; border-bottom: 1px solid var(--border);"><span>记忆 #7: LGBTQ 会议参与</span><span style="color: var(--success);">相似度: 0.85</span></div><div style="display: flex; justify-content: space-between; padding: 0.5rem;"><span>记忆 #12: 社区支持网络</span><span style="color: var(--accent);">相似度: 0.72</span></div></div>'
+            },
+            {
+                title: '🧬 进化决策',
+                content: '<p>LLM 分析新记忆与邻居的关系，做出进化决策：</p><div style="background: rgba(16,185,129,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--success);"><strong>决策:</strong> STRENGTHEN_AND_UPDATE<br><strong>原因:</strong> 新记忆与现有 LGBTQ 相关记忆高度相关，应建立链接并更新邻居上下文</div>'
+            },
+            {
+                title: '💾 存储记忆',
+                content: '<p>将处理后的记忆存入系统：</p><ul style="margin-top: 1rem; padding-left: 1.5rem;"><li>保存 MemoryNote 到 memories 字典</li><li>添加到语义检索索引</li><li>更新邻居记忆的 links</li><li>记录进化历史</li></ul><div style="background: rgba(99,102,241,0.2); padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--primary);">✅ 记忆已成功添加并建立 3 个关联链接</div>'
+            }
+        ];
+
+        function startFlowAnimation() {
+            resetFlowAnimation();
+            currentStep = 0;
+            animateStep();
+        }
+
+        function animateStep() {
+            if (currentStep >= 5) return;
+
+            const step = document.getElementById(`step-${currentStep + 1}`);
+            step.classList.add('active');
+
+            document.getElementById('flow-detail').innerHTML = `
+                <div class="card" style="background: rgba(99,102,241,0.1); border-color: var(--primary);">
+                    <h3 style="color: var(--primary-light);">${flowDetails[currentStep].title}</h3>
+                    ${flowDetails[currentStep].content}
+                </div>
+            `;
+
+            currentStep++;
+            if (currentStep < 5) {
+                flowInterval = setTimeout(animateStep, 2000);
+            }
+        }
+
+        function resetFlowAnimation() {
+            clearTimeout(flowInterval);
+            currentStep = 0;
+            document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
+            document.getElementById('flow-detail').innerHTML = `
+                <div class="card" style="background: rgba(99,102,241,0.1); border-color: var(--primary);">
+                    <p style="color: var(--text-muted); text-align: center;">点击"开始演示"查看详细流程</p>
+                </div>
+            `;
+        }
+
+        // Decision Selection
+        const decisionDetails = {
+            no_evolution: {
+                title: '🚫 NO_EVOLUTION',
+                content: '<p>当新记忆与现有记忆没有明显关联时，系统选择不进行任何进化操作。</p><p style="margin-top: 1rem;">记忆将独立存储，等待未来与其他记忆建立关联。</p>',
+                color: 'var(--text-muted)'
+            },
+            strengthen: {
+                title: '🔗 STRENGTHEN',
+                content: '<p>系统发现新记忆与某些现有记忆相关，决定建立链接。</p><h4 style="margin-top: 1rem; color: var(--primary-light);">执行操作：</h4><ul style="padding-left: 1.5rem; margin-top: 0.5rem;"><li>获取要连接的邻居索引</li><li>更新新记忆的 links 字段</li><li>可能更新 tags</li></ul>',
+                color: 'var(--primary)'
+            },
+            update: {
+                title: '📝 UPDATE_NEIGHBOR',
+                content: '<p>新记忆提供了对现有记忆的新理解，需要更新邻居的上下文。</p><h4 style="margin-top: 1rem; color: var(--primary-light);">执行操作：</h4><ul style="padding-left: 1.5rem; margin-top: 0.5rem;"><li>分析新记忆对邻居的影响</li><li>更新邻居的 context</li><li>可能更新邻居的 tags</li></ul>',
+                color: 'var(--accent)'
+            },
+            both: {
+                title: '🔄 STRENGTHEN_AND_UPDATE',
+                content: '<p>最全面的进化操作，同时建立链接和更新邻居。</p><h4 style="margin-top: 1rem; color: var(--primary-light);">执行操作：</h4><ul style="padding-left: 1.5rem; margin-top: 0.5rem;"><li>建立新记忆与邻居的链接</li><li>更新邻居的上下文信息</li><li>优化整个记忆网络的结构</li></ul><p style="margin-top: 1rem; color: var(--success);">这是最常见的进化模式，当记忆高度相关时触发。</p>',
+                color: 'var(--success)'
+            }
+        };
+
+        function selectDecision(element, type) {
+            document.querySelectorAll('.decision-option').forEach(o => o.classList.remove('selected'));
+            element.classList.add('selected');
+
+            const detail = decisionDetails[type];
+            document.getElementById('decision-detail').innerHTML = `
+                <div class="card" style="background: rgba(99,102,241,0.1); border-color: ${detail.color};">
+                    <h3 style="color: ${detail.color};">${detail.title}</h3>
+                    ${detail.content}
+                </div>
+            `;
+        }
+
+        // Network Visualization
+        let network;
+
+        function initNetwork() {
+            const container = document.getElementById('network-graph');
+            if (network) return;
+
+            const nodes = new vis.DataSet([
+                { id: 1, label: 'Caroline\nLGBTQ 活动', color: '#6366f1', font: { color: '#fff' } },
+                { id: 2, label: '跨性别\n经历', color: '#6366f1', font: { color: '#fff' } },
+                { id: 3, label: '骄傲\n游行', color: '#6366f1', font: { color: '#fff' } },
+                { id: 4, label: '支持\n小组', color: '#6366f1', font: { color: '#fff' } },
+                { id: 5, label: 'Melanie\n户外活动', color: '#10b981', font: { color: '#fff' } },
+                { id: 6, label: '社区\n支持', color: '#6366f1', font: { color: '#fff' } },
+            ]);
+
+            const edges = new vis.DataSet([
+                { from: 1, to: 2, color: { color: '#818cf8' } },
+                { from: 1, to: 3, color: { color: '#818cf8' } },
+                { from: 1, to: 4, color: { color: '#818cf8' } },
+                { from: 2, to: 4, color: { color: '#818cf8' } },
+                { from: 3, to: 6, color: { color: '#818cf8' } },
+                { from: 4, to: 6, color: { color: '#818cf8' } },
+                { from: 5, to: 6, color: { color: '#818cf8' } },
+            ]);
+
+            const data = { nodes, edges };
+            const options = {
+                nodes: {
+                    shape: 'dot',
+                    size: 25,
+                    borderWidth: 2,
+                    borderWidthSelected: 4,
+                    font: {
+                        size: 14,
+                        face: 'Segoe UI'
+                    }
+                },
+                edges: {
+                    width: 2,
+                    smooth: {
+                        type: 'continuous'
+                    }
+                },
+                physics: {
+                    enabled: true,
+                    barnesHut: {
+                        gravitationalConstant: -2000,
+                        centralGravity: 0.3,
+                        springLength: 150
+                    }
+                },
+                interaction: {
+                    hover: true,
+                    tooltipDelay: 200
+                }
+            };
+
+            network = new vis.Network(container, data, options);
+        }
+
+        let memoryCounter = 7;
+
+        function addRandomMemory() {
+            if (!network) return;
+
+            const contents = [
+                '新记忆: LGBTQ 权益倡导',
+                '新记忆: 跨性别健康',
+                '新记忆: 社区艺术展',
+                '新记忆: 心理咨询',
+                '新记忆: 儿童教育'
+            ];
+
+            const colors = ['#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
+
+            const idx = Math.floor(Math.random() * contents.length);
+
+            network.body.data.nodes.add({
+                id: memoryCounter,
+                label: contents[idx].replace('新记忆: ', ''),
+                color: colors[idx],
+                font: { color: '#fff' }
+            });
+
+            // Connect to 1-2 random existing nodes
+            const existingNodes = network.body.data.nodes.getIds();
+            const numConnections = Math.floor(Math.random() * 2) + 1;
+
+            for (let i = 0; i < numConnections; i++) {
+                const targetIdx = Math.floor(Math.random() * (existingNodes.length - 1));
+                network.body.data.edges.add({
+                    from: memoryCounter,
+                    to: existingNodes[targetIdx],
+                    color: { color: '#f59e0b' }
+                });
+            }
+
+            memoryCounter++;
+            updateNetworkStats();
+        }
+
+        function resetNetwork() {
+            if (network) {
+                network.destroy();
+                network = null;
+                memoryCounter = 7;
+            }
+            initNetwork();
+            updateNetworkStats();
+        }
+
+        function updateNetworkStats() {
+            if (!network) return;
+
+            const nodeCount = network.body.data.nodes.length;
+            const edgeCount = network.body.data.edges.length;
+
+            document.getElementById('node-count').textContent = nodeCount;
+            document.getElementById('edge-count').textContent = edgeCount;
+            document.getElementById('avg-links').textContent = (edgeCount * 2 / nodeCount).toFixed(1);
+            document.getElementById('evolution-count').textContent = Math.floor(edgeCount * 0.6);
+        }
+
+        // Retrieval Simulation
+        function simulateRetrieval() {
+            const results = [
+                { text: 'Caroline 参加骄傲游行', time: '2023年7月', sim: 0.92 + Math.random() * 0.05 },
+                { text: 'LGBTQ 支持小组会议', time: '2023年5月', sim: 0.85 + Math.random() * 0.08 },
+                { text: '跨性别会议发言', time: '2023年7月', sim: 0.72 + Math.random() * 0.1 },
+                { text: '社区支持网络建设', time: '2023年6月', sim: 0.65 + Math.random() * 0.1 },
+            ];
+
+            results.sort((a, b) => b.sim - a.sim);
+
+            const container = document.getElementById('retrieval-results');
+            container.innerHTML = results.map(r => `
+                <div class="result-item">
+                    <div>
+                        <div style="font-weight: 600;">${r.text}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">${r.time}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 0.9rem; color: ${r.sim > 0.8 ? 'var(--success)' : 'var(--accent)'};">${(r.sim * 100).toFixed(0)}%</div>
+                        <div class="similarity-bar">
+                            <div class="similarity-fill" style="width: ${r.sim * 100}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Vector Visualization
+        function initVectors() {
+            const queryVec = [0.82, -0.45, 0.91, -0.23, 0.67, -0.89, 0.34, 0.56, -0.12, 0.78];
+            const memoryVec = [0.79, -0.42, 0.88, -0.25, 0.71, -0.85, 0.38, 0.52, -0.15, 0.81];
+
+            const dims = ['d1', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10'];
+
+            document.getElementById('query-vector').innerHTML = dims.map((d, i) => {
+                const val = queryVec[i];
+                const width = Math.abs(val) * 100;
+                const offset = val < 0 ? `right: 50%` : `left: 50%`;
+                return `
+                    <div class="vector-bar">
+                        <div class="dim">${d}</div>
+                        <div class="bar">
+                            <div class="fill" style="width: ${width}%; ${offset}; background: linear-gradient(90deg, var(--primary), var(--accent));"></div>
+                        </div>
+                        <div class="val">${val.toFixed(2)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('memory-vector').innerHTML = dims.map((d, i) => {
+                const val = memoryVec[i];
+                const width = Math.abs(val) * 100;
+                const offset = val < 0 ? `right: 50%` : `left: 50%`;
+                return `
+                    <div class="vector-bar">
+                        <div class="dim">${d}</div>
+                        <div class="bar">
+                            <div class="fill" style="width: ${width}%; ${offset}; background: linear-gradient(90deg, var(--success), #34d399);"></div>
+                        </div>
+                        <div class="val">${val.toFixed(2)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initVectors();
+        });
+    </script>
+</body>
+</html>
