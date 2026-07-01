@@ -1,0 +1,1057 @@
+2026-06-30 19:24:52,373 - INFO - ============================================================
+2026-06-30 19:24:52,374 - INFO - A-MEM Evaluation with DeepSeek
+2026-06-30 19:24:52,374 - INFO - ============================================================
+2026-06-30 19:24:52,374 - INFO - Model: deepseek-v4-flash
+2026-06-30 19:24:52,374 - INFO - Dataset: data/locomo10.json
+2026-06-30 19:24:52,374 - INFO - Retrieve k: 10
+2026-06-30 19:24:52,374 - INFO - Ratio: 0.1
+2026-06-30 19:24:52,375 - INFO - Loading dataset from data/locomo10.json
+2026-06-30 19:24:52,394 - INFO - Loaded 10 samples
+2026-06-30 19:24:52,395 - INFO - Using 1 samples (10.0% of dataset)
+2026-06-30 19:24:52,522 - INFO - 
+========================================
+2026-06-30 19:24:52,522 - INFO - Processing sample 1/1
+2026-06-30 19:24:52,522 - INFO - ========================================
+2026-06-30 19:24:52,522 - INFO - Creating memories for sample 0
+2026-06-30 21:22:48,627 - INFO - Cached 419 memories
+2026-06-30 21:22:53,477 - INFO - 
+Question 1: When did Caroline go to the LGBTQ support group?
+2026-06-30 21:22:53,477 - INFO - Prediction: 7 May 2023
+2026-06-30 21:22:53,477 - INFO - Reference: 7 May 2023
+2026-06-30 21:22:53,477 - INFO - Category: 2
+2026-06-30 21:22:57,206 - INFO - 
+Question 2: When did Melanie paint a sunrise?
+2026-06-30 21:22:57,206 - INFO - Prediction: last year (2022)
+2026-06-30 21:22:57,206 - INFO - Reference: 2022
+2026-06-30 21:22:57,206 - INFO - Category: 2
+2026-06-30 21:23:03,794 - INFO - 
+Question 3: What fields would Caroline be likely to pursue in her educaton?
+2026-06-30 21:23:03,794 - INFO - Prediction: counseling and mental health
+2026-06-30 21:23:03,794 - INFO - Reference: Psychology, counseling certification
+2026-06-30 21:23:03,794 - INFO - Category: 3
+2026-06-30 21:23:07,575 - INFO - 
+Question 4: What did Caroline research?
+2026-06-30 21:23:07,575 - INFO - Prediction: counseling or mental health work
+2026-06-30 21:23:07,575 - INFO - Reference: Adoption agencies
+2026-06-30 21:23:07,575 - INFO - Category: 1
+2026-06-30 21:23:10,355 - INFO - 
+Question 5: What is Caroline's identity?
+2026-06-30 21:23:10,355 - INFO - Prediction: trans woman
+2026-06-30 21:23:10,355 - INFO - Reference: Transgender woman
+2026-06-30 21:23:10,355 - INFO - Category: 1
+2026-06-30 21:23:16,792 - INFO - 
+Question 6: When did Melanie run a charity race?
+2026-06-30 21:23:16,792 - INFO - Prediction: 20 May 2023
+2026-06-30 21:23:16,792 - INFO - Reference: The sunday before 25 May 2023
+2026-06-30 21:23:16,792 - INFO - Category: 2
+2026-06-30 21:23:21,207 - INFO - 
+Question 7: When is Melanie planning on going camping?
+2026-06-30 21:23:21,207 - INFO - Prediction: next month
+2026-06-30 21:23:21,207 - INFO - Reference: June 2023
+2026-06-30 21:23:21,207 - INFO - Category: 2
+2026-06-30 21:23:28,293 - INFO - 
+Question 8: What is Caroline's relationship status?
+2026-06-30 21:23:28,294 - INFO - Prediction: tough breakup
+2026-06-30 21:23:28,294 - INFO - Reference: Single
+2026-06-30 21:23:28,294 - INFO - Category: 1
+2026-06-30 21:23:39,554 - INFO - 
+Question 9: When did Caroline give a speech at a school?
+2026-06-30 21:23:39,554 - INFO - Prediction: 
+2026-06-30 21:23:39,554 - INFO - Reference: The week before 9 June 2023
+2026-06-30 21:23:39,554 - INFO - Category: 2
+2026-06-30 21:23:46,859 - INFO - 
+Question 10: When did Caroline meet up with her friends, family, and mentors?
+2026-06-30 21:23:46,859 - INFO - Prediction: approximately 2 June 2023
+2026-06-30 21:23:46,859 - INFO - Reference: The week before 9 June 2023
+2026-06-30 21:23:46,859 - INFO - Category: 2
+2026-06-30 21:23:46,872 - INFO - Processed 10 questions
+2026-06-30 21:23:50,641 - INFO - 
+Question 11: How long has Caroline had her current group of friends for?
+2026-06-30 21:23:50,641 - INFO - Prediction: 4 years
+2026-06-30 21:23:50,641 - INFO - Reference: 4 years
+2026-06-30 21:23:50,641 - INFO - Category: 2
+2026-06-30 21:23:56,032 - INFO - 
+Question 12: Where did Caroline move from 4 years ago?
+2026-06-30 21:23:56,032 - INFO - Prediction: Not specified.
+2026-06-30 21:23:56,033 - INFO - Reference: Sweden
+2026-06-30 21:23:56,033 - INFO - Category: 1
+2026-06-30 21:23:59,552 - INFO - 
+Question 13: How long ago was Caroline's 18th birthday?
+2026-06-30 21:23:59,552 - INFO - Prediction: ten years ago
+2026-06-30 21:23:59,552 - INFO - Reference: 10 years ago
+2026-06-30 21:23:59,552 - INFO - Category: 2
+2026-06-30 21:24:04,677 - INFO - 
+Question 14: What career path has Caroline decided to persue?
+2026-06-30 21:24:04,677 - INFO - Prediction: counseling and mental health
+2026-06-30 21:24:04,677 - INFO - Reference: counseling or mental health for Transgender people
+2026-06-30 21:24:04,677 - INFO - Category: 1
+2026-06-30 21:24:13,716 - INFO - 
+Question 15: Would Caroline still want to pursue counseling as a career if she hadn't received support growing up?
+2026-06-30 21:24:13,716 - INFO - Prediction: No, her inspiration came from the support she got.
+2026-06-30 21:24:13,716 - INFO - Reference: Likely no
+2026-06-30 21:24:13,716 - INFO - Category: 3
+2026-06-30 21:24:17,820 - INFO - 
+Question 16: What activities does Melanie partake in?
+2026-06-30 21:24:17,820 - INFO - Prediction: running, reading, or playing my violin
+2026-06-30 21:24:17,820 - INFO - Reference: pottery, camping, painting, swimming
+2026-06-30 21:24:17,820 - INFO - Category: 1
+2026-06-30 21:24:23,305 - INFO - 
+Question 17: When did Melanie sign up for a pottery class?
+2026-06-30 21:24:23,306 - INFO - Prediction: yesterday
+2026-06-30 21:24:23,306 - INFO - Reference: 2 July 2023
+2026-06-30 21:24:23,306 - INFO - Category: 2
+2026-06-30 21:24:27,441 - INFO - 
+Question 18: When is Caroline going to the transgender conference?
+2026-06-30 21:24:27,442 - INFO - Prediction: this month
+2026-06-30 21:24:27,442 - INFO - Reference: July 2023
+2026-06-30 21:24:27,442 - INFO - Category: 2
+2026-06-30 21:24:34,365 - INFO - 
+Question 19: Where has Melanie camped?
+2026-06-30 21:24:34,365 - INFO - Prediction: in the mountains, at the beach, and in the forest
+2026-06-30 21:24:34,365 - INFO - Reference: beach, mountains, forest
+2026-06-30 21:24:34,365 - INFO - Category: 1
+2026-06-30 21:24:39,686 - INFO - 
+Question 20: What do Melanie's kids like?
+2026-06-30 21:24:39,687 - INFO - Prediction: the beach
+2026-06-30 21:24:39,687 - INFO - Reference: dinosaurs, nature
+2026-06-30 21:24:39,687 - INFO - Category: 1
+2026-06-30 21:24:39,703 - INFO - Processed 20 questions
+2026-06-30 21:24:44,474 - INFO - 
+Question 21: When did Melanie go to the museum?
+2026-06-30 21:24:44,474 - INFO - Prediction: No information.
+2026-06-30 21:24:44,474 - INFO - Reference: 5 July 2023
+2026-06-30 21:24:44,474 - INFO - Category: 2
+2026-06-30 21:24:53,501 - INFO - 
+Question 22: When did Caroline have a picnic?
+2026-06-30 21:24:53,501 - INFO - Prediction: late June 2023
+2026-06-30 21:24:53,501 - INFO - Reference: The week before 6 July 2023
+2026-06-30 21:24:53,501 - INFO - Category: 2
+2026-06-30 21:24:58,435 - INFO - 
+Question 23: Would Caroline likely have Dr. Seuss books on her bookshelf?
+2026-06-30 21:24:58,435 - INFO - Prediction: classics
+2026-06-30 21:24:58,435 - INFO - Reference: Yes, since she collects classic children's books
+2026-06-30 21:24:58,435 - INFO - Category: 3
+2026-06-30 21:25:03,233 - INFO - 
+Question 24: What books has Melanie read?
+2026-06-30 21:25:03,234 - INFO - Prediction: Charlotte's Web
+2026-06-30 21:25:03,234 - INFO - Reference: "Nothing is Impossible", "Charlotte's Web"
+2026-06-30 21:25:03,234 - INFO - Category: 1
+2026-06-30 21:25:07,730 - INFO - 
+Question 25: What does Melanie do to destress?
+2026-06-30 21:25:07,730 - INFO - Prediction: running
+2026-06-30 21:25:07,730 - INFO - Reference: Running, pottery
+2026-06-30 21:25:07,730 - INFO - Category: 1
+2026-06-30 21:25:11,991 - INFO - 
+Question 26: When did Caroline go to the LGBTQ conference?
+2026-06-30 21:25:11,992 - INFO - Prediction: 10 July 2023
+2026-06-30 21:25:11,992 - INFO - Reference: 10 July 2023
+2026-06-30 21:25:11,992 - INFO - Category: 2
+2026-06-30 21:25:15,953 - INFO - 
+Question 27: When did Melanie read the book "nothing is impossible"?
+2026-06-30 21:25:15,954 - INFO - Prediction: Not mentioned.
+2026-06-30 21:25:15,954 - INFO - Reference: 2022
+2026-06-30 21:25:15,954 - INFO - Category: 2
+2026-06-30 21:25:21,898 - INFO - 
+Question 28: Would Caroline pursue writing as a career option?
+2026-06-30 21:25:21,898 - INFO - Prediction: No.
+2026-06-30 21:25:21,898 - INFO - Reference: LIkely no; though she likes reading, she wants to be a counselor
+2026-06-30 21:25:21,898 - INFO - Category: 3
+2026-06-30 21:25:27,698 - INFO - 
+Question 29: When did Caroline go to the adoption meeting?
+2026-06-30 21:25:27,698 - INFO - Prediction: July 14, 2023
+2026-06-30 21:25:27,698 - INFO - Reference: The friday before 15 July 2023
+2026-06-30 21:25:27,698 - INFO - Category: 2
+2026-06-30 21:25:32,762 - INFO - 
+Question 30: When did Melanie go to the pottery workshop?
+2026-06-30 21:25:32,762 - INFO - Prediction: 14 July 2023
+2026-06-30 21:25:32,762 - INFO - Reference: The Friday before 15 July 2023
+2026-06-30 21:25:32,762 - INFO - Category: 2
+2026-06-30 21:25:32,775 - INFO - Processed 30 questions
+2026-06-30 21:25:38,054 - INFO - 
+Question 31: Would Melanie be considered a member of the LGBTQ community?
+2026-06-30 21:25:38,055 - INFO - Prediction: No
+2026-06-30 21:25:38,055 - INFO - Reference: Likely no, she does not refer to herself as part of it
+2026-06-30 21:25:38,055 - INFO - Category: 3
+2026-06-30 21:25:45,362 - INFO - 
+Question 32: When did Melanie go camping in June?
+2026-06-30 21:25:45,362 - INFO - Prediction: late June
+2026-06-30 21:25:45,362 - INFO - Reference: The week before 27 June 2023
+2026-06-30 21:25:45,362 - INFO - Category: 2
+2026-06-30 21:25:50,159 - INFO - 
+Question 33: What LGBTQ+ events has Caroline participated in?
+2026-06-30 21:25:50,159 - INFO - Prediction: LGBTQ conference, LGBTQ+ pride parade, LGBTQ support group, school event, LGBTQ activist group, LGBTQ+ counseling workshop
+2026-06-30 21:25:50,159 - INFO - Reference: Pride parade, school speech, support group
+2026-06-30 21:25:50,159 - INFO - Category: 1
+2026-06-30 21:26:00,700 - INFO - 
+Question 34: When did Caroline go to a pride parade during the summer?
+2026-06-30 21:26:00,700 - INFO - Prediction: 11 August 2023
+2026-06-30 21:26:00,700 - INFO - Reference: The week before 3 July 2023
+2026-06-30 21:26:00,700 - INFO - Category: 2
+2026-06-30 21:26:07,273 - INFO - 
+Question 35: What events has Caroline participated in to help children?
+2026-06-30 21:26:07,273 - INFO - Prediction: volunteer at an LGBTQ+ youth center
+2026-06-30 21:26:07,273 - INFO - Reference: Mentoring program, school speech
+2026-06-30 21:26:07,273 - INFO - Category: 1
+2026-06-30 21:26:20,424 - INFO - 
+Question 36: When did Melanie go camping in July?
+2026-06-30 21:26:20,424 - INFO - Prediction: early July
+2026-06-30 21:26:20,424 - INFO - Reference: two weekends before 17 July 2023
+2026-06-30 21:26:20,425 - INFO - Category: 2
+2026-06-30 21:26:26,825 - INFO - 
+Question 37: When did Caroline join a mentorship program?
+2026-06-30 21:26:26,825 - INFO - Prediction: 16 July 2023
+2026-06-30 21:26:26,825 - INFO - Reference: The weekend before 17 July 2023
+2026-06-30 21:26:26,825 - INFO - Category: 2
+2026-06-30 21:26:39,725 - INFO - 
+Question 38: What did Melanie paint recently?
+2026-06-30 21:26:39,726 - INFO - Prediction: 
+2026-06-30 21:26:39,726 - INFO - Reference: sunset
+2026-06-30 21:26:39,726 - INFO - Category: 1
+2026-06-30 21:26:44,335 - INFO - 
+Question 39: What activities has Melanie done with her family?
+2026-06-30 21:26:44,335 - INFO - Prediction: camping, beach trips, hiking, concert
+2026-06-30 21:26:44,335 - INFO - Reference: Pottery, painting, camping, museum, swimming, hiking
+2026-06-30 21:26:44,335 - INFO - Category: 1
+2026-06-30 21:26:52,328 - INFO - 
+Question 40: In what ways is Caroline participating in the LGBTQ community?
+2026-06-30 21:26:52,328 - INFO - Prediction: Attending support groups, speaking at school events, joining activist groups, volunteering at youth centers, attending conferences and parades.
+2026-06-30 21:26:52,328 - INFO - Reference: Joining activist group, going to pride parades, participating in an art show, mentoring program
+2026-06-30 21:26:52,328 - INFO - Category: 1
+2026-06-30 21:26:52,343 - INFO - Processed 40 questions
+2026-06-30 21:27:04,284 - INFO - 
+Question 41: How many times has Melanie gone to the beach in 2023?
+2026-06-30 21:27:04,284 - INFO - Prediction: 
+2026-06-30 21:27:04,284 - INFO - Reference: 2
+2026-06-30 21:27:04,284 - INFO - Category: 1
+2026-06-30 21:27:08,624 - INFO - 
+Question 42: When did Caroline join a new activist group?
+2026-06-30 21:27:08,624 - INFO - Prediction: last Tuesday
+2026-06-30 21:27:08,624 - INFO - Reference: The Tuesday before 20 July 2023
+2026-06-30 21:27:08,624 - INFO - Category: 2
+2026-06-30 21:27:12,121 - INFO - 
+Question 43: Would Melanie be more interested in going to a national park or a theme park?
+2026-06-30 21:27:12,121 - INFO - Prediction: National park
+2026-06-30 21:27:12,121 - INFO - Reference: National park; she likes the outdoors
+2026-06-30 21:27:12,121 - INFO - Category: 3
+2026-06-30 21:27:16,809 - INFO - 
+Question 44: What kind of art does Caroline make?
+2026-06-30 21:27:16,809 - INFO - Prediction: painting
+2026-06-30 21:27:16,809 - INFO - Reference: abstract art
+2026-06-30 21:27:16,809 - INFO - Category: 1
+2026-06-30 21:27:22,494 - INFO - 
+Question 45: When is Melanie's daughter's birthday?
+2026-06-30 21:27:22,494 - INFO - Prediction: 13 August 2023
+2026-06-30 21:27:22,494 - INFO - Reference: 13 August
+2026-06-30 21:27:22,494 - INFO - Category: 2
+2026-06-30 21:27:26,413 - INFO - 
+Question 46: When did Caroline attend a pride parade in August?
+2026-06-30 21:27:26,413 - INFO - Prediction: last Friday
+2026-06-30 21:27:26,413 - INFO - Reference: The Friday before 14 August 2023
+2026-06-30 21:27:26,413 - INFO - Category: 2
+2026-06-30 21:27:38,806 - INFO - 
+Question 47: Would Melanie be considered an ally to the transgender community?
+2026-06-30 21:27:38,806 - INFO - Prediction: 
+2026-06-30 21:27:38,806 - INFO - Reference: Yes, she is supportive
+2026-06-30 21:27:38,806 - INFO - Category: 3
+2026-06-30 21:27:43,918 - INFO - 
+Question 48: Who supports Caroline when she has a negative experience?
+2026-06-30 21:27:43,918 - INFO - Prediction: Melanie
+2026-06-30 21:27:43,918 - INFO - Reference: Her mentors, family, and friends
+2026-06-30 21:27:43,918 - INFO - Category: 1
+2026-06-30 21:27:49,881 - INFO - 
+Question 49: What types of pottery have Melanie and her kids made?
+2026-06-30 21:27:49,881 - INFO - Prediction: pots, bowls, and cups
+2026-06-30 21:27:49,881 - INFO - Reference: bowls, cup
+2026-06-30 21:27:49,881 - INFO - Category: 1
+2026-06-30 21:27:56,652 - INFO - 
+Question 50: When did Caroline and Melanie go to a pride fesetival together?
+2026-06-30 21:27:56,653 - INFO - Prediction: last year
+2026-06-30 21:27:56,653 - INFO - Reference: 2022
+2026-06-30 21:27:56,653 - INFO - Category: 2
+2026-06-30 21:27:56,668 - INFO - Processed 50 questions
+2026-06-30 21:28:05,227 - INFO - 
+Question 51: What would Caroline's political leaning likely be?
+2026-06-30 21:28:05,227 - INFO - Prediction: Progressive
+2026-06-30 21:28:05,227 - INFO - Reference: Liberal
+2026-06-30 21:28:05,227 - INFO - Category: 3
+2026-06-30 21:28:14,687 - INFO - 
+Question 52: What has Melanie painted?
+2026-06-30 21:28:14,687 - INFO - Prediction: a painting of a sunset
+2026-06-30 21:28:14,687 - INFO - Reference: Horse, sunset, sunrise
+2026-06-30 21:28:14,687 - INFO - Category: 1
+2026-06-30 21:28:20,850 - INFO - 
+Question 53: What are Melanie's pets' names?
+2026-06-30 21:28:20,850 - INFO - Prediction: Oliver and Bailey
+2026-06-30 21:28:20,851 - INFO - Reference: Oliver, Luna, Bailey
+2026-06-30 21:28:20,851 - INFO - Category: 1
+2026-06-30 21:28:23,737 - INFO - 
+Question 54: When did Caroline apply to adoption agencies?
+2026-06-30 21:28:23,737 - INFO - Prediction: 23 August 2023
+2026-06-30 21:28:23,737 - INFO - Reference: The week of 23 August 2023
+2026-06-30 21:28:23,737 - INFO - Category: 2
+2026-06-30 21:28:31,926 - INFO - 
+Question 55: When did Caroline draw a self-portrait?
+2026-06-30 21:28:31,926 - INFO - Prediction: mid-August 2023
+2026-06-30 21:28:31,926 - INFO - Reference: The week before 23 August 2023
+2026-06-30 21:28:31,926 - INFO - Category: 2
+2026-06-30 21:28:46,364 - INFO - 
+Question 56: What subject have Caroline and Melanie both painted?
+2026-06-30 21:28:46,364 - INFO - Prediction: 
+2026-06-30 21:28:46,364 - INFO - Reference: Sunsets
+2026-06-30 21:28:46,364 - INFO - Category: 1
+2026-06-30 21:28:53,124 - INFO - 
+Question 57: What symbols are important to Caroline?
+2026-06-30 21:28:53,124 - INFO - Prediction: love, faith and strength
+2026-06-30 21:28:53,124 - INFO - Reference: Rainbow flag, transgender symbol
+2026-06-30 21:28:53,124 - INFO - Category: 1
+2026-06-30 21:28:57,325 - INFO - 
+Question 58: When did Caroline encounter people on a hike and have a negative experience?
+2026-06-30 21:28:57,325 - INFO - Prediction: 17 August, 2023
+2026-06-30 21:28:57,325 - INFO - Reference: The week before 25 August 2023
+2026-06-30 21:28:57,325 - INFO - Category: 2
+2026-06-30 21:29:02,236 - INFO - 
+Question 59: When did Melanie make a plate in pottery class?
+2026-06-30 21:29:02,236 - INFO - Prediction: August 25, 2023
+2026-06-30 21:29:02,236 - INFO - Reference: 24 August 2023
+2026-06-30 21:29:02,236 - INFO - Category: 2
+2026-06-30 21:29:06,240 - INFO - 
+Question 60: Would Caroline be considered religious?
+2026-06-30 21:29:06,240 - INFO - Prediction: No
+2026-06-30 21:29:06,240 - INFO - Reference: Somewhat, but not extremely religious
+2026-06-30 21:29:06,240 - INFO - Category: 3
+2026-06-30 21:29:06,254 - INFO - Processed 60 questions
+2026-06-30 21:29:10,726 - INFO - 
+Question 61: What instruments does Melanie play?
+2026-06-30 21:29:10,726 - INFO - Prediction: violin
+2026-06-30 21:29:10,726 - INFO - Reference: clarinet and violin
+2026-06-30 21:29:10,726 - INFO - Category: 1
+2026-06-30 21:29:15,291 - INFO - 
+Question 62: What musical artists/bands has Melanie seen?
+2026-06-30 21:29:15,292 - INFO - Prediction: Matt Patterson
+2026-06-30 21:29:15,292 - INFO - Reference: Summer Sounds, Matt Patterson
+2026-06-30 21:29:15,292 - INFO - Category: 1
+2026-06-30 21:29:20,534 - INFO - 
+Question 63: When did Melanie go to the park?
+2026-06-30 21:29:20,534 - INFO - Prediction: yesterday
+2026-06-30 21:29:20,534 - INFO - Reference: 27 August 2023
+2026-06-30 21:29:20,534 - INFO - Category: 2
+2026-06-30 21:29:25,336 - INFO - 
+Question 64: When is Caroline's youth center putting on a talent show?
+2026-06-30 21:29:25,336 - INFO - Prediction: next month
+2026-06-30 21:29:25,336 - INFO - Reference: September 2023
+2026-06-30 21:29:25,336 - INFO - Category: 2
+2026-06-30 21:29:29,297 - INFO - 
+Question 65: Would Melanie likely enjoy the song "The Four Seasons" by Vivaldi?
+2026-06-30 21:29:29,297 - INFO - Prediction: Yes, she likes classical music.
+2026-06-30 21:29:29,297 - INFO - Reference: Yes; it's classical music
+2026-06-30 21:29:29,297 - INFO - Category: 3
+2026-06-30 21:29:36,114 - INFO - 
+Question 66: What are some changes Caroline has faced during her transition journey?
+2026-06-30 21:29:36,114 - INFO - Prediction: struggles and development since coming out, and changing body
+2026-06-30 21:29:36,114 - INFO - Reference: Changes to her body, losing unsupportive friends
+2026-06-30 21:29:36,114 - INFO - Category: 1
+2026-06-30 21:29:42,979 - INFO - 
+Question 67: What does Melanie do with her family on hikes?
+2026-06-30 21:29:42,979 - INFO - Prediction: exploring forests
+2026-06-30 21:29:42,979 - INFO - Reference: Roast marshmallows, tell stories
+2026-06-30 21:29:42,979 - INFO - Category: 1
+2026-06-30 21:29:49,607 - INFO - 
+Question 68: When did Caroline go biking with friends?
+2026-06-30 21:29:49,607 - INFO - Prediction: last weekend
+2026-06-30 21:29:49,607 - INFO - Reference: The weekend before 13 September 2023
+2026-06-30 21:29:49,607 - INFO - Category: 2
+2026-06-30 21:29:53,536 - INFO - 
+Question 69: How long has Melanie been practicing art?
+2026-06-30 21:29:53,536 - INFO - Prediction: Seven years.
+2026-06-30 21:29:53,536 - INFO - Reference: Since 2016
+2026-06-30 21:29:53,536 - INFO - Category: 2
+2026-06-30 21:30:02,359 - INFO - 
+Question 70: What personality traits might Melanie say Caroline has?
+2026-06-30 21:30:02,359 - INFO - Prediction: caring about being real and helping others
+2026-06-30 21:30:02,359 - INFO - Reference: Thoughtful, authentic, driven
+2026-06-30 21:30:02,359 - INFO - Category: 3
+2026-06-30 21:30:02,378 - INFO - Processed 70 questions
+2026-06-30 21:30:13,484 - INFO - 
+Question 71: What transgender-specific events has Caroline attended?
+2026-06-30 21:30:13,484 - INFO - Prediction: transgender conference
+2026-06-30 21:30:13,484 - INFO - Reference: Poetry reading, conference
+2026-06-30 21:30:13,484 - INFO - Category: 1
+2026-06-30 21:30:19,173 - INFO - 
+Question 72: What book did Melanie read from Caroline's suggestion?
+2026-06-30 21:30:19,173 - INFO - Prediction: The book title is not specified.
+2026-06-30 21:30:19,173 - INFO - Reference: "Becoming Nicole"
+2026-06-30 21:30:19,173 - INFO - Category: 1
+2026-06-30 21:30:23,519 - INFO - 
+Question 73: When did Melanie's friend adopt a child?
+2026-06-30 21:30:23,520 - INFO - Prediction: Last year
+2026-06-30 21:30:23,520 - INFO - Reference: 2022
+2026-06-30 21:30:23,520 - INFO - Category: 2
+2026-06-30 21:30:27,335 - INFO - 
+Question 74: When did Melanie get hurt?
+2026-06-30 21:30:27,335 - INFO - Prediction: September 2023
+2026-06-30 21:30:27,335 - INFO - Reference: September 2023
+2026-06-30 21:30:27,335 - INFO - Category: 2
+2026-06-30 21:30:38,594 - INFO - 
+Question 75: When did Melanie's family go on a roadtrip?
+2026-06-30 21:30:38,594 - INFO - Prediction: before 20 October 2023
+2026-06-30 21:30:38,594 - INFO - Reference: The weekend before 20 October 2023
+2026-06-30 21:30:38,594 - INFO - Category: 2
+2026-06-30 21:30:46,013 - INFO - 
+Question 76: How many children does Melanie have?
+2026-06-30 21:30:46,013 - INFO - Prediction: 2
+2026-06-30 21:30:46,013 - INFO - Reference: 3
+2026-06-30 21:30:46,013 - INFO - Category: 1
+2026-06-30 21:30:57,804 - INFO - 
+Question 77: When did Melanie go on a hike after the roadtrip?
+2026-06-30 21:30:57,804 - INFO - Prediction: There is no mention of a hike after the roadtrip.
+2026-06-30 21:30:57,804 - INFO - Reference: 19 October 2023
+2026-06-30 21:30:57,804 - INFO - Category: 1
+2026-06-30 21:31:02,501 - INFO - 
+Question 78: Would Melanie go on another roadtrip soon?
+2026-06-30 21:31:02,502 - INFO - Prediction: No.
+2026-06-30 21:31:02,502 - INFO - Reference: Likely no; since this one went badly
+2026-06-30 21:31:02,502 - INFO - Category: 3
+2026-06-30 21:31:09,834 - INFO - 
+Question 79: What items has Melanie bought?
+2026-06-30 21:31:09,834 - INFO - Prediction: No items mentioned.
+2026-06-30 21:31:09,834 - INFO - Reference: Figurines, shoes
+2026-06-30 21:31:09,834 - INFO - Category: 1
+2026-06-30 21:31:15,578 - INFO - 
+Question 80: When did Caroline pass the adoption interview?
+2026-06-30 21:31:15,578 - INFO - Prediction: last Friday
+2026-06-30 21:31:15,578 - INFO - Reference: The Friday before 22 October 2023
+2026-06-30 21:31:15,578 - INFO - Category: 2
+2026-06-30 21:31:15,594 - INFO - Processed 80 questions
+2026-06-30 21:31:21,119 - INFO - 
+Question 81: When did Melanie buy the figurines?
+2026-06-30 21:31:21,119 - INFO - Prediction: yesterday
+2026-06-30 21:31:21,119 - INFO - Reference: 21 October 2023
+2026-06-30 21:31:21,120 - INFO - Category: 2
+2026-06-30 21:31:25,722 - INFO - 
+Question 82: Would Caroline want to move back to her home country soon?
+2026-06-30 21:31:25,722 - INFO - Prediction: Not mentioned.
+2026-06-30 21:31:25,722 - INFO - Reference: No; she's in the process of adopting children.
+2026-06-30 21:31:25,722 - INFO - Category: 3
+2026-06-30 21:31:28,988 - INFO - 
+Question 83: What did the charity race raise awareness for?
+2026-06-30 21:31:28,988 - INFO - Prediction: mental health
+2026-06-30 21:31:28,988 - INFO - Reference: mental health
+2026-06-30 21:31:28,988 - INFO - Category: 4
+2026-06-30 21:31:34,880 - INFO - 
+Question 84: What did Melanie realize after the charity race?
+2026-06-30 21:31:34,880 - INFO - Prediction: Self-care is really important.
+2026-06-30 21:31:34,880 - INFO - Reference: self-care is important
+2026-06-30 21:31:34,880 - INFO - Category: 4
+2026-06-30 21:31:38,574 - INFO - 
+Question 85: How does Melanie prioritize self-care?
+2026-06-30 21:31:38,574 - INFO - Prediction: carving out some me-time each day - running, reading, or playing my violin
+2026-06-30 21:31:38,574 - INFO - Reference: by carving out some me-time each day for activities like running, reading, or playing the violin
+2026-06-30 21:31:38,574 - INFO - Category: 4
+2026-06-30 21:31:46,482 - INFO - 
+Question 86: What are Caroline's plans for the summer?
+2026-06-30 21:31:46,482 - INFO - Prediction: plan something special for this summer
+2026-06-30 21:31:46,482 - INFO - Reference: researching adoption agencies
+2026-06-30 21:31:46,482 - INFO - Category: 4
+2026-06-30 21:31:51,288 - INFO - 
+Question 87: What type of individuals does the adoption agency Caroline is considering support?
+2026-06-30 21:31:51,288 - INFO - Prediction: LGBTQ+ folks
+2026-06-30 21:31:51,288 - INFO - Reference: LGBTQ+ individuals
+2026-06-30 21:31:51,288 - INFO - Category: 4
+2026-06-30 21:31:55,479 - INFO - 
+Question 88: Why did Caroline choose the adoption agency?
+2026-06-30 21:31:55,479 - INFO - Prediction: they help LGBTQ+ folks with adoption
+2026-06-30 21:31:55,479 - INFO - Reference: because of their inclusivity and support for LGBTQ+ individuals
+2026-06-30 21:31:55,479 - INFO - Category: 4
+2026-06-30 21:32:07,444 - INFO - 
+Question 89: What is Caroline excited about in the adoption process?
+2026-06-30 21:32:07,444 - INFO - Prediction: 
+2026-06-30 21:32:07,444 - INFO - Reference: creating a family for kids who need one
+2026-06-30 21:32:07,444 - INFO - Category: 4
+2026-06-30 21:32:11,978 - INFO - 
+Question 90: What does Melanie think about Caroline's decision to adopt?
+2026-06-30 21:32:11,978 - INFO - Prediction: That's amazing.
+2026-06-30 21:32:11,978 - INFO - Reference: she thinks Caroline is doing something amazing and will be an awesome mom
+2026-06-30 21:32:11,978 - INFO - Category: 4
+2026-06-30 21:32:11,993 - INFO - Processed 90 questions
+2026-06-30 21:32:14,850 - INFO - 
+Question 91: How long have Mel and her husband been married?
+2026-06-30 21:32:14,850 - INFO - Prediction: 5 years
+2026-06-30 21:32:14,850 - INFO - Reference: Mel and her husband have been married for 5 years.
+2026-06-30 21:32:14,850 - INFO - Category: 4
+2026-06-30 21:32:18,099 - INFO - 
+Question 92: What does Caroline's necklace symbolize?
+2026-06-30 21:32:18,099 - INFO - Prediction: love, faith and strength
+2026-06-30 21:32:18,100 - INFO - Reference: love, faith, and strength
+2026-06-30 21:32:18,100 - INFO - Category: 4
+2026-06-30 21:32:20,319 - INFO - 
+Question 93: What country is Caroline's grandma from?
+2026-06-30 21:32:20,319 - INFO - Prediction: Sweden
+2026-06-30 21:32:20,319 - INFO - Reference: Sweden
+2026-06-30 21:32:20,319 - INFO - Category: 4
+2026-06-30 21:32:23,301 - INFO - 
+Question 94: What was grandma's gift to Caroline?
+2026-06-30 21:32:23,301 - INFO - Prediction: necklace
+2026-06-30 21:32:23,301 - INFO - Reference: necklace
+2026-06-30 21:32:23,301 - INFO - Category: 4
+2026-06-30 21:32:34,071 - INFO - 
+Question 95: What is Melanie's hand-painted bowl a reminder of?
+2026-06-30 21:32:34,071 - INFO - Prediction: art and self-expression
+2026-06-30 21:32:34,071 - INFO - Reference: art and self-expression
+2026-06-30 21:32:34,071 - INFO - Category: 4
+2026-06-30 21:32:41,540 - INFO - 
+Question 96: What did Melanie and her family do while camping?
+2026-06-30 21:32:41,541 - INFO - Prediction: explored nature, roasted marshmallows around the campfire and even went on a hike
+2026-06-30 21:32:41,541 - INFO - Reference: explored nature, roasted marshmallows, and went on a hike
+2026-06-30 21:32:41,541 - INFO - Category: 4
+2026-06-30 21:32:45,659 - INFO - 
+Question 97: What kind of counseling and mental health services is Caroline interested in pursuing?
+2026-06-30 21:32:45,659 - INFO - Prediction: working with trans people
+2026-06-30 21:32:45,659 - INFO - Reference: working with trans people, helping them accept themselves and supporting their mental health
+2026-06-30 21:32:45,659 - INFO - Category: 4
+2026-06-30 21:32:48,966 - INFO - 
+Question 98: What workshop did Caroline attend recently?
+2026-06-30 21:32:48,966 - INFO - Prediction: LGBTQ+ counseling workshop
+2026-06-30 21:32:48,966 - INFO - Reference: LGBTQ+ counseling workshop
+2026-06-30 21:32:48,967 - INFO - Category: 4
+2026-06-30 21:32:52,343 - INFO - 
+Question 99: What was discussed in the LGBTQ+ counseling workshop?
+2026-06-30 21:32:52,344 - INFO - Prediction: They talked about different therapeutic methods and how to best work with trans people.
+2026-06-30 21:32:52,344 - INFO - Reference: therapeutic methods and how to best work with trans people
+2026-06-30 21:32:52,344 - INFO - Category: 4
+2026-06-30 21:32:58,082 - INFO - 
+Question 100: What motivated Caroline to pursue counseling?
+2026-06-30 21:32:58,082 - INFO - Prediction: My own journey and the support I got
+2026-06-30 21:32:58,082 - INFO - Reference: her own journey and the support she received, and how counseling improved her life
+2026-06-30 21:32:58,082 - INFO - Category: 4
+2026-06-30 21:32:58,099 - INFO - Processed 100 questions
+2026-06-30 21:33:02,452 - INFO - 
+Question 101: What kind of place does Caroline want to create for people?
+2026-06-30 21:33:02,452 - INFO - Prediction: a safe, inviting place for people to grow
+2026-06-30 21:33:02,452 - INFO - Reference: a safe and inviting place for people to grow
+2026-06-30 21:33:02,452 - INFO - Category: 4
+2026-06-30 21:33:07,868 - INFO - 
+Question 102: Did Melanie make the black and white bowl in the photo?
+2026-06-30 21:33:07,868 - INFO - Prediction: Yeah, I made this bowl in my class.
+2026-06-30 21:33:07,869 - INFO - Reference: Yes
+2026-06-30 21:33:07,869 - INFO - Category: 4
+2026-06-30 21:33:11,904 - INFO - 
+Question 103: What kind of books does Caroline have in her library?
+2026-06-30 21:33:11,904 - INFO - Prediction: kids' books, classics, stories from different cultures, educational books
+2026-06-30 21:33:11,904 - INFO - Reference: kids' books - classics, stories from different cultures, educational books
+2026-06-30 21:33:11,904 - INFO - Category: 4
+2026-06-30 21:33:15,340 - INFO - 
+Question 104: What was Melanie's favorite book from her childhood?
+2026-06-30 21:33:15,340 - INFO - Prediction: Charlotte's Web
+2026-06-30 21:33:15,340 - INFO - Reference: "Charlotte's Web"
+2026-06-30 21:33:15,340 - INFO - Category: 4
+2026-06-30 21:33:23,210 - INFO - 
+Question 105: What book did Caroline recommend to Melanie?
+2026-06-30 21:33:23,210 - INFO - Prediction: that book
+2026-06-30 21:33:23,210 - INFO - Reference: "Becoming Nicole"
+2026-06-30 21:33:23,210 - INFO - Category: 4
+2026-06-30 21:33:29,514 - INFO - 
+Question 106: What did Caroline take away from the book "Becoming Nicole"?
+2026-06-30 21:33:29,515 - INFO - Prediction: Not found in the provided context.
+2026-06-30 21:33:29,515 - INFO - Reference: Lessons on self-acceptance and finding support
+2026-06-30 21:33:29,515 - INFO - Category: 4
+2026-06-30 21:33:32,341 - INFO - 
+Question 107: What are the new shoes that Melanie got used for?
+2026-06-30 21:33:32,341 - INFO - Prediction: running
+2026-06-30 21:33:32,341 - INFO - Reference: Running
+2026-06-30 21:33:32,341 - INFO - Category: 4
+2026-06-30 21:33:36,209 - INFO - 
+Question 108: What is Melanie's reason for getting into running?
+2026-06-30 21:33:36,209 - INFO - Prediction: destress and clear my mind
+2026-06-30 21:33:36,209 - INFO - Reference: To de-stress and clear her mind
+2026-06-30 21:33:36,209 - INFO - Category: 4
+2026-06-30 21:33:40,878 - INFO - 
+Question 109: What does Melanie say running has been great for?
+2026-06-30 21:33:40,878 - INFO - Prediction: her headspace
+2026-06-30 21:33:40,878 - INFO - Reference: Her mental health
+2026-06-30 21:33:40,878 - INFO - Category: 4
+2026-06-30 21:33:47,577 - INFO - 
+Question 110: What did Mel and her kids make during the pottery workshop?
+2026-06-30 21:33:47,577 - INFO - Prediction: pots
+2026-06-30 21:33:47,577 - INFO - Reference: pots
+2026-06-30 21:33:47,578 - INFO - Category: 4
+2026-06-30 21:33:47,595 - INFO - Processed 110 questions
+2026-06-30 21:33:55,155 - INFO - 
+Question 111: What kind of pot did Mel and her kids make with clay?
+2026-06-30 21:33:55,155 - INFO - Prediction: a cup with a dog face on it
+2026-06-30 21:33:55,155 - INFO - Reference: a cup with a dog face on it
+2026-06-30 21:33:55,155 - INFO - Category: 4
+2026-06-30 21:33:59,776 - INFO - 
+Question 112: What creative project do Mel and her kids do together besides pottery?
+2026-06-30 21:33:59,776 - INFO - Prediction: painting
+2026-06-30 21:33:59,776 - INFO - Reference: painting
+2026-06-30 21:33:59,776 - INFO - Category: 4
+2026-06-30 21:34:04,606 - INFO - 
+Question 113: What did Mel and her kids paint in their latest project in July 2023?
+2026-06-30 21:34:04,606 - INFO - Prediction: a sunset with a palm tree
+2026-06-30 21:34:04,606 - INFO - Reference: a sunset with a palm tree
+2026-06-30 21:34:04,606 - INFO - Category: 4
+2026-06-30 21:34:09,382 - INFO - 
+Question 114: What did Caroline see at the council meeting for adoption?
+2026-06-30 21:34:09,382 - INFO - Prediction: so many people wanted to create loving homes for children in need
+2026-06-30 21:34:09,382 - INFO - Reference: many people wanting to create loving homes for children in need
+2026-06-30 21:34:09,382 - INFO - Category: 4
+2026-06-30 21:34:12,005 - INFO - 
+Question 115: What do sunflowers represent according to Caroline?
+2026-06-30 21:34:12,005 - INFO - Prediction: warmth and happiness
+2026-06-30 21:34:12,005 - INFO - Reference: warmth and happiness
+2026-06-30 21:34:12,005 - INFO - Category: 4
+2026-06-30 21:34:18,290 - INFO - 
+Question 116: Why are flowers important to Melanie?
+2026-06-30 21:34:18,290 - INFO - Prediction: Flowers bring joy and remind her of her wedding day.
+2026-06-30 21:34:18,290 - INFO - Reference: They remind her to appreciate the small moments and were a part of her wedding decor
+2026-06-30 21:34:18,290 - INFO - Category: 4
+2026-06-30 21:34:22,302 - INFO - 
+Question 117: What inspired Caroline's painting for the art show?
+2026-06-30 21:34:22,302 - INFO - Prediction: visited a LGBTQ center
+2026-06-30 21:34:22,302 - INFO - Reference: visiting an LGBTQ center and wanting to capture unity and strength
+2026-06-30 21:34:22,302 - INFO - Category: 4
+2026-06-30 21:34:25,266 - INFO - 
+Question 118: How often does Melanie go to the beach with her kids?
+2026-06-30 21:34:25,266 - INFO - Prediction: once or twice a year
+2026-06-30 21:34:25,266 - INFO - Reference: once or twice a year
+2026-06-30 21:34:25,266 - INFO - Category: 4
+2026-06-30 21:34:30,244 - INFO - 
+Question 119: What did Melanie and her family see during their camping trip last year?
+2026-06-30 21:34:30,245 - INFO - Prediction: The view from the top
+2026-06-30 21:34:30,245 - INFO - Reference: Perseid meteor shower
+2026-06-30 21:34:30,245 - INFO - Category: 4
+2026-06-30 21:34:34,386 - INFO - 
+Question 120: How did Melanie feel while watching the meteor shower?
+2026-06-30 21:34:34,386 - INFO - Prediction: tiny and in awe
+2026-06-30 21:34:34,386 - INFO - Reference: in awe of the universe
+2026-06-30 21:34:34,386 - INFO - Category: 4
+2026-06-30 21:34:34,399 - INFO - Processed 120 questions
+2026-06-30 21:34:38,112 - INFO - 
+Question 121: Whose birthday did Melanie celebrate recently?
+2026-06-30 21:34:38,112 - INFO - Prediction: my daughter's
+2026-06-30 21:34:38,112 - INFO - Reference: Melanie's daughter
+2026-06-30 21:34:38,112 - INFO - Category: 4
+2026-06-30 21:34:42,873 - INFO - 
+Question 122: Who performed at the concert at Melanie's daughter's birthday?
+2026-06-30 21:34:42,873 - INFO - Prediction: Matt Patterson
+2026-06-30 21:34:42,873 - INFO - Reference: Matt Patterson
+2026-06-30 21:34:42,873 - INFO - Category: 4
+2026-06-30 21:34:53,758 - INFO - 
+Question 123: Why did Melanie choose to use colors and patterns in her pottery project?
+2026-06-30 21:34:53,758 - INFO - Prediction: 
+2026-06-30 21:34:53,758 - INFO - Reference: She wanted to catch the eye and make people smile.
+2026-06-30 21:34:53,758 - INFO - Category: 4
+2026-06-30 21:34:57,423 - INFO - 
+Question 124: What pet does Caroline have?
+2026-06-30 21:34:57,423 - INFO - Prediction: guinea pig
+2026-06-30 21:34:57,423 - INFO - Reference: guinea pig
+2026-06-30 21:34:57,423 - INFO - Category: 4
+2026-06-30 21:35:10,555 - INFO - 
+Question 125: What pets does Melanie have?
+2026-06-30 21:35:10,555 - INFO - Prediction: 
+2026-06-30 21:35:10,555 - INFO - Reference: Two cats and a dog
+2026-06-30 21:35:10,555 - INFO - Category: 4
+2026-06-30 21:35:14,843 - INFO - 
+Question 126: Where did Oliver hide his bone once?
+2026-06-30 21:35:14,843 - INFO - Prediction: in my slipper
+2026-06-30 21:35:14,843 - INFO - Reference: In Melanie's slipper
+2026-06-30 21:35:14,843 - INFO - Category: 4
+2026-06-30 21:35:17,719 - INFO - 
+Question 127: What activity did Caroline used to do with her dad?
+2026-06-30 21:35:17,719 - INFO - Prediction: horseback riding
+2026-06-30 21:35:17,719 - INFO - Reference: Horseback riding
+2026-06-30 21:35:17,719 - INFO - Category: 4
+2026-06-30 21:35:30,492 - INFO - 
+Question 128: What did Caroline make for a local church?
+2026-06-30 21:35:30,492 - INFO - Prediction: 
+2026-06-30 21:35:30,492 - INFO - Reference: a stained glass window
+2026-06-30 21:35:30,492 - INFO - Category: 4
+2026-06-30 21:35:42,865 - INFO - 
+Question 129: What did Caroline find in her neighborhood during her walk?
+2026-06-30 21:35:42,865 - INFO - Prediction: 
+2026-06-30 21:35:42,865 - INFO - Reference: a rainbow sidewalk
+2026-06-30 21:35:42,865 - INFO - Category: 4
+2026-06-30 21:35:46,158 - INFO - 
+Question 130: Which song motivates Caroline to be courageous?
+2026-06-30 21:35:46,158 - INFO - Prediction: Brave
+2026-06-30 21:35:46,158 - INFO - Reference: Brave by Sara Bareilles
+2026-06-30 21:35:46,158 - INFO - Category: 4
+2026-06-30 21:35:46,175 - INFO - Processed 130 questions
+2026-06-30 21:35:50,252 - INFO - 
+Question 131: Which  classical musicians does Melanie enjoy listening to?
+2026-06-30 21:35:50,253 - INFO - Prediction: Bach and Mozart
+2026-06-30 21:35:50,253 - INFO - Reference: Bach and Mozart
+2026-06-30 21:35:50,253 - INFO - Category: 4
+2026-06-30 21:35:54,582 - INFO - 
+Question 132: Who is Melanie a fan of in terms of modern music?
+2026-06-30 21:35:54,582 - INFO - Prediction: Ed Sheeran
+2026-06-30 21:35:54,582 - INFO - Reference: Ed Sheeran
+2026-06-30 21:35:54,582 - INFO - Category: 4
+2026-06-30 21:35:58,174 - INFO - 
+Question 133: How long has Melanie been creating art?
+2026-06-30 21:35:58,174 - INFO - Prediction: Seven years
+2026-06-30 21:35:58,174 - INFO - Reference: 7 years
+2026-06-30 21:35:58,174 - INFO - Category: 4
+2026-06-30 21:36:07,639 - INFO - 
+Question 134: What precautionary sign did Melanie see at the café?
+2026-06-30 21:36:07,639 - INFO - Prediction: a sign posted on a door stating that someone is not being able to leave
+2026-06-30 21:36:07,639 - INFO - Reference: A sign stating that someone is not being able to leave
+2026-06-30 21:36:07,639 - INFO - Category: 4
+2026-06-30 21:36:11,672 - INFO - 
+Question 135: What advice does Caroline give for getting started with adoption?
+2026-06-30 21:36:11,672 - INFO - Prediction: Do your research and find an adoption agency or lawyer.
+2026-06-30 21:36:11,672 - INFO - Reference: Do research, find an adoption agency or lawyer, gather necessary documents, and prepare emotionally.
+2026-06-30 21:36:11,672 - INFO - Category: 4
+2026-06-30 21:36:16,003 - INFO - 
+Question 136: What setback did Melanie face in October 2023?
+2026-06-30 21:36:16,003 - INFO - Prediction: I got hurt and had to take a break from pottery.
+2026-06-30 21:36:16,003 - INFO - Reference: She got hurt and had to take a break from pottery.
+2026-06-30 21:36:16,003 - INFO - Category: 4
+2026-06-30 21:36:21,039 - INFO - 
+Question 137: What does Melanie do to keep herself busy during her pottery break?
+2026-06-30 21:36:21,040 - INFO - Prediction: reading and painting
+2026-06-30 21:36:21,040 - INFO - Reference: Read a book and paint.
+2026-06-30 21:36:21,040 - INFO - Category: 4
+2026-06-30 21:36:25,870 - INFO - 
+Question 138: What painting did Melanie show to Caroline on October 13, 2023?
+2026-06-30 21:36:25,871 - INFO - Prediction: No information.
+2026-06-30 21:36:25,871 - INFO - Reference: A painting inspired by sunsets with a pink sky.
+2026-06-30 21:36:25,871 - INFO - Category: 4
+2026-06-30 21:36:31,306 - INFO - 
+Question 139: What kind of painting did Caroline share with Melanie on October 13, 2023?
+2026-06-30 21:36:31,307 - INFO - Prediction: No information available.
+2026-06-30 21:36:31,307 - INFO - Reference: An abstract painting with blue streaks on a wall.
+2026-06-30 21:36:31,307 - INFO - Category: 4
+2026-06-30 21:36:34,893 - INFO - 
+Question 140: What was the poetry reading that Caroline attended about?
+2026-06-30 21:36:34,893 - INFO - Prediction: transgender poetry reading
+2026-06-30 21:36:34,893 - INFO - Reference: It was a transgender poetry reading where transgender people shared their stories.
+2026-06-30 21:36:34,893 - INFO - Category: 4
+2026-06-30 21:36:34,910 - INFO - Processed 140 questions
+2026-06-30 21:36:40,691 - INFO - 
+Question 141: What did the posters at the poetry reading say?
+2026-06-30 21:36:40,691 - INFO - Prediction: trans lives matter
+2026-06-30 21:36:40,691 - INFO - Reference: "Trans Lives Matter"
+2026-06-30 21:36:40,691 - INFO - Category: 4
+2026-06-30 21:36:43,781 - INFO - 
+Question 142: What does Caroline's drawing symbolize for her?
+2026-06-30 21:36:43,781 - INFO - Prediction: freedom and being real
+2026-06-30 21:36:43,781 - INFO - Reference: Freedom and being true to herself.
+2026-06-30 21:36:43,781 - INFO - Category: 4
+2026-06-30 21:36:47,899 - INFO - 
+Question 143: How do Melanie and Caroline describe their journey through life together?
+2026-06-30 21:36:47,899 - INFO - Prediction: on this trip together
+2026-06-30 21:36:47,899 - INFO - Reference: An ongoing adventure of learning and growing.
+2026-06-30 21:36:47,899 - INFO - Category: 4
+2026-06-30 21:36:52,747 - INFO - 
+Question 144: What happened to Melanie's son on their road trip?
+2026-06-30 21:36:52,747 - INFO - Prediction: got into an accident
+2026-06-30 21:36:52,747 - INFO - Reference: He got into an accident
+2026-06-30 21:36:52,747 - INFO - Category: 4
+2026-06-30 21:36:57,746 - INFO - 
+Question 145: How did Melanie's son handle the accident?
+2026-06-30 21:36:57,746 - INFO - Prediction: Not mentioned in context.
+2026-06-30 21:36:57,746 - INFO - Reference: He was scared but reassured by his family
+2026-06-30 21:36:57,746 - INFO - Category: 4
+2026-06-30 21:37:01,060 - INFO - 
+Question 146: How did Melanie feel about her family after the accident?
+2026-06-30 21:37:01,060 - INFO - Prediction: cherish our family
+2026-06-30 21:37:01,060 - INFO - Reference: They are important and mean the world to her
+2026-06-30 21:37:01,060 - INFO - Category: 4
+2026-06-30 21:37:06,782 - INFO - 
+Question 147: How did Melanie's children handle the accident?
+2026-06-30 21:37:06,782 - INFO - Prediction: freaked
+2026-06-30 21:37:06,782 - INFO - Reference: They were scared but resilient
+2026-06-30 21:37:06,782 - INFO - Category: 4
+2026-06-30 21:37:10,547 - INFO - 
+Question 148: How did Melanie feel after the accident?
+2026-06-30 21:37:10,547 - INFO - Prediction: scared
+2026-06-30 21:37:10,547 - INFO - Reference: Grateful and thankful for her family
+2026-06-30 21:37:10,547 - INFO - Category: 4
+2026-06-30 21:37:14,938 - INFO - 
+Question 149: What was Melanie's reaction to her children enjoying the Grand Canyon?
+2026-06-30 21:37:14,938 - INFO - Prediction: Not mentioned.
+2026-06-30 21:37:14,938 - INFO - Reference: She was happy and thankful
+2026-06-30 21:37:14,938 - INFO - Category: 4
+2026-06-30 21:37:19,706 - INFO - 
+Question 150: What do Melanie's family give her?
+2026-06-30 21:37:19,706 - INFO - Prediction: joy and love
+2026-06-30 21:37:19,706 - INFO - Reference: Strength and motivation
+2026-06-30 21:37:19,706 - INFO - Category: 4
+2026-06-30 21:37:19,724 - INFO - Processed 150 questions
+2026-06-30 21:37:23,956 - INFO - 
+Question 151: How did Melanie feel about her family supporting her?
+2026-06-30 21:37:23,956 - INFO - Prediction: awesome
+2026-06-30 21:37:23,956 - INFO - Reference: She appreciated them a lot
+2026-06-30 21:37:23,956 - INFO - Category: 4
+2026-06-30 21:37:36,181 - INFO - 
+Question 152: What did Melanie do after the road trip to relax?
+2026-06-30 21:37:36,181 - INFO - Prediction: 
+2026-06-30 21:37:36,181 - INFO - Reference: Went on a nature walk or hike
+2026-06-30 21:37:36,181 - INFO - Category: 4
+2026-06-30 21:37:39,168 - INFO - 
+Question 153: What did Caroline realize after her charity race?
+2026-06-30 21:37:39,168 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:37:39,169 - INFO - Reference: self-care is important
+2026-06-30 21:37:39,169 - INFO - Category: 5
+2026-06-30 21:37:45,609 - INFO - 
+Question 154: What are Melanie's plans for the summer with respect to adoption?
+2026-06-30 21:37:45,609 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:37:45,609 - INFO - Reference: researching adoption agencies
+2026-06-30 21:37:45,609 - INFO - Category: 5
+2026-06-30 21:37:51,764 - INFO - 
+Question 155: What type of individuals does the adoption agency Melanie is considering support?
+2026-06-30 21:37:51,764 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:37:51,764 - INFO - Reference: LGBTQ+ individuals
+2026-06-30 21:37:51,764 - INFO - Category: 5
+2026-06-30 21:37:55,411 - INFO - 
+Question 156: Why did Melanie choose the adoption agency?
+2026-06-30 21:37:55,411 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:37:55,411 - INFO - Reference: because of their inclusivity and support for LGBTQ+ individuals
+2026-06-30 21:37:55,411 - INFO - Category: 5
+2026-06-30 21:37:59,766 - INFO - 
+Question 157: What is Melanie excited about in her adoption process?
+2026-06-30 21:37:59,766 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:37:59,766 - INFO - Reference: creating a family for kids who need one
+2026-06-30 21:37:59,766 - INFO - Category: 5
+2026-06-30 21:38:04,330 - INFO - 
+Question 158: What does Melanie's necklace symbolize?
+2026-06-30 21:38:04,330 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:04,331 - INFO - Reference: love, faith, and strength
+2026-06-30 21:38:04,331 - INFO - Category: 5
+2026-06-30 21:38:07,245 - INFO - 
+Question 159: What country is Melanie's grandma from?
+2026-06-30 21:38:07,245 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:07,245 - INFO - Reference: Sweden
+2026-06-30 21:38:07,245 - INFO - Category: 5
+2026-06-30 21:38:10,831 - INFO - 
+Question 160: What was grandma's gift to Melanie?
+2026-06-30 21:38:10,831 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:10,831 - INFO - Reference: necklace
+2026-06-30 21:38:10,831 - INFO - Category: 5
+2026-06-30 21:38:10,842 - INFO - Processed 160 questions
+2026-06-30 21:38:15,252 - INFO - 
+Question 161: What was grandpa's gift to Caroline?
+2026-06-30 21:38:15,252 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:15,252 - INFO - Reference: necklace
+2026-06-30 21:38:15,252 - INFO - Category: 5
+2026-06-30 21:38:18,587 - INFO - 
+Question 162: What is Caroline's hand-painted bowl a reminder of?
+2026-06-30 21:38:18,587 - INFO - Prediction: art and self-expression
+2026-06-30 21:38:18,587 - INFO - Reference: art and self-expression
+2026-06-30 21:38:18,587 - INFO - Category: 5
+2026-06-30 21:38:22,304 - INFO - 
+Question 163: What did Caroline and her family do while camping?
+2026-06-30 21:38:22,304 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:22,304 - INFO - Reference: explored nature, roasted marshmallows, and went on a hike
+2026-06-30 21:38:22,304 - INFO - Category: 5
+2026-06-30 21:38:25,291 - INFO - 
+Question 164: What kind of counseling and mental health services is Melanie interested in pursuing?
+2026-06-30 21:38:25,291 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:25,291 - INFO - Reference: working with trans people, helping them accept themselves and supporting their mental health
+2026-06-30 21:38:25,291 - INFO - Category: 5
+2026-06-30 21:38:28,930 - INFO - 
+Question 165: What kind of counseling workshop did Melanie attend recently?
+2026-06-30 21:38:28,930 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:28,930 - INFO - Reference: LGBTQ+ counseling workshop
+2026-06-30 21:38:28,930 - INFO - Category: 5
+2026-06-30 21:38:32,679 - INFO - 
+Question 166: What motivated Melanie to pursue counseling?
+2026-06-30 21:38:32,679 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:32,679 - INFO - Reference: her own journey and the support she received, and how counseling improved her life
+2026-06-30 21:38:32,679 - INFO - Category: 5
+2026-06-30 21:38:38,260 - INFO - 
+Question 167: What kind of place does Melanie want to create for people?
+2026-06-30 21:38:38,260 - INFO - Prediction: a safe and inviting place for people to grow
+2026-06-30 21:38:38,260 - INFO - Reference: a safe and inviting place for people to grow
+2026-06-30 21:38:38,260 - INFO - Category: 5
+2026-06-30 21:38:50,368 - INFO - 
+Question 168: Did Caroline make the black and white bowl in the photo?
+2026-06-30 21:38:50,368 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:50,368 - INFO - Reference: Yes
+2026-06-30 21:38:50,368 - INFO - Category: 5
+2026-06-30 21:38:54,413 - INFO - 
+Question 169: What are the new shoes that Caroline got used for?
+2026-06-30 21:38:54,413 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:54,413 - INFO - Reference: Running
+2026-06-30 21:38:54,413 - INFO - Category: 5
+2026-06-30 21:38:57,870 - INFO - 
+Question 170: What is Caroline's reason for getting into running?
+2026-06-30 21:38:57,870 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:38:57,870 - INFO - Reference: To de-stress and clear her mind
+2026-06-30 21:38:57,870 - INFO - Category: 5
+2026-06-30 21:38:57,887 - INFO - Processed 170 questions
+2026-06-30 21:39:06,213 - INFO - 
+Question 171: What does Caroline say running has been great for?
+2026-06-30 21:39:06,213 - INFO - Prediction: Her mental health
+2026-06-30 21:39:06,213 - INFO - Reference: Her mental health
+2026-06-30 21:39:06,213 - INFO - Category: 5
+2026-06-30 21:39:10,720 - INFO - 
+Question 172: What did Melanie see at the council meeting for adoption?
+2026-06-30 21:39:10,720 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:10,720 - INFO - Reference: many people wanting to create loving homes for children in need
+2026-06-30 21:39:10,720 - INFO - Category: 5
+2026-06-30 21:39:16,031 - INFO - 
+Question 173: What inspired Melanie's painting for the art show?
+2026-06-30 21:39:16,032 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:16,032 - INFO - Reference: visiting an LGBTQ center and wanting to capture unity and strength
+2026-06-30 21:39:16,032 - INFO - Category: 5
+2026-06-30 21:39:19,705 - INFO - 
+Question 174: What inspired Caroline's sculpture for the art show?
+2026-06-30 21:39:19,705 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:19,705 - INFO - Reference: visiting an LGBTQ center and wanting to capture unity and strength
+2026-06-30 21:39:19,705 - INFO - Category: 5
+2026-06-30 21:39:24,230 - INFO - 
+Question 175: How often does Caroline go to the beach with her kids?
+2026-06-30 21:39:24,230 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:24,230 - INFO - Reference: once or twice a year
+2026-06-30 21:39:24,230 - INFO - Category: 5
+2026-06-30 21:39:28,899 - INFO - 
+Question 176: What did Caroline and her family see during their camping trip last year?
+2026-06-30 21:39:28,899 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:28,899 - INFO - Reference: Perseid meteor shower
+2026-06-30 21:39:28,899 - INFO - Category: 5
+2026-06-30 21:39:32,687 - INFO - 
+Question 177: How did Caroline feel while watching the meteor shower?
+2026-06-30 21:39:32,687 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:32,688 - INFO - Reference: in awe of the universe
+2026-06-30 21:39:32,688 - INFO - Category: 5
+2026-06-30 21:39:37,333 - INFO - 
+Question 178: Why did Caroline choose to use colors and patterns in her pottery project?
+2026-06-30 21:39:37,334 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:37,334 - INFO - Reference: She wanted to catch the eye and make people smile.
+2026-06-30 21:39:37,334 - INFO - Category: 5
+2026-06-30 21:39:43,778 - INFO - 
+Question 179: Is Oscar Melanie's pet?
+2026-06-30 21:39:43,779 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:43,779 - INFO - Reference: Yes
+2026-06-30 21:39:43,779 - INFO - Category: 5
+2026-06-30 21:39:48,509 - INFO - 
+Question 180: Where did Oscar hide his bone once?
+2026-06-30 21:39:48,509 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:48,509 - INFO - Reference: In Melanie's slipper
+2026-06-30 21:39:48,509 - INFO - Category: 5
+2026-06-30 21:39:48,523 - INFO - Processed 180 questions
+2026-06-30 21:39:53,668 - INFO - 
+Question 181: What activity did Melanie used to do with her dad?
+2026-06-30 21:39:53,668 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:53,669 - INFO - Reference: Horseback riding
+2026-06-30 21:39:53,669 - INFO - Category: 5
+2026-06-30 21:39:57,533 - INFO - 
+Question 182: What did Melanie make for a local church?
+2026-06-30 21:39:57,533 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:39:57,533 - INFO - Reference: a stained glass window
+2026-06-30 21:39:57,533 - INFO - Category: 5
+2026-06-30 21:40:02,881 - INFO - 
+Question 183: What did Melanie find in her neighborhood during her walk?
+2026-06-30 21:40:02,881 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:02,881 - INFO - Reference: a rainbow sidewalk
+2026-06-30 21:40:02,882 - INFO - Category: 5
+2026-06-30 21:40:06,839 - INFO - 
+Question 184: Which song motivates Melanie to be courageous?
+2026-06-30 21:40:06,839 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:06,839 - INFO - Reference: Brave by Sara Bareilles
+2026-06-30 21:40:06,839 - INFO - Category: 5
+2026-06-30 21:40:10,359 - INFO - 
+Question 185: What type of instrument does Caroline play?
+2026-06-30 21:40:10,359 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:10,359 - INFO - Reference: clarinet and violin
+2026-06-30 21:40:10,359 - INFO - Category: 5
+2026-06-30 21:40:13,454 - INFO - 
+Question 186: Which classical musicians does Caroline enjoy listening to?
+2026-06-30 21:40:13,454 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:13,454 - INFO - Reference: Bach and Mozart
+2026-06-30 21:40:13,454 - INFO - Category: 5
+2026-06-30 21:40:18,080 - INFO - 
+Question 187: Who is Caroline a fan of in terms of modern music?
+2026-06-30 21:40:18,080 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:18,080 - INFO - Reference: Ed Sheeran
+2026-06-30 21:40:18,080 - INFO - Category: 5
+2026-06-30 21:40:21,468 - INFO - 
+Question 188: What precautionary sign did Caroline see at the café?
+2026-06-30 21:40:21,468 - INFO - Prediction: A sign stating that someone is not being able to leave
+2026-06-30 21:40:21,468 - INFO - Reference: A sign stating that someone is not being able to leave
+2026-06-30 21:40:21,468 - INFO - Category: 5
+2026-06-30 21:40:25,584 - INFO - 
+Question 189: What setback did Caroline face recently?
+2026-06-30 21:40:25,584 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:25,584 - INFO - Reference: She got hurt and had to take a break from pottery.
+2026-06-30 21:40:25,584 - INFO - Category: 5
+2026-06-30 21:40:31,077 - INFO - 
+Question 190: What does Caroline do to keep herself busy during her pottery break?
+2026-06-30 21:40:31,077 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:31,077 - INFO - Reference: Read a book and paint.
+2026-06-30 21:40:31,077 - INFO - Category: 5
+2026-06-30 21:40:31,093 - INFO - Processed 190 questions
+2026-06-30 21:40:34,627 - INFO - 
+Question 191: What was the poetry reading that Melanie attended about?
+2026-06-30 21:40:34,627 - INFO - Prediction: It was a transgender poetry reading where transgender people shared their stories.
+2026-06-30 21:40:34,627 - INFO - Reference: It was a transgender poetry reading where transgender people shared their stories.
+2026-06-30 21:40:34,627 - INFO - Category: 5
+2026-06-30 21:40:38,309 - INFO - 
+Question 192: What happened to Caroline's son on their road trip?
+2026-06-30 21:40:38,309 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:38,309 - INFO - Reference: He got into an accident
+2026-06-30 21:40:38,309 - INFO - Category: 5
+2026-06-30 21:40:42,077 - INFO - 
+Question 193: How did Caroline's son handle the accident?
+2026-06-30 21:40:42,077 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:42,077 - INFO - Reference: He was scared but reassured by his family
+2026-06-30 21:40:42,077 - INFO - Category: 5
+2026-06-30 21:40:44,976 - INFO - 
+Question 194: How did Caroline feel about her family after the accident?
+2026-06-30 21:40:44,976 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:44,977 - INFO - Reference: They are important and mean the world to her
+2026-06-30 21:40:44,977 - INFO - Category: 5
+2026-06-30 21:40:47,915 - INFO - 
+Question 195: How did Caroline's children handle the accident?
+2026-06-30 21:40:47,915 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:47,915 - INFO - Reference: They were scared but resilient
+2026-06-30 21:40:47,915 - INFO - Category: 5
+2026-06-30 21:40:53,091 - INFO - 
+Question 196: How did Caroline feel after the accident?
+2026-06-30 21:40:53,091 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:53,091 - INFO - Reference: Grateful and thankful for her family
+2026-06-30 21:40:53,091 - INFO - Category: 5
+2026-06-30 21:40:57,301 - INFO - 
+Question 197: What was Caroline's reaction to her children enjoying the Grand Canyon?
+2026-06-30 21:40:57,301 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:40:57,301 - INFO - Reference: She was happy and thankful
+2026-06-30 21:40:57,301 - INFO - Category: 5
+2026-06-30 21:41:01,490 - INFO - 
+Question 198: What did Caroline do after the road trip to relax?
+2026-06-30 21:41:01,490 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:41:01,490 - INFO - Reference: Went on a nature walk or hike
+2026-06-30 21:41:01,490 - INFO - Category: 5
+2026-06-30 21:41:07,831 - INFO - 
+Question 199: What does Caroline love most about camping with her family?
+2026-06-30 21:41:07,831 - INFO - Prediction: Not mentioned in the conversation
+2026-06-30 21:41:07,831 - INFO - Reference: Being present and bonding with her family
+2026-06-30 21:41:07,831 - INFO - Category: 5
+2026-06-30 21:41:07,883 - INFO - 
+Results saved to results\results_deepseek-v4-flash_2026-06-30-19-24.json
+2026-06-30 21:41:07,884 - INFO - 
+============================================================
+2026-06-30 21:41:07,884 - INFO - Evaluation Summary
+2026-06-30 21:41:07,884 - INFO - ============================================================
+2026-06-30 21:41:07,884 - INFO - Total questions evaluated: 199
+2026-06-30 21:41:07,884 - INFO - 
+Category Distribution:
+2026-06-30 21:41:07,884 - INFO -   Category 1: 32 questions (16.1%)
+2026-06-30 21:41:07,884 - INFO -   Category 2: 37 questions (18.6%)
+2026-06-30 21:41:07,884 - INFO -   Category 3: 13 questions (6.5%)
+2026-06-30 21:41:07,884 - INFO -   Category 4: 70 questions (35.2%)
+2026-06-30 21:41:07,885 - INFO -   Category 5: 47 questions (23.6%)
+2026-06-30 21:41:07,885 - INFO - 
+Overall Metrics:
+2026-06-30 21:41:07,885 - INFO -   exact_match: 0.1307 (std: 0.3379)
+2026-06-30 21:41:07,885 - INFO -   f1: 0.3088 (std: 0.3759)
+2026-06-30 21:41:07,885 - INFO -   rouge1_f: 0.3365 (std: 0.3820)
+2026-06-30 21:41:07,885 - INFO -   rouge2_f: 0.2098 (std: 0.3610)
+2026-06-30 21:41:07,885 - INFO -   rougeL_f: 0.3328 (std: 0.3805)
+2026-06-30 21:41:07,885 - INFO -   bleu1: 0.2663 (std: 0.3604)
+2026-06-30 21:41:07,885 - INFO -   bleu2: 0.2088 (std: 0.3331)
+2026-06-30 21:41:07,885 - INFO -   bleu3: 0.1676 (std: 0.2935)
+2026-06-30 21:41:07,885 - INFO -   bleu4: 0.1311 (std: 0.2393)
+2026-06-30 21:41:07,886 - INFO -   meteor: 0.2392 (std: 0.3474)
+2026-06-30 21:41:07,886 - INFO -   sbert_similarity: 0.4693 (std: 0.3680)

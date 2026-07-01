@@ -1,265 +1,133 @@
-# A-Mem：面向 LLM 智能体的自主记忆系统
+# A-MEM 复现项目
 
-对论文 **"A-Mem: Agentic Memory for LLM Agents"**（arXiv:2502.12110）的忠实复现。
+这是论文 "A-MEM: Agentic Memory for LLM Agents" 的复现实现，使用 DeepSeek API 作为 LLM 后端。
 
-## 概述
+## 论文简介
 
-A-Mem 是一种面向 LLM 智能体的自主记忆系统，能够实现动态记忆结构化，无需依赖静态、预定义的记忆操作。该系统受 **Zettelkasten 方法** 启发，通过以下机制构建互联的知识网络：
+A-MEM 提出了一种智能记忆系统，可以让 LLM 代理动态组织和管理记忆。该系统基于 Zettelkasten 方法，通过以下方式工作：
 
-1. **笔记构建（Note Construction）** — 生成结构化记忆笔记，由 LLM 提取关键词、上下文和标签
-2. **链接生成（Link Generation）** — 在相关记忆之间建立语义连接
-3. **记忆演化（Memory Evolution）** — 随着新经验的融入，动态更新已有记忆
-4. **记忆检索（Memory Retrieval）** — 使用嵌入向量的余弦相似度检索相关记忆
+1. **记忆分析**：自动提取关键词、上下文和标签
+2. **记忆进化**：根据相关记忆动态更新记忆之间的链接
+3. **混合检索**：结合 BM25 和语义嵌入进行记忆检索
 
-## 系统架构
+## 环境要求
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                      LLM 智能体                              │
-│                      交互层                                  │
-│                       │                                      │
-│                       ▼                                      │
-│              ┌────────────────┐                              │
-│              │  笔记构建       │  K_i, G_i, X_i ← LLM(c_i)  │
-│              │  Note           │  e_i = f_enc(concat(...))    │
-│              │  Construction   │                              │
-│              └───────┬────────┘                              │
-│                      │                                       │
-│                      ▼                                       │
-│              ┌────────────────┐                              │
-│              │  链接生成       │  查找 top-k 最近邻            │
-│              │  Link           │  LLM 决定连接关系            │
-│              │  Generation     │                              │
-│              └───────┬────────┘                              │
-│                      │                                       │
-│                      ▼                                       │
-│              ┌────────────────┐                              │
-│              │  记忆演化       │  更新已有记忆的上下文和标签    │
-│              │  Memory         │                              │
-│              │  Evolution      │                              │
-│              └───────┬────────┘                              │
-│                      │                                       │
-│                      ▼                                       │
-│              ┌────────────────┐                              │
-│              │  记忆存储       │  互联的知识网络               │
-│              │  Memory Store   │  （嵌入向量）                 │
-│              │  (Embeddings)   │                              │
-│              └────────────────┘                              │
-└─────────────────────────────────────────────────────────────┘
-```
+- Python 3.8+
+- DeepSeek API Key
 
-## 快速开始
-
-### 安装
+## 安装
 
 ```bash
-# 克隆仓库
-git clone https://github.com/your-username/A-Memory-Reproducing.git
-cd A-Memory-Reproducing
+# 克隆或下载本项目
+cd "E:\Amem reproducing"
+
+# 创建虚拟环境（推荐）
+python -m venv venv
+venv\Scripts\activate  # Windows
+# 或
+source venv/bin/activate  # Linux/Mac
 
 # 安装依赖
 pip install -r requirements.txt
-
-# 复制环境配置文件并填入你的 API 密钥
-cp .env.example .env
 ```
 
-### 配置
+## 使用方法
 
-编辑 `.env` 文件，填入你的 API 凭据：
-
-```env
-# 豆包（火山引擎 Ark API）— 国内推荐
-DOUBAO_API_KEY=你的Ark-API密钥
-DOUBAO_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
-DOUBAO_MODEL=doubao-seed-2.0-lite-260215
-
-# 或 OpenAI
-OPENAI_API_KEY=sk-你的API密钥
-```
-
-### 运行示例
-
-#### 豆包 Doubao（国内推荐）
+### 快速开始
 
 ```bash
-# 使用豆包模型运行示例（从 .env 自动读取配置）
-python examples/doubao_demo.py
+# 设置 API Key（方式一：环境变量）
+set DEEPSEEK_API_KEY=your_api_key_here
 
-# 或指定参数
-python examples/doubao_demo.py --api-key "你的Key" --model "doubao-seed-2.0-lite-260215"
+# 或直接在命令行中指定（方式二）
+python evaluate.py --api_key YOUR_API_KEY
 ```
 
-#### OpenAI
+### 完整参数
 
 ```bash
-python examples/basic_demo.py --backend openai --model gpt-4o-mini
+python evaluate.py \
+    --api_key YOUR_API_KEY \
+    --model deepseek-v4-flash \
+    --base_url https://api.deepseek.com \
+    --dataset data/locomo10.json \
+    --output_dir results \
+    --ratio 1.0 \
+    --retrieve_k 10 \
+    --temperature_c5 0.5 \
+    --embedding_model all-MiniLM-L6-v2 \
+    --backend deepseek
 ```
 
-#### Ollama（本地部署）
+### 参数说明
+
+| 参数 | 默认值 | 说明 |
+|------|--------|------|
+| `--api_key` | 环境变量 | DeepSeek API Key |
+| `--model` | deepseek-v4-flash | 模型名称 |
+| `--base_url` | https://api.deepseek.com | API 地址 |
+| `--dataset` | data/locomo10.json | 数据集路径 |
+| `--output_dir` | results | 结果输出目录 |
+| `--ratio` | 1.0 | 评估数据比例（0.0-1.0） |
+| `--retrieve_k` | 10 | 检索记忆数量 |
+| `--temperature_c5` | 0.5 | 类别5问题的温度 |
+| `--embedding_model` | all-MiniLM-L6-v2 | 嵌入模型 |
+| `--backend` | deepseek | 后端类型 |
+
+### 快速测试
+
+如果只想快速测试，可以使用 `--ratio 0.1` 只评估 10% 的数据：
 
 ```bash
-# 先启动 Ollama 并拉取模型
-ollama serve
-ollama pull llama3.2
-
-# 运行示例
-python examples/basic_demo.py --backend ollama --model llama3.2
+python evaluate.py --api_key YOUR_API_KEY --ratio 0.1
 ```
 
-#### 交互式对话
+## 数据集
 
-```bash
-python examples/conversation_demo.py --interactive
-```
+使用 LoCoMo 数据集进行评估，包含以下类别：
 
-### Web 可视化
+- **Category 1**: 单跳问题 (Single-hop)
+- **Category 2**: 时间问题 (Temporal)
+- **Category 3**: 开放域问题 (Open-domain)
+- **Category 4**: 多跳问题 (Multi-hop)
+- **Category 5**: 对抗性问题 (Adversarial)
 
-启动 Web 可视化界面，直观查看记忆网络：
+## 评估指标
 
-```bash
-# 启动 Web 服务器
-python web/app.py
-
-# 在浏览器中打开
-# http://localhost:5000
-```
-
-Web 界面功能：
-- 📝 **添加记忆** — 输入内容，实时查看笔记构建过程
-- 🔍 **检索记忆** — 查询相关记忆，观察检索结果
-- 🌐 **网络图** — 可视化记忆节点和连接关系
-- 🔄 **演化记录** — 查看记忆标签和上下文的动态更新
-- 💾 **持久化** — 记忆自动保存到 `web/data/` 目录
+- Exact Match (精确匹配)
+- F1 Score
+- ROUGE-1, ROUGE-2, ROUGE-L
+- BLEU-1, BLEU-2, BLEU-3, BLEU-4
+- METEOR
+- Sentence-BERT Similarity
 
 ## 项目结构
 
 ```
-├── amem/
-│   ├── __init__.py              # 包导出
-│   ├── memory_note.py           # MemoryNote 数据类（m_i = {c_i, t_i, K_i, G_i, X_i, e_i, L_i}）
-│   ├── retriever.py             # SimpleEmbeddingRetriever（余弦相似度检索）
-│   ├── llm_controller.py        # LLM 后端抽象层（OpenAI/Ollama/LiteLLM/豆包）
-│   ├── agentic_memory.py        # AgenticMemorySystem（核心编排器）
-│   ├── prompt_templates.py      # 提示词模板（Ps1, Ps2, Ps3）
-│   └── parsers.py               # LLM 响应解析器（含回退机制）
-├── web/
-│   ├── app.py                   # Flask Web 服务器
-│   ├── templates/
-│   │   └── index.html           # Web 可视化界面
-│   └── data/
-│       ├── memories.json        # 持久化的记忆数据
-│       └── meta.json            # 系统元数据
-├── examples/
-│   ├── basic_demo.py            # 基础用法示例
-│   ├── doubao_demo.py           # 豆包模型示例
-│   └── conversation_demo.py     # 多轮对话示例
-├── evaluation/
-│   ├── evaluate.py              # LoCoMo 数据集评估脚本
-│   ├── metrics.py               # F1、BLEU-1、ROUGE-L、ROUGE-2、METEOR、SBERT
-│   └── load_dataset.py          # LoCoMo 数据集加载器
-├── requirements.txt
-├── setup.py
-├── .env.example
-└── README.md
+E:\Amem reproducing\
+├── README.md           # 本文件
+├── requirements.txt    # 依赖列表
+├── config.py          # 配置文件
+├── llm_controllers.py # LLM 控制器
+├── memory_layer.py    # 记忆层实现
+├── load_dataset.py    # 数据集加载器
+├── metrics.py         # 评估指标
+├── evaluate.py        # 主评估脚本
+└── data/
+    └── locomo10.json  # LoCoMo 数据集
 ```
 
-## 评估
-
-### 在 LoCoMo 数据集上评估
-
-```bash
-python evaluation/evaluate.py \
-    --data_dir ./data/locomo \
-    --backend openai \
-    --model gpt-4o-mini \
-    --top_k 10 \
-    --output results.json
-```
-
-### 评估指标
-
-| 指标 | 说明 |
-|------|------|
-| F1 | 词级 F1 分数（精确率 + 召回率） |
-| BLEU-1 | 一元组重叠精确率 |
-| ROUGE-L | 最长公共子序列 |
-| ROUGE-2 | 二元组重叠 |
-| METEOR | 对齐一元组（含同义词匹配） |
-| SBERT | 句子嵌入余弦相似度 |
-
-## LLM 后端
-
-### 豆包 Doubao（国内推荐）
-
-使用火山引擎的豆包模型，适合国内用户：
-
-1. 注册 [火山引擎](https://www.volcengine.com/) 账号
-2. 开通 [Ark API 服务](https://console.volcengine.com/ark)
-3. 创建 API Key 并获取 endpoint
-4. 配置 `.env` 文件：
-
-```env
-DOUBAO_API_KEY=你的Ark-API密钥
-DOUBAO_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
-DOUBAO_MODEL=doubao-seed-2.0-lite-260215
-```
-
-```python
-memory = AgenticMemorySystem(
-    llm_backend="doubao",
-    llm_model="doubao-seed-2.0-lite-260215",
-    api_key="你的API密钥",
-    api_base="https://ark.cn-beijing.volces.com/api/v3"
-)
-```
-
-### OpenAI
-
-```python
-import os
-os.environ["OPENAI_API_KEY"] = "sk-..."
-
-memory = AgenticMemorySystem(llm_backend="openai", llm_model="gpt-4o-mini")
-```
-
-### Ollama（本地部署）
-
-```bash
-# 启动 Ollama 服务
-ollama serve
-
-# 拉取模型
-ollama pull llama3.2
-```
-
-```python
-memory = AgenticMemorySystem(llm_backend="ollama", llm_model="llama3.2")
-```
-
-### LiteLLM（通用适配）
-
-```python
-memory = AgenticMemorySystem(
-    llm_backend="litellm",
-    llm_model="ollama/llama3.2",
-    api_base="http://localhost:11434"
-)
-```
-
-## 论文引用
+## 参考文献
 
 ```bibtex
-@article{xu2025amem,
-  title={A-Mem: Agentic Memory for LLM Agents},
+@inproceedings{xu2025amem,
+  title={A-Mem: Agentic memory for llm agents},
   author={Xu, Wujiang and Liang, Zujie and Mei, Kai and Gao, Hang and Tan, Juntao and Zhang, Yongfeng},
-  journal={arXiv preprint arXiv:2502.12110},
+  booktitle={Advances in Neural Information Processing Systems},
   year={2025}
 }
 ```
 
-## 致谢
+## 许可证
 
-- 原始论文：[A-Mem: Agentic Memory for LLM Agents](https://arxiv.org/abs/2502.12110)
-- 原始代码：[WujiangXu/AgenticMemory](https://github.com/WujiangXu/AgenticMemory)
-- 嵌入模型：[all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2)
+本项目仅用于学术研究目的。

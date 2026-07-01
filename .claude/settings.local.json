@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"E:/Amem reproducing/data\")",
+      "Bash(cp \"E:/A-mem/A-mem-main/data/locomo10.json\" \"E:/Amem reproducing/data/\")"
+    ]
+  }
+}

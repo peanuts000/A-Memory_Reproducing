@@ -1,0 +1,4536 @@
+{
+  "model": "deepseek-v4-flash",
+  "dataset": "data/locomo10.json",
+  "total_questions": 199,
+  "category_distribution": {
+    "2": 37,
+    "3": 13,
+    "1": 32,
+    "4": 70,
+    "5": 47
+  },
+  "aggregate_metrics": {
+    "overall": {
+      "exact_match": {
+        "mean": 0.1306532663316583,
+        "std": 0.3378707471723954,
+        "median": 0,
+        "min": 0,
+        "max": 1,
+        "count": 199
+      },
+      "f1": {
+        "mean": 0.308779903671331,
+        "std": 0.37587439777283993,
+        "median": 0.13333333333333333,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 199
+      },
+      "rouge1_f": {
+        "mean": 0.33654366759571747,
+        "std": 0.38196727359348476,
+        "median": 0.2222222222222222,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 199
+      },
+      "rouge2_f": {
+        "mean": 0.20981963318646735,
+        "std": 0.3610048295321388,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 199
+      },
+      "rougeL_f": {
+        "mean": 0.3328333912723758,
+        "std": 0.3805434166882417,
+        "median": 0.2222222222222222,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 199
+      },
+      "bleu1": {
+        "mean": 0.2663098599978116,
+        "std": 0.36036519647168047,
+        "median": 0.06766764161830635,
+        "min": 0,
+        "max": 1.0,
+        "count": 199
+      },
+      "bleu2": {
+        "mean": 0.208782946001011,
+        "std": 0.3331448824819501,
+        "median": 0.030261889307125377,
+        "min": 0,
+        "max": 1.0,
+        "count": 199
+      },
+      "bleu3": {
+        "mean": 0.16760988312011532,
+        "std": 0.2935113603332021,
+        "median": 0.02355435073584915,
+        "min": 0,
+        "max": 1.0,
+        "count": 199
+      },
+      "bleu4": {
+        "mean": 0.13105615547310703,
+        "std": 0.2393435381671606,
+        "median": 0.020060960693725614,
+        "min": 0,
+        "max": 1.0,
+        "count": 199
+      },
+      "meteor": {
+        "mean": 0.23922913226069079,
+        "std": 0.3474303561786635,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.9997106481481481,
+        "count": 199
+      },
+      "sbert_similarity": {
+        "mean": 0.4693350061381133,
+        "std": 0.36799098839810623,
+        "median": 0.4867415130138397,
+        "min": -0.06094188243150711,
+        "max": 1.000000238418579,
+        "count": 199
+      }
+    },
+    "category_1": {
+      "exact_match": {
+        "mean": 0,
+        "std": 0.0,
+        "median": 0.0,
+        "min": 0,
+        "max": 0,
+        "count": 32
+      },
+      "f1": {
+        "mean": 0.2007476240234861,
+        "std": 0.2574983636771518,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.6666666666666666,
+        "count": 32
+      },
+      "rouge1_f": {
+        "mean": 0.22839087995337995,
+        "std": 0.2694023852540078,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.6666666666666666,
+        "count": 32
+      },
+      "rouge2_f": {
+        "mean": 0.05084325396825397,
+        "std": 0.139234072918012,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.5714285714285715,
+        "count": 32
+      },
+      "rougeL_f": {
+        "mean": 0.22074227855477854,
+        "std": 0.2643989737047481,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.6666666666666666,
+        "count": 32
+      },
+      "bleu1": {
+        "mean": 0.14273548719175258,
+        "std": 0.16031221010483085,
+        "median": 0.10240936722970712,
+        "min": 0,
+        "max": 0.5,
+        "count": 32
+      },
+      "bleu2": {
+        "mean": 0.07666506500964038,
+        "std": 0.10042272409618183,
+        "median": 0.04279677428117006,
+        "min": 0,
+        "max": 0.2904327290997419,
+        "count": 32
+      },
+      "bleu3": {
+        "mean": 0.04235341796322265,
+        "std": 0.05113925689650556,
+        "median": 0.02960813390314045,
+        "min": 0,
+        "max": 0.1740444189610778,
+        "count": 32
+      },
+      "bleu4": {
+        "mean": 0.0305048371040742,
+        "std": 0.03698950115101675,
+        "median": 0.02355864669485603,
+        "min": 0,
+        "max": 0.1495348781221221,
+        "count": 32
+      },
+      "meteor": {
+        "mean": 0.10117941877744395,
+        "std": 0.16228982494199487,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.4934210526315789,
+        "count": 32
+      },
+      "sbert_similarity": {
+        "mean": 0.4462662268197164,
+        "std": 0.28332867860808814,
+        "median": 0.4488660395145416,
+        "min": 0.0,
+        "max": 0.8823397159576416,
+        "count": 32
+      }
+    },
+    "category_2": {
+      "exact_match": {
+        "mean": 0.10810810810810811,
+        "std": 0.3148000938676783,
+        "median": 0,
+        "min": 0,
+        "max": 1,
+        "count": 37
+      },
+      "f1": {
+        "mean": 0.3355855855855856,
+        "std": 0.338723040422301,
+        "median": 0.25,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 37
+      },
+      "rouge1_f": {
+        "mean": 0.35435435435435436,
+        "std": 0.3348426097093688,
+        "median": 0.25,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 37
+      },
+      "rouge2_f": {
+        "mean": 0.22072072072072071,
+        "std": 0.3436562304203833,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 37
+      },
+      "rougeL_f": {
+        "mean": 0.35435435435435436,
+        "std": 0.3348426097093688,
+        "median": 0.25,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 37
+      },
+      "bleu1": {
+        "mean": 0.2533033718442797,
+        "std": 0.3260270515782051,
+        "median": 0.06766764161830635,
+        "min": 0,
+        "max": 1.0,
+        "count": 37
+      },
+      "bleu2": {
+        "mean": 0.20749044815466794,
+        "std": 0.3256807526013998,
+        "median": 0.030261889307125377,
+        "min": 0,
+        "max": 1.0,
+        "count": 37
+      },
+      "bleu3": {
+        "mean": 0.15051193851220535,
+        "std": 0.25821399236115056,
+        "median": 0.02355435073584915,
+        "min": 0,
+        "max": 1.0,
+        "count": 37
+      },
+      "bleu4": {
+        "mean": 0.10566957475943473,
+        "std": 0.16705050160599327,
+        "median": 0.020237345084409754,
+        "min": 0,
+        "max": 0.6065306597126334,
+        "count": 37
+      },
+      "meteor": {
+        "mean": 0.26000502219876087,
+        "std": 0.3467546622256618,
+        "median": 0.08928571428571427,
+        "min": 0.0,
+        "max": 0.9814814814814815,
+        "count": 37
+      },
+      "sbert_similarity": {
+        "mean": 0.6406916597404996,
+        "std": 0.25996521359960745,
+        "median": 0.7192232608795166,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 37
+      }
+    },
+    "category_3": {
+      "exact_match": {
+        "mean": 0,
+        "std": 0.0,
+        "median": 0,
+        "min": 0,
+        "max": 0,
+        "count": 13
+      },
+      "f1": {
+        "mean": 0.1012171589094666,
+        "std": 0.14866240703955289,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.4444444444444445,
+        "count": 13
+      },
+      "rouge1_f": {
+        "mean": 0.18057284595746134,
+        "std": 0.19579438904828275,
+        "median": 0.15384615384615385,
+        "min": 0.0,
+        "max": 0.6,
+        "count": 13
+      },
+      "rouge2_f": {
+        "mean": 0.04487179487179487,
+        "std": 0.11084369529352939,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.33333333333333337,
+        "count": 13
+      },
+      "rougeL_f": {
+        "mean": 0.18057284595746134,
+        "std": 0.19579438904828275,
+        "median": 0.15384615384615385,
+        "min": 0.0,
+        "max": 0.6,
+        "count": 13
+      },
+      "bleu1": {
+        "mean": 0.06929736330743363,
+        "std": 0.12906907805585344,
+        "median": 0.0012393760883331792,
+        "min": 0,
+        "max": 0.42857142857142855,
+        "count": 13
+      },
+      "bleu2": {
+        "mean": 0.03780335989435964,
+        "std": 0.07584822074138453,
+        "median": 0.0005542658366401546,
+        "min": 0,
+        "max": 0.26726124191242434,
+        "count": 13
+      },
+      "bleu3": {
+        "mean": 0.020779514034911843,
+        "std": 0.03609914507159761,
+        "median": 0.00043141298233640324,
+        "min": 0,
+        "max": 0.11511121735118796,
+        "count": 13
+      },
+      "bleu4": {
+        "mean": 0.016782133402729493,
+        "std": 0.028747198468486456,
+        "median": 0.00037065990463274877,
+        "min": 0,
+        "max": 0.08034284189446518,
+        "count": 13
+      },
+      "meteor": {
+        "mean": 0.03466555818296574,
+        "std": 0.057256739403478966,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.16129032258064518,
+        "count": 13
+      },
+      "sbert_similarity": {
+        "mean": 0.3323786098223466,
+        "std": 0.2529005525110074,
+        "median": 0.2627900540828705,
+        "min": 0.0,
+        "max": 0.7252469658851624,
+        "count": 13
+      }
+    },
+    "category_4": {
+      "exact_match": {
+        "mean": 0.24285714285714285,
+        "std": 0.4319055950832105,
+        "median": 0.0,
+        "min": 0,
+        "max": 1,
+        "count": 70
+      },
+      "f1": {
+        "mean": 0.5017421370619939,
+        "std": 0.4169314786650478,
+        "median": 0.4852941176470588,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 70
+      },
+      "rouge1_f": {
+        "mean": 0.5439492532596296,
+        "std": 0.41626079940711436,
+        "median": 0.5357142857142858,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 70
+      },
+      "rouge2_f": {
+        "mean": 0.3768160411017554,
+        "std": 0.4292615207987641,
+        "median": 0.1769230769230769,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 70
+      },
+      "rougeL_f": {
+        "mean": 0.5368979712083475,
+        "std": 0.41655693842568364,
+        "median": 0.5,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 70
+      },
+      "bleu1": {
+        "mean": 0.4616803647708255,
+        "std": 0.41315517829714815,
+        "median": 0.4793952890549223,
+        "min": 0,
+        "max": 1.0,
+        "count": 70
+      },
+      "bleu2": {
+        "mean": 0.36673265622975826,
+        "std": 0.38482813399143695,
+        "median": 0.2529431149211522,
+        "min": 0,
+        "max": 1.0,
+        "count": 70
+      },
+      "bleu3": {
+        "mean": 0.2994981578120596,
+        "std": 0.33967801746431897,
+        "median": 0.1715975459275989,
+        "min": 0,
+        "max": 1.0,
+        "count": 70
+      },
+      "bleu4": {
+        "mean": 0.2381427734098558,
+        "std": 0.2860656098893735,
+        "median": 0.13372085715834686,
+        "min": 0,
+        "max": 1.0,
+        "count": 70
+      },
+      "meteor": {
+        "mean": 0.41118771118246894,
+        "std": 0.38872883344852777,
+        "median": 0.33308457711442785,
+        "min": 0.0,
+        "max": 0.9990234375,
+        "count": 70
+      },
+      "sbert_similarity": {
+        "mean": 0.6117027632759086,
+        "std": 0.38701036913192927,
+        "median": 0.7526072859764099,
+        "min": -0.0393037311732769,
+        "max": 1.000000238418579,
+        "count": 70
+      }
+    },
+    "category_5": {
+      "exact_match": {
+        "mean": 0.10638297872340426,
+        "std": 0.3116605283339055,
+        "median": 0,
+        "min": 0,
+        "max": 1,
+        "count": 47
+      },
+      "f1": {
+        "mean": 0.13125186244710652,
+        "std": 0.3120925293356856,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 47
+      },
+      "rouge1_f": {
+        "mean": 0.13039735864483906,
+        "std": 0.3119054638637062,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 47
+      },
+      "rouge2_f": {
+        "mean": 0.10638297872340426,
+        "std": 0.3116605283339055,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 47
+      },
+      "rougeL_f": {
+        "mean": 0.13039735864483906,
+        "std": 0.3119054638637062,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 1.0,
+        "count": 47
+      },
+      "bleu1": {
+        "mean": 0.12420022413267336,
+        "std": 0.31246071842963724,
+        "median": 0,
+        "min": 0,
+        "max": 1.0,
+        "count": 47
+      },
+      "bleu2": {
+        "mean": 0.11180102079702614,
+        "std": 0.3103130688622389,
+        "median": 0,
+        "min": 0,
+        "max": 1.0,
+        "count": 47
+      },
+      "bleu3": {
+        "mean": 0.11053427471979153,
+        "std": 0.3105161085506591,
+        "median": 0,
+        "min": 0,
+        "max": 1.0,
+        "count": 47
+      },
+      "bleu4": {
+        "mean": 0.09161880878283936,
+        "std": 0.26564384200593844,
+        "median": 0,
+        "min": 0,
+        "max": 1.0,
+        "count": 47
+      },
+      "meteor": {
+        "mean": 0.11733783103178147,
+        "std": 0.3075548531864414,
+        "median": 0.0,
+        "min": 0.0,
+        "max": 0.9997106481481481,
+        "count": 47
+      },
+      "sbert_similarity": {
+        "mean": 0.17598808927342613,
+        "std": 0.2940892983536086,
+        "median": 0.09608786553144455,
+        "min": -0.06094188243150711,
+        "max": 1.0000001192092896,
+        "count": 47
+      }
+    }
+  },
+  "individual_results": [
+    {
+      "sample_id": 0,
+      "question": "When did Caroline go to the LGBTQ support group?",
+      "prediction": "7 May 2023",
+      "reference": "7 May 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 0.9999998807907104
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie paint a sunrise?",
+      "prediction": "last year (2022)",
+      "reference": 2022,
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.5,
+        "bleu1": 0.2,
+        "bleu2": 0.07071067811865477,
+        "bleu3": 0.05665132701906204,
+        "bleu4": 0.05372849659117709,
+        "meteor": 0.0,
+        "sbert_similarity": 0.8021035194396973
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What fields would Caroline be likely to pursue in her educaton?",
+      "prediction": "counseling and mental health",
+      "reference": "Psychology, counseling certification",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.28571428571428575,
+        "rouge1_f": 0.28571428571428575,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.28571428571428575,
+        "bleu1": 0.25,
+        "bleu2": 0.09128709291752769,
+        "bleu3": 0.07665320007195604,
+        "bleu4": 0.08034284189446518,
+        "meteor": 0.16129032258064518,
+        "sbert_similarity": 0.6725396513938904
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline research?",
+      "prediction": "counseling or mental health work",
+      "reference": "Adoption agencies",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.14713960886001587
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Caroline's identity?",
+      "prediction": "trans woman",
+      "reference": "Transgender woman",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.5,
+        "bleu1": 0.5,
+        "bleu2": 0.223606797749979,
+        "bleu3": 0.1740444189610778,
+        "bleu4": 0.1495348781221221,
+        "meteor": 0.25,
+        "sbert_similarity": 0.8823397159576416
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie run a charity race?",
+      "prediction": "20 May 2023",
+      "reference": "The sunday before 25 May 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444444,
+        "rouge1_f": 0.4444444444444444,
+        "rouge2_f": 0.28571428571428575,
+        "rougeL_f": 0.4444444444444444,
+        "bleu1": 0.24525296078096154,
+        "bleu2": 0.21239529438966132,
+        "bleu3": 0.11974448045963429,
+        "bleu4": 0.08839449202722564,
+        "meteor": 0.3289473684210526,
+        "sbert_similarity": 0.810510516166687
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When is Melanie planning on going camping?",
+      "prediction": "next month",
+      "reference": "June 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.5679936408996582
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Caroline's relationship status?",
+      "prediction": "tough breakup",
+      "reference": "Single",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.39194053411483765
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline give a speech at a school?",
+      "prediction": "",
+      "reference": "The week before 9 June 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline meet up with her friends, family, and mentors?",
+      "prediction": "approximately 2 June 2023",
+      "reference": "The week before 9 June 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4,
+        "rouge1_f": 0.4,
+        "rouge2_f": 0.25,
+        "rougeL_f": 0.4,
+        "bleu1": 0.3032653298563167,
+        "bleu2": 0.24761510494160163,
+        "bleu3": 0.12494616991426132,
+        "bleu4": 0.10305224267080783,
+        "meteor": 0.32327586206896547,
+        "sbert_similarity": 0.7192232608795166
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How long has Caroline had her current group of friends for?",
+      "prediction": "4 years",
+      "reference": "4 years",
+      "category": 2,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Where did Caroline move from 4 years ago?",
+      "prediction": "Not specified.",
+      "reference": "Sweden",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.24045684933662415
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How long ago was Caroline's 18th birthday?",
+      "prediction": "ten years ago",
+      "reference": "10 years ago",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.5,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.6666666666666666,
+        "bleu2": 0.5773502691896257,
+        "bleu3": 0.3254992452916931,
+        "bleu4": 0.24028114141347542,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 0.9706804156303406
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What career path has Caroline decided to persue?",
+      "prediction": "counseling and mental health",
+      "reference": "counseling or mental health for Transgender people",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5454545454545454,
+        "rouge1_f": 0.5454545454545454,
+        "rouge2_f": 0.2222222222222222,
+        "rougeL_f": 0.5454545454545454,
+        "bleu1": 0.354274914555761,
+        "bleu2": 0.23618327637050732,
+        "bleu3": 0.1112396062304518,
+        "bleu4": 0.08881915596542085,
+        "meteor": 0.3814262023217247,
+        "sbert_similarity": 0.6846485137939453
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Caroline still want to pursue counseling as a career if she hadn't received support growing up?",
+      "prediction": "No, her inspiration came from the support she got.",
+      "reference": "Likely no",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.1818181818181818,
+        "rouge1_f": 0.1818181818181818,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.1818181818181818,
+        "bleu1": 0.0909090909090909,
+        "bleu2": 0.03015113445777637,
+        "bleu3": 0.022461584318318094,
+        "bleu4": 0.018850319022747353,
+        "meteor": 0.0,
+        "sbert_similarity": 0.1512071192264557
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What activities does Melanie partake in?",
+      "prediction": "running, reading, or playing my violin",
+      "reference": "pottery, camping, painting, swimming",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.25,
+        "bleu2": 0.059761430466719695,
+        "bleu3": 0.04033183084278514,
+        "bleu4": 0.03303164318013808,
+        "meteor": 0.0,
+        "sbert_similarity": 0.3142072558403015
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie sign up for a pottery class?",
+      "prediction": "yesterday",
+      "reference": "2 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.3336077332496643
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When is Caroline going to the transgender conference?",
+      "prediction": "this month",
+      "reference": "July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.4867415130138397
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Where has Melanie camped?",
+      "prediction": "in the mountains, at the beach, and in the forest",
+      "reference": "beach, mountains, forest",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6,
+        "rouge1_f": 0.4615384615384615,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.30769230769230765,
+        "bleu1": 0.4166666666666667,
+        "bleu2": 0.27524094128159016,
+        "bleu3": 0.09337069741532533,
+        "bleu4": 0.053863663688318665,
+        "meteor": 0.4054054054054054,
+        "sbert_similarity": 0.7935965061187744
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What do Melanie's kids like?",
+      "prediction": "the beach",
+      "reference": "dinosaurs, nature",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.2911331057548523
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie go to the museum?",
+      "prediction": "No information.",
+      "reference": "5 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.04651650786399841
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline have a picnic?",
+      "prediction": "late June 2023",
+      "reference": "The week before 6 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.2222222222222222,
+        "rouge1_f": 0.2222222222222222,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.2222222222222222,
+        "bleu1": 0.12262648039048077,
+        "bleu2": 0.04749303163563625,
+        "bleu3": 0.044556965439969995,
+        "bleu4": 0.0417991745584234,
+        "meteor": 0.08771929824561403,
+        "sbert_similarity": 0.7915313839912415
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Caroline likely have Dr. Seuss books on her bookshelf?",
+      "prediction": "classics",
+      "reference": "Yes, since she collects classic children's books",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.2222222222222222,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.2222222222222222,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.078125,
+        "sbert_similarity": 0.33545228838920593
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What books has Melanie read?",
+      "prediction": "Charlotte's Web",
+      "reference": "\"Nothing is Impossible\", \"Charlotte's Web\"",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.5714285714285715,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.06948345122280154,
+        "bleu2": 0.06948345122280154,
+        "bleu3": 0.06948345122280154,
+        "bleu4": 0.0390734160394292,
+        "meteor": 0.0,
+        "sbert_similarity": 0.6980752944946289
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Melanie do to destress?",
+      "prediction": "running",
+      "reference": "Running, pottery",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.1353352832366127,
+        "bleu2": 0.04279677428117006,
+        "bleu3": 0.02960813390314045,
+        "bleu4": 0.024066394763145416,
+        "meteor": 0.0,
+        "sbert_similarity": 0.5836725831031799
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline go to the LGBTQ conference?",
+      "prediction": "10 July 2023",
+      "reference": "10 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie read the book \"nothing is impossible\"?",
+      "prediction": "Not mentioned.",
+      "reference": 2022,
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.20728152990341187
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Caroline pursue writing as a career option?",
+      "prediction": "No.",
+      "reference": "LIkely no; though she likes reading, she wants to be a counselor",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.15384615384615385,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.15384615384615385,
+        "bleu1": 0.0012393760883331792,
+        "bleu2": 0.0005542658366401546,
+        "bleu3": 0.00043141298233640324,
+        "bleu4": 0.00037065990463274877,
+        "meteor": 0.0,
+        "sbert_similarity": 0.07765065133571625
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline go to the adoption meeting?",
+      "prediction": "July 14, 2023",
+      "reference": "The friday before 15 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444444,
+        "rouge1_f": 0.4444444444444444,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.4444444444444444,
+        "bleu1": 0.3032653298563167,
+        "bleu2": 0.07830277146770757,
+        "bleu3": 0.05844171443814127,
+        "bleu4": 0.05795053470733952,
+        "meteor": 0.17543859649122806,
+        "sbert_similarity": 0.7577008008956909
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie go to the pottery workshop?",
+      "prediction": "14 July 2023",
+      "reference": "The Friday before 15 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444444,
+        "rouge1_f": 0.4444444444444444,
+        "rouge2_f": 0.28571428571428575,
+        "rougeL_f": 0.4444444444444444,
+        "bleu1": 0.24525296078096154,
+        "bleu2": 0.21239529438966132,
+        "bleu3": 0.11974448045963429,
+        "bleu4": 0.08839449202722564,
+        "meteor": 0.3289473684210526,
+        "sbert_similarity": 0.7633202075958252
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Melanie be considered a member of the LGBTQ community?",
+      "prediction": "No",
+      "reference": "Likely no, she does not refer to herself as part of it",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.15384615384615385,
+        "rouge1_f": 0.15384615384615385,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.15384615384615385,
+        "bleu1": 6.14421235332821e-06,
+        "bleu2": 1.9429705464260385e-06,
+        "bleu3": 1.3442071996008229e-06,
+        "bleu4": 1.0926126318830351e-06,
+        "meteor": 0.0,
+        "sbert_similarity": 0.17811241745948792
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie go camping in June?",
+      "prediction": "late June",
+      "reference": "The week before 27 June 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.5944905281066895
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What LGBTQ+ events has Caroline participated in?",
+      "prediction": "LGBTQ conference, LGBTQ+ pride parade, LGBTQ support group, school event, LGBTQ activist group, LGBTQ+ counseling workshop",
+      "reference": "Pride parade, school speech, support group",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5555555555555556,
+        "rouge1_f": 0.45454545454545453,
+        "rouge2_f": 0.2,
+        "rougeL_f": 0.36363636363636365,
+        "bleu1": 0.3333333333333333,
+        "bleu2": 0.25819888974716115,
+        "bleu3": 0.15484642967621126,
+        "bleu4": 0.0664462779761476,
+        "meteor": 0.4508928571428572,
+        "sbert_similarity": 0.6302502155303955
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline go to a pride parade during the summer?",
+      "prediction": "11 August 2023",
+      "reference": "The week before 3 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.2222222222222222,
+        "rouge1_f": 0.2222222222222222,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.2222222222222222,
+        "bleu1": 0.12262648039048077,
+        "bleu2": 0.04749303163563625,
+        "bleu3": 0.044556965439969995,
+        "bleu4": 0.0417991745584234,
+        "meteor": 0.08771929824561403,
+        "sbert_similarity": 0.7371276617050171
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What events has Caroline participated in to help children?",
+      "prediction": "volunteer at an LGBTQ+ youth center",
+      "reference": "Mentoring program, school speech",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.2915394902229309
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie go camping in July?",
+      "prediction": "early July",
+      "reference": "two weekends before 17 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.5579091310501099
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline join a mentorship program?",
+      "prediction": "16 July 2023",
+      "reference": "The weekend before 17 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444444,
+        "rouge1_f": 0.4444444444444444,
+        "rouge2_f": 0.28571428571428575,
+        "rougeL_f": 0.4444444444444444,
+        "bleu1": 0.24525296078096154,
+        "bleu2": 0.21239529438966132,
+        "bleu3": 0.11974448045963429,
+        "bleu4": 0.08839449202722564,
+        "meteor": 0.3289473684210526,
+        "sbert_similarity": 0.7217468023300171
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie paint recently?",
+      "prediction": "",
+      "reference": "sunset",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What activities has Melanie done with her family?",
+      "prediction": "camping, beach trips, hiking, concert",
+      "reference": "Pottery, painting, camping, museum, swimming, hiking",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.3636363636363636,
+        "rouge1_f": 0.3636363636363636,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.3636363636363636,
+        "bleu1": 0.42955579924435766,
+        "bleu2": 0.2904327290997419,
+        "bleu3": 0.10079700029278177,
+        "bleu4": 0.060368759096897026,
+        "meteor": 0.0847457627118644,
+        "sbert_similarity": 0.6429731845855713
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "In what ways is Caroline participating in the LGBTQ community?",
+      "prediction": "Attending support groups, speaking at school events, joining activist groups, volunteering at youth centers, attending conferences and parades.",
+      "reference": "Joining activist group, going to pride parades, participating in an art show, mentoring program",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.20689655172413796,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.13333333333333333,
+        "rougeL_f": 0.25,
+        "bleu1": 0.2608695652173913,
+        "bleu2": 0.10889310129609417,
+        "bleu3": 0.03963582249568903,
+        "bleu4": 0.023050898626566643,
+        "meteor": 0.13020833333333334,
+        "sbert_similarity": 0.7492877244949341
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How many times has Melanie gone to the beach in 2023?",
+      "prediction": "",
+      "reference": 2,
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline join a new activist group?",
+      "prediction": "last Tuesday",
+      "reference": "The Tuesday before 20 July 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.5787901878356934
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Melanie be more interested in going to a national park or a theme park?",
+      "prediction": "National park",
+      "reference": "National park; she likes the outdoors",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.33333333333333337,
+        "rougeL_f": 0.5,
+        "bleu1": 0.0820849986238988,
+        "bleu2": 0.0820849986238988,
+        "bleu3": 0.038394038428908775,
+        "bleu4": 0.025957555738330737,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.7252469658851624
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of art does Caroline make?",
+      "prediction": "painting",
+      "reference": "abstract art",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.5710419416427612
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When is Melanie's daughter's birthday?",
+      "prediction": "13 August 2023",
+      "reference": "13 August",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.8,
+        "rouge1_f": 0.8,
+        "rouge2_f": 0.6666666666666666,
+        "rougeL_f": 0.8,
+        "bleu1": 0.6666666666666666,
+        "bleu2": 0.5773502691896257,
+        "bleu3": 0.3254992452916931,
+        "bleu4": 0.24028114141347542,
+        "meteor": 0.8928571428571429,
+        "sbert_similarity": 0.7679367065429688
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline attend a pride parade in August?",
+      "prediction": "last Friday",
+      "reference": "The Friday before 14 August 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.601944088935852
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Melanie be considered an ally to the transgender community?",
+      "prediction": "",
+      "reference": "Yes, she is supportive",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Who supports Caroline when she has a negative experience?",
+      "prediction": "Melanie",
+      "reference": "Her mentors, family, and friends",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.29411637783050537
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What types of pottery have Melanie and her kids made?",
+      "prediction": "pots, bowls, and cups",
+      "reference": "bowls, cup",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.3333333333333333,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.3333333333333333,
+        "bleu2": 0.25819888974716115,
+        "bleu3": 0.12111838948674812,
+        "bleu4": 0.08633400213704504,
+        "meteor": 0.45454545454545453,
+        "sbert_similarity": 0.7619283199310303
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline and Melanie go to a pride fesetival together?",
+      "prediction": "last year",
+      "reference": 2022,
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.3672371208667755
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What would Caroline's political leaning likely be?",
+      "prediction": "Progressive",
+      "reference": "Liberal",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.5571330189704895
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What has Melanie painted?",
+      "prediction": "a painting of a sunset",
+      "reference": "Horse, sunset, sunrise",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.28571428571428575,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.2,
+        "bleu2": 0.07071067811865477,
+        "bleu3": 0.05665132701906204,
+        "bleu4": 0.05372849659117709,
+        "meteor": 0.0,
+        "sbert_similarity": 0.6115660071372986
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What are Melanie's pets' names?",
+      "prediction": "Oliver and Bailey",
+      "reference": "Oliver, Luna, Bailey",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.3422780793550613,
+        "bleu2": 0.09373671250115519,
+        "bleu3": 0.07816643970700751,
+        "bleu4": 0.069372929071742,
+        "meteor": 0.16666666666666666,
+        "sbert_similarity": 0.8147498369216919
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline apply to adoption agencies?",
+      "prediction": "23 August 2023",
+      "reference": "The week of 23 August 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.5714285714285715,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.36787944117144233,
+        "bleu2": 0.36787944117144233,
+        "bleu3": 0.36787944117144233,
+        "bleu4": 0.20687381245863395,
+        "meteor": 0.5165692007797271,
+        "sbert_similarity": 0.8445632457733154
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline draw a self-portrait?",
+      "prediction": "mid-August 2023",
+      "reference": "The week before 23 August 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.4444444444444444,
+        "rouge2_f": 0.28571428571428575,
+        "rougeL_f": 0.4444444444444444,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.7941144704818726
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What subject have Caroline and Melanie both painted?",
+      "prediction": "",
+      "reference": "Sunsets",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What symbols are important to Caroline?",
+      "prediction": "love, faith and strength",
+      "reference": "Rainbow flag, transgender symbol",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.2,
+        "bleu2": 0.07071067811865477,
+        "bleu3": 0.05665132701906204,
+        "bleu4": 0.05372849659117709,
+        "meteor": 0.0,
+        "sbert_similarity": 0.1254812330007553
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline encounter people on a hike and have a negative experience?",
+      "prediction": "17 August, 2023",
+      "reference": "The week before 25 August 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444444,
+        "rouge1_f": 0.4444444444444444,
+        "rouge2_f": 0.28571428571428575,
+        "rougeL_f": 0.4444444444444444,
+        "bleu1": 0.3032653298563167,
+        "bleu2": 0.07830277146770757,
+        "bleu3": 0.05844171443814127,
+        "bleu4": 0.05795053470733952,
+        "meteor": 0.08771929824561403,
+        "sbert_similarity": 0.8000428080558777
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie make a plate in pottery class?",
+      "prediction": "August 25, 2023",
+      "reference": "24 August 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.5,
+        "bleu2": 0.12909944487358058,
+        "bleu3": 0.09635409769034631,
+        "bleu4": 0.09554427922043669,
+        "meteor": 0.3333333333333333,
+        "sbert_similarity": 0.9509599804878235
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Caroline be considered religious?",
+      "prediction": "No",
+      "reference": "Somewhat, but not extremely religious",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.21692007780075073
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What instruments does Melanie play?",
+      "prediction": "violin",
+      "reference": "clarinet and violin",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.5,
+        "bleu1": 0.1353352832366127,
+        "bleu2": 0.04279677428117006,
+        "bleu3": 0.02960813390314045,
+        "bleu4": 0.024066394763145416,
+        "meteor": 0.17857142857142855,
+        "sbert_similarity": 0.7264777421951294
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What musical artists/bands has Melanie seen?",
+      "prediction": "Matt Patterson",
+      "reference": "Summer Sounds, Matt Patterson",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.5,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.22313016014842982,
+        "bleu2": 0.22313016014842982,
+        "bleu3": 0.10436581698246099,
+        "bleu4": 0.07055995207471726,
+        "meteor": 0.4934210526315789,
+        "sbert_similarity": 0.6367626786231995
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie go to the park?",
+      "prediction": "yesterday",
+      "reference": "27 August 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.40520763397216797
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When is Caroline's youth center putting on a talent show?",
+      "prediction": "next month",
+      "reference": "September 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.5368356704711914
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Melanie likely enjoy the song \"The Four Seasons\" by Vivaldi?",
+      "prediction": "Yes, she likes classical music.",
+      "reference": "Yes; it's classical music",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444445,
+        "rouge1_f": 0.6,
+        "rouge2_f": 0.25,
+        "rougeL_f": 0.6,
+        "bleu1": 0.42857142857142855,
+        "bleu2": 0.26726124191242434,
+        "bleu3": 0.11511121735118796,
+        "bleu4": 0.07730551756939454,
+        "meteor": 0.12195121951219512,
+        "sbert_similarity": 0.7090791463851929
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What are some changes Caroline has faced during her transition journey?",
+      "prediction": "struggles and development since coming out, and changing body",
+      "reference": "Changes to her body, losing unsupportive friends",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.13333333333333333,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.2,
+        "bleu2": 0.04714045207910317,
+        "bleu3": 0.03136318607896979,
+        "bleu4": 0.025098621243978974,
+        "meteor": 0.06944444444444445,
+        "sbert_similarity": 0.5057915449142456
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Melanie do with her family on hikes?",
+      "prediction": "exploring forests",
+      "reference": "Roast marshmallows, tell stories",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.250732958316803
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline go biking with friends?",
+      "prediction": "last weekend",
+      "reference": "The weekend before 13 September 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.5756862163543701
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How long has Melanie been practicing art?",
+      "prediction": "Seven years.",
+      "reference": "Since 2016",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.40967434644699097
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What personality traits might Melanie say Caroline has?",
+      "prediction": "caring about being real and helping others",
+      "reference": "Thoughtful, authentic, driven",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.3366078734397888
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What transgender-specific events has Caroline attended?",
+      "prediction": "transgender conference",
+      "reference": "Poetry reading, conference",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4,
+        "rouge1_f": 0.4,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.4,
+        "bleu1": 0.18393972058572117,
+        "bleu2": 0.082260343798398,
+        "bleu3": 0.06402736358640969,
+        "bleu4": 0.05501080739920602,
+        "meteor": 0.17241379310344826,
+        "sbert_similarity": 0.38659703731536865
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What book did Melanie read from Caroline's suggestion?",
+      "prediction": "The book title is not specified.",
+      "reference": "\"Becoming Nicole\"",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.11491610109806061
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie's friend adopt a child?",
+      "prediction": "Last year",
+      "reference": 2022,
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.3672371208667755
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie get hurt?",
+      "prediction": "September 2023",
+      "reference": "September 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie's family go on a roadtrip?",
+      "prediction": "before 20 October 2023",
+      "reference": "The weekend before 20 October 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.8,
+        "rouge1_f": 0.8,
+        "rouge2_f": 0.7499999999999999,
+        "rougeL_f": 0.8,
+        "bleu1": 0.6065306597126334,
+        "bleu2": 0.6065306597126334,
+        "bleu3": 0.6065306597126334,
+        "bleu4": 0.6065306597126334,
+        "meteor": 0.6842672413793103,
+        "sbert_similarity": 0.8651890754699707
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How many children does Melanie have?",
+      "prediction": "2",
+      "reference": 3,
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.8665267825126648
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie go on a hike after the roadtrip?",
+      "prediction": "There is no mention of a hike after the roadtrip.",
+      "reference": "19 October 2023",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.006945889443159103
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Melanie go on another roadtrip soon?",
+      "prediction": "No.",
+      "reference": "Likely no; since this one went badly",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.024893534183931972,
+        "bleu2": 0.01113272692709733,
+        "bleu3": 0.008665161385860336,
+        "bleu4": 0.007444903200446295,
+        "meteor": 0.0,
+        "sbert_similarity": 0.2627900540828705
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What items has Melanie bought?",
+      "prediction": "No items mentioned.",
+      "reference": "Figurines, shoes",
+      "category": 1,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.2656242251396179
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Caroline pass the adoption interview?",
+      "prediction": "last Friday",
+      "reference": "The Friday before 22 October 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.25,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.25,
+        "bleu1": 0.06766764161830635,
+        "bleu2": 0.030261889307125377,
+        "bleu3": 0.02355435073584915,
+        "bleu4": 0.020237345084409754,
+        "meteor": 0.08928571428571427,
+        "sbert_similarity": 0.5740446448326111
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "When did Melanie buy the figurines?",
+      "prediction": "yesterday",
+      "reference": "21 October 2023",
+      "category": 2,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.3976430594921112
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Would Caroline want to move back to her home country soon?",
+      "prediction": "Not mentioned.",
+      "reference": "No; she's in the process of adopting children.",
+      "category": 3,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.023161150407600514,
+        "bleu2": 0.008970274980764192,
+        "bleu3": 0.008415723708086742,
+        "bleu4": 0.007894844292834697,
+        "meteor": 0.0,
+        "sbert_similarity": 0.09818266332149506
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did the charity race raise awareness for?",
+      "prediction": "mental health",
+      "reference": "mental health",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie realize after the charity race?",
+      "prediction": "Self-care is really important.",
+      "reference": "self-care is important",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.8571428571428571,
+        "rouge1_f": 0.888888888888889,
+        "rouge2_f": 0.5714285714285715,
+        "rougeL_f": 0.888888888888889,
+        "bleu1": 0.6,
+        "bleu2": 0.3872983346207417,
+        "bleu3": 0.17404441896107775,
+        "bleu4": 0.12574334296829354,
+        "meteor": 0.6048387096774195,
+        "sbert_similarity": 0.9314206838607788
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How does Melanie prioritize self-care?",
+      "prediction": "carving out some me-time each day - running, reading, or playing my violin",
+      "reference": "by carving out some me-time each day for activities like running, reading, or playing the violin",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.7586206896551724,
+        "rouge1_f": 0.8000000000000002,
+        "rouge2_f": 0.6428571428571429,
+        "rougeL_f": 0.8000000000000002,
+        "bleu1": 0.7095666526675843,
+        "bleu2": 0.6441739116870948,
+        "bleu3": 0.5954268738104647,
+        "bleu4": 0.5408804419255526,
+        "meteor": 0.6935305574564405,
+        "sbert_similarity": 0.8146421909332275
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What are Caroline's plans for the summer?",
+      "prediction": "plan something special for this summer",
+      "reference": "researching adoption agencies",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.022633373737335205
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What type of individuals does the adoption agency Caroline is considering support?",
+      "prediction": "LGBTQ+ folks",
+      "reference": "LGBTQ+ individuals",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.5,
+        "bleu1": 0.5,
+        "bleu2": 0.223606797749979,
+        "bleu3": 0.1740444189610778,
+        "bleu4": 0.1495348781221221,
+        "meteor": 0.25,
+        "sbert_similarity": 0.9303993582725525
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Why did Caroline choose the adoption agency?",
+      "prediction": "they help LGBTQ+ folks with adoption",
+      "reference": "because of their inclusivity and support for LGBTQ+ individuals",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.13333333333333333,
+        "rouge1_f": 0.13333333333333333,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.13333333333333333,
+        "bleu1": 0.10108844328543891,
+        "bleu2": 0.03501806396568503,
+        "bleu3": 0.027335243559790102,
+        "bleu4": 0.024761510494160165,
+        "meteor": 0.0574712643678161,
+        "sbert_similarity": 0.5769880414009094
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Caroline excited about in the adoption process?",
+      "prediction": "",
+      "reference": "creating a family for kids who need one",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Melanie think about Caroline's decision to adopt?",
+      "prediction": "That's amazing.",
+      "reference": "she thinks Caroline is doing something amazing and will be an awesome mom",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.13333333333333336,
+        "rouge1_f": 0.125,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.125,
+        "bleu1": 0.026349806140466083,
+        "bleu2": 0.009621588806014277,
+        "bleu3": 0.00807918784776961,
+        "bleu4": 0.008468073234773096,
+        "meteor": 0.0,
+        "sbert_similarity": 0.11582635343074799
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How long have Mel and her husband been married?",
+      "prediction": "5 years",
+      "reference": "Mel and her husband have been married for 5 years.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.33333333333333337,
+        "rouge1_f": 0.33333333333333337,
+        "rouge2_f": 0.19999999999999998,
+        "rougeL_f": 0.33333333333333337,
+        "bleu1": 0.011108996538242306,
+        "bleu2": 0.011108996538242306,
+        "bleu3": 0.005196068065373761,
+        "bleu4": 0.0035129731579771513,
+        "meteor": 0.05434782608695652,
+        "sbert_similarity": 0.34713196754455566
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Caroline's necklace symbolize?",
+      "prediction": "love, faith and strength",
+      "reference": "love, faith, and strength",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 0.8187307530779819,
+        "bleu2": 0.7090416310250969,
+        "bleu3": 0.5181569246973543,
+        "bleu4": 0.2737591267534727,
+        "meteor": 0.6388888888888888,
+        "sbert_similarity": 0.9917947053909302
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What country is Caroline's grandma from?",
+      "prediction": "Sweden",
+      "reference": "Sweden",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 0.316227766016838,
+        "bleu3": 0.2187761623949553,
+        "bleu4": 0.1778279410038923,
+        "meteor": 0.5,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was grandma's gift to Caroline?",
+      "prediction": "necklace",
+      "reference": "necklace",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 0.316227766016838,
+        "bleu3": 0.2187761623949553,
+        "bleu4": 0.1778279410038923,
+        "meteor": 0.5,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Melanie's hand-painted bowl a reminder of?",
+      "prediction": "art and self-expression",
+      "reference": "art and self-expression",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie and her family do while camping?",
+      "prediction": "explored nature, roasted marshmallows around the campfire and even went on a hike",
+      "reference": "explored nature, roasted marshmallows, and went on a hike",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.8181818181818181,
+        "rouge1_f": 0.8181818181818181,
+        "rouge2_f": 0.6,
+        "rougeL_f": 0.8181818181818181,
+        "bleu1": 0.7142857142857143,
+        "bleu2": 0.6201736729460422,
+        "bleu3": 0.5464986398614002,
+        "bleu4": 0.45723134461864345,
+        "meteor": 0.828623670212766,
+        "sbert_similarity": 0.9127585291862488
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of counseling and mental health services is Caroline interested in pursuing?",
+      "prediction": "working with trans people",
+      "reference": "working with trans people, helping them accept themselves and supporting their mental health",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.47058823529411764,
+        "rouge1_f": 0.47058823529411764,
+        "rouge2_f": 0.4,
+        "rougeL_f": 0.47058823529411764,
+        "bleu1": 0.0820849986238988,
+        "bleu2": 0.0820849986238988,
+        "bleu3": 0.0820849986238988,
+        "bleu4": 0.0820849986238988,
+        "meteor": 0.2433425160697888,
+        "sbert_similarity": 0.7983206510543823
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What workshop did Caroline attend recently?",
+      "prediction": "LGBTQ+ counseling workshop",
+      "reference": "LGBTQ+ counseling workshop",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was discussed in the LGBTQ+ counseling workshop?",
+      "prediction": "They talked about different therapeutic methods and how to best work with trans people.",
+      "reference": "therapeutic methods and how to best work with trans people",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.8333333333333333,
+        "rouge1_f": 0.8333333333333333,
+        "rouge2_f": 0.8181818181818181,
+        "rougeL_f": 0.8333333333333333,
+        "bleu1": 0.6666666666666666,
+        "bleu2": 0.6546536707079771,
+        "bleu3": 0.6441485748898267,
+        "bleu4": 0.6262844962765469,
+        "meteor": 0.8647910731244065,
+        "sbert_similarity": 0.8247994184494019
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What motivated Caroline to pursue counseling?",
+      "prediction": "My own journey and the support I got",
+      "reference": "her own journey and the support she received, and how counseling improved her life",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5,
+        "rouge1_f": 0.45454545454545453,
+        "rouge2_f": 0.4,
+        "rougeL_f": 0.45454545454545453,
+        "bleu1": 0.26053876229906775,
+        "bleu2": 0.2491227060323351,
+        "bleu3": 0.23609689710827422,
+        "bleu4": 0.2155064730781546,
+        "meteor": 0.33283582089552244,
+        "sbert_similarity": 0.5107564926147461
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of place does Caroline want to create for people?",
+      "prediction": "a safe, inviting place for people to grow",
+      "reference": "a safe and inviting place for people to grow",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.9411764705882353,
+        "rouge1_f": 0.9411764705882353,
+        "rouge2_f": 0.7999999999999999,
+        "rougeL_f": 0.9411764705882353,
+        "bleu1": 0.8888888888888888,
+        "bleu2": 0.816496580927726,
+        "bleu3": 0.7272560259547889,
+        "bleu4": 0.6606328636027614,
+        "meteor": 0.7773446457234581,
+        "sbert_similarity": 0.9949334859848022
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Did Melanie make the black and white bowl in the photo?",
+      "prediction": "Yeah, I made this bowl in my class.",
+      "reference": "Yes",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.13204289972782135
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of books does Caroline have in her library?",
+      "prediction": "kids' books, classics, stories from different cultures, educational books",
+      "reference": "kids' books - classics, stories from different cultures, educational books",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.9411764705882353,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 0.9230769230769231,
+        "bleu2": 0.8770580193070293,
+        "bleu3": 0.8255793154384929,
+        "bleu4": 0.7611606003349892,
+        "meteor": 0.8017676767676769,
+        "sbert_similarity": 0.9684610366821289
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was Melanie's favorite book from her childhood?",
+      "prediction": "Charlotte's Web",
+      "reference": "\"Charlotte's Web\"",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 0.513417119032592,
+        "bleu2": 0.513417119032592,
+        "bleu3": 0.513417119032592,
+        "bleu4": 0.288715663092199,
+        "meteor": 0.0,
+        "sbert_similarity": 0.9549332857131958
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What book did Caroline recommend to Melanie?",
+      "prediction": "that book",
+      "reference": "\"Becoming Nicole\"",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.12889418005943298
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline take away from the book \"Becoming Nicole\"?",
+      "prediction": "Not found in the provided context.",
+      "reference": "Lessons on self-acceptance and finding support",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.08333333333333333,
+        "sbert_similarity": 0.12225396186113358
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What are the new shoes that Melanie got used for?",
+      "prediction": "running",
+      "reference": "Running",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 0.316227766016838,
+        "bleu3": 0.2187761623949553,
+        "bleu4": 0.1778279410038923,
+        "meteor": 0.5,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Melanie's reason for getting into running?",
+      "prediction": "destress and clear my mind",
+      "reference": "To de-stress and clear her mind",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5454545454545454,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.2,
+        "rougeL_f": 0.5,
+        "bleu1": 0.49123845184678916,
+        "bleu2": 0.3170930571698881,
+        "bleu3": 0.142495518205023,
+        "bleu4": 0.10294994188297393,
+        "meteor": 0.43314500941619577,
+        "sbert_similarity": 0.49691981077194214
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Melanie say running has been great for?",
+      "prediction": "her headspace",
+      "reference": "Her mental health",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4,
+        "rouge1_f": 0.4,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.4,
+        "bleu1": 0.3032653298563167,
+        "bleu2": 0.13562437855552414,
+        "bleu3": 0.10556327625176448,
+        "bleu4": 0.09069748827745895,
+        "meteor": 0.17241379310344826,
+        "sbert_similarity": 0.5343438386917114
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Mel and her kids make during the pottery workshop?",
+      "prediction": "pots",
+      "reference": "pots",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 0.316227766016838,
+        "bleu3": 0.2187761623949553,
+        "bleu4": 0.1778279410038923,
+        "meteor": 0.5,
+        "sbert_similarity": 1.0000001192092896
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of pot did Mel and her kids make with clay?",
+      "prediction": "a cup with a dog face on it",
+      "reference": "a cup with a dog face on it",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 1.0,
+        "meteor": 0.9990234375,
+        "sbert_similarity": 1.0000001192092896
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What creative project do Mel and her kids do together besides pottery?",
+      "prediction": "painting",
+      "reference": "painting",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 0.316227766016838,
+        "bleu3": 0.2187761623949553,
+        "bleu4": 0.1778279410038923,
+        "meteor": 0.5,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Mel and her kids paint in their latest project in July 2023?",
+      "prediction": "a sunset with a palm tree",
+      "reference": "a sunset with a palm tree",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 1.0,
+        "meteor": 0.9976851851851852,
+        "sbert_similarity": 1.0000001192092896
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline see at the council meeting for adoption?",
+      "prediction": "so many people wanted to create loving homes for children in need",
+      "reference": "many people wanting to create loving homes for children in need",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.8695652173913043,
+        "rouge1_f": 0.9565217391304348,
+        "rouge2_f": 0.9523809523809523,
+        "rougeL_f": 0.9565217391304348,
+        "bleu1": 0.8333333333333334,
+        "bleu2": 0.778498944161523,
+        "bleu3": 0.7161767386056302,
+        "bleu4": 0.670422683816333,
+        "meteor": 0.9906187178914452,
+        "sbert_similarity": 0.9689647555351257
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What do sunflowers represent according to Caroline?",
+      "prediction": "warmth and happiness",
+      "reference": "warmth and happiness",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Why are flowers important to Melanie?",
+      "prediction": "Flowers bring joy and remind her of her wedding day.",
+      "reference": "They remind her to appreciate the small moments and were a part of her wedding decor",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4166666666666667,
+        "rouge1_f": 0.4615384615384615,
+        "rouge2_f": 0.25,
+        "rougeL_f": 0.38461538461538464,
+        "bleu1": 0.34621986487651735,
+        "bleu2": 0.2567635238099693,
+        "bleu3": 0.16915067289412006,
+        "bleu4": 0.0779345887785444,
+        "meteor": 0.36525974025974023,
+        "sbert_similarity": 0.6636438965797424
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What inspired Caroline's painting for the art show?",
+      "prediction": "visited a LGBTQ center",
+      "reference": "visiting an LGBTQ center and wanting to capture unity and strength",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.28571428571428575,
+        "rouge1_f": 0.39999999999999997,
+        "rouge2_f": 0.15384615384615383,
+        "rougeL_f": 0.39999999999999997,
+        "bleu1": 0.08688697172522257,
+        "bleu2": 0.07094291534080824,
+        "bleu3": 0.035797677029744235,
+        "bleu4": 0.029524961852386813,
+        "meteor": 0.24811218985976266,
+        "sbert_similarity": 0.7813957333564758
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How often does Melanie go to the beach with her kids?",
+      "prediction": "once or twice a year",
+      "reference": "once or twice a year",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 1.0,
+        "meteor": 0.996,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie and her family see during their camping trip last year?",
+      "prediction": "The view from the top",
+      "reference": "Perseid meteor shower",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.16157548129558563
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Melanie feel while watching the meteor shower?",
+      "prediction": "tiny and in awe",
+      "reference": "in awe of the universe",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4444444444444445,
+        "rouge1_f": 0.4444444444444445,
+        "rouge2_f": 0.28571428571428575,
+        "rougeL_f": 0.4444444444444445,
+        "bleu1": 0.38940039153570244,
+        "bleu2": 0.3179440883008189,
+        "bleu3": 0.16043405788769674,
+        "bleu4": 0.13232169883599026,
+        "meteor": 0.38265306122448983,
+        "sbert_similarity": 0.57357257604599
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Whose birthday did Melanie celebrate recently?",
+      "prediction": "my daughter's",
+      "reference": "Melanie's daughter",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.6666666666666666,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.3333333333333333,
+        "bleu1": 0.6666666666666666,
+        "bleu2": 0.18257418583505536,
+        "bleu3": 0.1522474354853864,
+        "bleu4": 0.13512001548070346,
+        "meteor": 0.0,
+        "sbert_similarity": 0.5035442113876343
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Who performed at the concert at Melanie's daughter's birthday?",
+      "prediction": "Matt Patterson",
+      "reference": "Matt Patterson",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Why did Melanie choose to use colors and patterns in her pottery project?",
+      "prediction": "",
+      "reference": "She wanted to catch the eye and make people smile.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What pet does Caroline have?",
+      "prediction": "guinea pig",
+      "reference": "guinea pig",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 0.9999999403953552
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What pets does Melanie have?",
+      "prediction": "",
+      "reference": "Two cats and a dog",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Where did Oliver hide his bone once?",
+      "prediction": "in my slipper",
+      "reference": "In Melanie's slipper",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6666666666666666,
+        "rouge1_f": 0.5714285714285715,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.5714285714285715,
+        "bleu1": 0.47768754038252614,
+        "bleu2": 0.13082012065333476,
+        "bleu3": 0.10909005447984235,
+        "bleu4": 0.09681772177713914,
+        "meteor": 0.3333333333333333,
+        "sbert_similarity": 0.6715267896652222
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What activity did Caroline used to do with her dad?",
+      "prediction": "horseback riding",
+      "reference": "Horseback riding",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 1.0000001192092896
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline make for a local church?",
+      "prediction": "",
+      "reference": "a stained glass window",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline find in her neighborhood during her walk?",
+      "prediction": "",
+      "reference": "a rainbow sidewalk",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Which song motivates Caroline to be courageous?",
+      "prediction": "Brave",
+      "reference": "Brave by Sara Bareilles",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4,
+        "rouge1_f": 0.4,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.4,
+        "bleu1": 0.049787068367863944,
+        "bleu2": 0.015744053406497194,
+        "bleu3": 0.010892223754416544,
+        "bleu4": 0.008853531856477262,
+        "meteor": 0.13513513513513511,
+        "sbert_similarity": 0.5007991790771484
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Which  classical musicians does Melanie enjoy listening to?",
+      "prediction": "Bach and Mozart",
+      "reference": "Bach and Mozart",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.000000238418579
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Who is Melanie a fan of in terms of modern music?",
+      "prediction": "Ed Sheeran",
+      "reference": "Ed Sheeran",
+      "category": 4,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 0.46773514128719823,
+        "bleu4": 0.316227766016838,
+        "meteor": 0.9375,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How long has Melanie been creating art?",
+      "prediction": "Seven years",
+      "reference": "7 years",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.5,
+        "rouge1_f": 0.5,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.5,
+        "bleu1": 0.5,
+        "bleu2": 0.223606797749979,
+        "bleu3": 0.1740444189610778,
+        "bleu4": 0.1495348781221221,
+        "meteor": 0.9375,
+        "sbert_similarity": 0.9557746648788452
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What precautionary sign did Melanie see at the café?",
+      "prediction": "a sign posted on a door stating that someone is not being able to leave",
+      "reference": "A sign stating that someone is not being able to leave",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.88,
+        "rouge1_f": 0.846153846153846,
+        "rouge2_f": 0.75,
+        "rougeL_f": 0.846153846153846,
+        "bleu1": 0.7333333333333333,
+        "bleu2": 0.6866065623255951,
+        "bleu3": 0.6360749521034652,
+        "bleu4": 0.5968774175634496,
+        "meteor": 0.955125416847905,
+        "sbert_similarity": 0.890834391117096
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What advice does Caroline give for getting started with adoption?",
+      "prediction": "Do your research and find an adoption agency or lawyer.",
+      "reference": "Do research, find an adoption agency or lawyer, gather necessary documents, and prepare emotionally.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.75,
+        "rouge1_f": 0.75,
+        "rouge2_f": 0.4545454545454546,
+        "rougeL_f": 0.6666666666666666,
+        "bleu1": 0.48110303772731844,
+        "bleu2": 0.35679556205304663,
+        "bleu3": 0.3121843074321139,
+        "bleu4": 0.2776433663357304,
+        "meteor": 0.4944477791116447,
+        "sbert_similarity": 0.8361725807189941
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What setback did Melanie face in October 2023?",
+      "prediction": "I got hurt and had to take a break from pottery.",
+      "reference": "She got hurt and had to take a break from pottery.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.9090909090909091,
+        "rouge1_f": 0.9090909090909091,
+        "rouge2_f": 0.9,
+        "rougeL_f": 0.9090909090909091,
+        "bleu1": 0.9166666666666666,
+        "bleu2": 0.9128709291752768,
+        "bleu3": 0.9094319693204537,
+        "bleu4": 0.9036020036098448,
+        "meteor": 0.9086363636363638,
+        "sbert_similarity": 0.723818838596344
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Melanie do to keep herself busy during her pottery break?",
+      "prediction": "reading and painting",
+      "reference": "Read a book and paint.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.7499999999999999,
+        "rouge2_f": 0.3333333333333333,
+        "rougeL_f": 0.7499999999999999,
+        "bleu1": 0.12262648039048077,
+        "bleu2": 0.04749303163563625,
+        "bleu3": 0.044556965439969995,
+        "bleu4": 0.0417991745584234,
+        "meteor": 0.20833333333333331,
+        "sbert_similarity": 0.6571757197380066
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What painting did Melanie show to Caroline on October 13, 2023?",
+      "prediction": "No information.",
+      "reference": "A painting inspired by sunsets with a pink sky.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.03232398928813501,
+        "bleu2": 0.012519027219593387,
+        "bleu3": 0.011745088573097433,
+        "bleu4": 0.011018142789200103,
+        "meteor": 0.0,
+        "sbert_similarity": 0.003804038278758526
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of painting did Caroline share with Melanie on October 13, 2023?",
+      "prediction": "No information available.",
+      "reference": "An abstract painting with blue streaks on a wall.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.055782540037107455,
+        "bleu2": 0.020368903662172547,
+        "bleu3": 0.017103640807945183,
+        "bleu4": 0.017926911178691992,
+        "meteor": 0.0,
+        "sbert_similarity": -0.0393037311732769
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was the poetry reading that Caroline attended about?",
+      "prediction": "transgender poetry reading",
+      "reference": "It was a transgender poetry reading where transgender people shared their stories.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.42857142857142855,
+        "rouge1_f": 0.4,
+        "rouge2_f": 0.3076923076923077,
+        "rougeL_f": 0.4,
+        "bleu1": 0.03567399334725241,
+        "bleu2": 0.03567399334725241,
+        "bleu3": 0.03567399334725241,
+        "bleu4": 0.020060960693725614,
+        "meteor": 0.2302302302302302,
+        "sbert_similarity": 0.8538634777069092
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did the posters at the poetry reading say?",
+      "prediction": "trans lives matter",
+      "reference": "\"Trans Lives Matter\"",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.3333333333333333,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 0.513417119032592,
+        "bleu2": 0.513417119032592,
+        "bleu3": 0.513417119032592,
+        "bleu4": 0.288715663092199,
+        "meteor": 0.16666666666666666,
+        "sbert_similarity": 0.9525078535079956
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Caroline's drawing symbolize for her?",
+      "prediction": "freedom and being real",
+      "reference": "Freedom and being true to herself.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.6,
+        "rouge1_f": 0.6,
+        "rouge2_f": 0.5,
+        "rougeL_f": 0.6,
+        "bleu1": 0.354274914555761,
+        "bleu2": 0.3340135926488844,
+        "bleu3": 0.2989505394514747,
+        "bleu4": 0.1878296463217631,
+        "meteor": 0.5076628352490421,
+        "sbert_similarity": 0.6762146949768066
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How do Melanie and Caroline describe their journey through life together?",
+      "prediction": "on this trip together",
+      "reference": "An ongoing adventure of learning and growing.",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.24708521366119385
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What happened to Melanie's son on their road trip?",
+      "prediction": "got into an accident",
+      "reference": "He got into an accident",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.888888888888889,
+        "rouge1_f": 0.888888888888889,
+        "rouge2_f": 0.8571428571428571,
+        "rougeL_f": 0.888888888888889,
+        "bleu1": 0.7788007830714049,
+        "bleu2": 0.7788007830714049,
+        "bleu3": 0.7788007830714049,
+        "bleu4": 0.7788007830714049,
+        "meteor": 0.8099489795918368,
+        "sbert_similarity": 0.846612811088562
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Melanie's son handle the accident?",
+      "prediction": "Not mentioned in context.",
+      "reference": "He was scared but reassured by his family",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.2154904305934906
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Melanie feel about her family after the accident?",
+      "prediction": "cherish our family",
+      "reference": "They are important and mean the world to her",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.24149619042873383
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Melanie's children handle the accident?",
+      "prediction": "freaked",
+      "reference": "They were scared but resilient",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.35364338755607605
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Melanie feel after the accident?",
+      "prediction": "scared",
+      "reference": "Grateful and thankful for her family",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.08508017659187317
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was Melanie's reaction to her children enjoying the Grand Canyon?",
+      "prediction": "Not mentioned.",
+      "reference": "She was happy and thankful",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.015929847955703735
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What do Melanie's family give her?",
+      "prediction": "joy and love",
+      "reference": "Strength and motivation",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.3333333333333333,
+        "rouge1_f": 0.3333333333333333,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.3333333333333333,
+        "bleu1": 0.3333333333333333,
+        "bleu2": 0.12909944487358058,
+        "bleu3": 0.12111838948674812,
+        "bleu4": 0.11362193664674995,
+        "meteor": 0.16666666666666666,
+        "sbert_similarity": 0.240303173661232
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Melanie feel about her family supporting her?",
+      "prediction": "awesome",
+      "reference": "She appreciated them a lot",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.1274121254682541
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie do after the road trip to relax?",
+      "prediction": "",
+      "reference": "Went on a nature walk or hike",
+      "category": 4,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0.0,
+        "bleu2": 0.0,
+        "bleu3": 0.0,
+        "bleu4": 0.0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline realize after her charity race?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "self-care is important",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.1022978201508522
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What are Melanie's plans for the summer with respect to adoption?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "researching adoption agencies",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.010256932117044926
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What type of individuals does the adoption agency Melanie is considering support?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "LGBTQ+ individuals",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.12336074560880661
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Why did Melanie choose the adoption agency?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "because of their inclusivity and support for LGBTQ+ individuals",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.09916652739048004
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Melanie excited about in her adoption process?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "creating a family for kids who need one",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": -0.06094188243150711
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Melanie's necklace symbolize?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "love, faith, and strength",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.04011673107743263
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What country is Melanie's grandma from?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Sweden",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.12741492688655853
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was grandma's gift to Melanie?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "necklace",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.17644497752189636
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was grandpa's gift to Caroline?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "necklace",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.17644497752189636
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Caroline's hand-painted bowl a reminder of?",
+      "prediction": "art and self-expression",
+      "reference": "art and self-expression",
+      "category": 5,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline and her family do while camping?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "explored nature, roasted marshmallows, and went on a hike",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.08374752104282379
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of counseling and mental health services is Melanie interested in pursuing?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "working with trans people, helping them accept themselves and supporting their mental health",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.058188680559396744
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of counseling workshop did Melanie attend recently?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "LGBTQ+ counseling workshop",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.11074957251548767
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What motivated Melanie to pursue counseling?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "her own journey and the support she received, and how counseling improved her life",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.11764705882352941,
+        "rouge1_f": 0.10526315789473682,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.10526315789473682,
+        "bleu1": 0.027067056647322542,
+        "bleu2": 0.009569649651041096,
+        "bleu3": 0.007666923387854731,
+        "bleu4": 0.007271361304044331,
+        "meteor": 0.038167938931297704,
+        "sbert_similarity": 0.0042391493916511536
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What kind of place does Melanie want to create for people?",
+      "prediction": "a safe and inviting place for people to grow",
+      "reference": "a safe and inviting place for people to grow",
+      "category": 5,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 1.0,
+        "meteor": 0.9993141289437586,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Did Caroline make the black and white bowl in the photo?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Yes",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.11724141240119934
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What are the new shoes that Caroline got used for?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Running",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.1654406189918518
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What is Caroline's reason for getting into running?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "To de-stress and clear her mind",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.15259528160095215
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Caroline say running has been great for?",
+      "prediction": "Her mental health",
+      "reference": "Her mental health",
+      "category": 5,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 0.5623413251903491,
+        "meteor": 0.9814814814814815,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie see at the council meeting for adoption?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "many people wanting to create loving homes for children in need",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.12500000000000003,
+        "rouge1_f": 0.12500000000000003,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.12500000000000003,
+        "bleu1": 0.060238842382440407,
+        "bleu2": 0.02129764696972561,
+        "bleu3": 0.01706305179528683,
+        "bleu4": 0.016182712188007015,
+        "meteor": 0.04807692307692308,
+        "sbert_similarity": 0.013970820233225822
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What inspired Melanie's painting for the art show?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "visiting an LGBTQ center and wanting to capture unity and strength",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": -0.0016056299209594727
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What inspired Caroline's sculpture for the art show?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "visiting an LGBTQ center and wanting to capture unity and strength",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": -0.0016056299209594727
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How often does Caroline go to the beach with her kids?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "once or twice a year",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.053056735545396805
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline and her family see during their camping trip last year?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Perseid meteor shower",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.03334161639213562
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Caroline feel while watching the meteor shower?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "in awe of the universe",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.4000000000000001,
+        "rouge1_f": 0.4000000000000001,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.4000000000000001,
+        "bleu1": 0.4,
+        "bleu2": 0.10000000000000002,
+        "bleu3": 0.0712114757473708,
+        "bleu4": 0.06389431042462725,
+        "meteor": 0.20000000000000004,
+        "sbert_similarity": 0.159219890832901
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Why did Caroline choose to use colors and patterns in her pottery project?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "She wanted to catch the eye and make people smile.",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.13333333333333333,
+        "rouge1_f": 0.13333333333333333,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.13333333333333333,
+        "bleu1": 0.060238842382440407,
+        "bleu2": 0.02129764696972561,
+        "bleu3": 0.01706305179528683,
+        "bleu4": 0.016182712188007015,
+        "meteor": 0.052631578947368425,
+        "sbert_similarity": 0.041106417775154114
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Is Oscar Melanie's pet?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Yes",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.11724141240119934
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Where did Oscar hide his bone once?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "In Melanie's slipper",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.25,
+        "rouge1_f": 0.22222222222222224,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.22222222222222224,
+        "bleu1": 0.2,
+        "bleu2": 0.07071067811865477,
+        "bleu3": 0.05665132701906204,
+        "bleu4": 0.05372849659117709,
+        "meteor": 0.15625,
+        "sbert_similarity": 0.17263300716876984
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What activity did Melanie used to do with her dad?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Horseback riding",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.056279197335243225
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie make for a local church?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "a stained glass window",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.03617009148001671
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Melanie find in her neighborhood during her walk?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "a rainbow sidewalk",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": -0.04855136573314667
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Which song motivates Melanie to be courageous?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Brave by Sara Bareilles",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": -0.004309728741645813
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What type of instrument does Caroline play?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "clarinet and violin",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.012888332828879356
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Which classical musicians does Caroline enjoy listening to?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Bach and Mozart",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.10292424261569977
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "Who is Caroline a fan of in terms of modern music?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Ed Sheeran",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.09608786553144455
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What precautionary sign did Caroline see at the café?",
+      "prediction": "A sign stating that someone is not being able to leave",
+      "reference": "A sign stating that someone is not being able to leave",
+      "category": 5,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 1.0,
+        "meteor": 0.9996243425995492,
+        "sbert_similarity": 1.0000001192092896
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What setback did Caroline face recently?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "She got hurt and had to take a break from pottery.",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.03774181380867958
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Caroline do to keep herself busy during her pottery break?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Read a book and paint.",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.08983387053012848
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was the poetry reading that Melanie attended about?",
+      "prediction": "It was a transgender poetry reading where transgender people shared their stories.",
+      "reference": "It was a transgender poetry reading where transgender people shared their stories.",
+      "category": 5,
+      "metrics": {
+        "exact_match": 1,
+        "f1": 1.0,
+        "rouge1_f": 1.0,
+        "rouge2_f": 1.0,
+        "rougeL_f": 1.0,
+        "bleu1": 1.0,
+        "bleu2": 1.0,
+        "bleu3": 1.0,
+        "bleu4": 1.0,
+        "meteor": 0.9997106481481481,
+        "sbert_similarity": 1.0
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What happened to Caroline's son on their road trip?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "He got into an accident",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.13336867094039917
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Caroline's son handle the accident?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "He was scared but reassured by his family",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.12110544741153717
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Caroline feel about her family after the accident?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "They are important and mean the world to her",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.14285714285714285,
+        "rouge1_f": 0.14285714285714285,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.14285714285714285,
+        "bleu1": 0.08986579282344431,
+        "bleu2": 0.03177235575108143,
+        "bleu3": 0.02545508208534111,
+        "bleu4": 0.02414176971688927,
+        "meteor": 0.05813953488372093,
+        "sbert_similarity": 0.18959127366542816
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Caroline's children handle the accident?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "They were scared but resilient",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.07462231814861298
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "How did Caroline feel after the accident?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Grateful and thankful for her family",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.012023845687508583
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What was Caroline's reaction to her children enjoying the Grand Canyon?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "She was happy and thankful",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.026393607258796692
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What did Caroline do after the road trip to relax?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Went on a nature walk or hike",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.06870590150356293
+      }
+    },
+    {
+      "sample_id": 0,
+      "question": "What does Caroline love most about camping with her family?",
+      "prediction": "Not mentioned in the conversation",
+      "reference": "Being present and bonding with her family",
+      "category": 5,
+      "metrics": {
+        "exact_match": 0,
+        "f1": 0.0,
+        "rouge1_f": 0.0,
+        "rouge2_f": 0.0,
+        "rougeL_f": 0.0,
+        "bleu1": 0,
+        "bleu2": 0,
+        "bleu3": 0,
+        "bleu4": 0,
+        "meteor": 0.0,
+        "sbert_similarity": 0.19244205951690674
+      }
+    }
+  ]
+}
